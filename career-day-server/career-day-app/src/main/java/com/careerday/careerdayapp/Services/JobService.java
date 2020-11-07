@@ -1,4 +1,32 @@
-package com.careerday.careerdayapp.Services.Impl;
+package com.careerday.careerdayapp.Services;
+
+
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.stereotype.Service;
+
+import com.careerday.careerdayapp.DTOs.ApiResponse;
+import com.careerday.careerdayapp.DTOs.JobCreateRequest;
+import com.careerday.careerdayapp.DTOs.JobResponse;
+import com.careerday.careerdayapp.DTOs.JobUpdateRequest;
+import com.careerday.careerdayapp.DTOs.PagedResponse;
+import com.careerday.careerdayapp.Entities.Job;
+import com.careerday.careerdayapp.Entities.JobStatus;
+import com.careerday.careerdayapp.Entities.JobType;
+import com.careerday.careerdayapp.Exceptions.BadRequestException;
+import com.careerday.careerdayapp.Exceptions.ResourceNotFoundException;
+import com.careerday.careerdayapp.Repositories.JobRepository;
+import com.careerday.careerdayapp.Repositories.JobTypeRepository;
+import com.careerday.careerdayapp.Utils.AppConstants;
+
+
 
 
 @Service
@@ -7,8 +35,8 @@ public class JobService implements IJobService{
 	private final JobTypeRepository jobTypeRepository;
 	private final ModelMapper modelMapper;
 
-    public static string JOB="Job";
-	public static string ID="Id";
+    public static String JOB="Job";
+	public static String ID="Id";
 	public static String JOB_TYPE="Job Type";
 	public static String TYPE="Type";
     public static String INTERVIEW_AT="interview_date";
@@ -26,8 +54,8 @@ public class JobService implements IJobService{
 	public JobResponse create(JobCreateRequest createRequest){
 		 Job newJob=convertFromDTO(createRequest);
 		 JobType jobType=jobTypeRepository.findByName(createRequest.getJobType())
-		                 .orElseThrow(()-> new ResourceNotFoundException(JOB,ID,id));
-		 newJob.setType(jobType);
+		                 .orElseThrow(()-> new ResourceNotFoundException(JOB,TYPE,createRequest.getJobType()));
+		 newJob.setJobType(jobType);
 		 Job savedJob=jobRepository.save(newJob);
 		 return convertFromEntity(savedJob);
 	 }
@@ -39,14 +67,14 @@ public class JobService implements IJobService{
 		job.setName(updateRequest.getName());
 		job.setDescription(updateRequest.getDescription());
 		job.setSummary(updateRequest.getSummary());
-		job.setInterviewDate(LocalDate.of(updateRequest.getInterviewDate()))
-		job.setStartTime(LocalTime.of(updateRequest.getStartTime()));
-		job.setEndTime(LocalTime.of(updateRequest.getEndTime()));
-		job.setStatus(new JobStatus(updateRequest.getStatus()));
+		job.setInterviewDate(updateRequest.getInterviewDate());
+		job.setStartTime(updateRequest.getStartTime());
+		job.setEndTime(updateRequest.getEndTime());
+		job.setStatus(JobStatus.valueOf(updateRequest.getStatus()));
 		
 		JobType jobType=jobTypeRepository.findByName(updateRequest.getJobType())
 		                .orElseThrow(()-> new ResourceNotFoundException(JOB_TYPE,TYPE,updateRequest.getJobType()));
-		job.setType(jobType);
+		job.setJobType(jobType);
 		
 		Job savedJob=jobRepository.save(job);
 		
@@ -74,11 +102,15 @@ public class JobService implements IJobService{
 		validatePageNumberAndSize(page,size);
 		Pageable pageable = PageRequest.of(page, size, Sort.Direction.DESC, INTERVIEW_AT);
 
-		Page<Job> jobs = jobRepository.findByAll(pageable);
+		Page<Job> jobs = jobRepository.findAll(pageable);
 
 		List<Job> content = jobs.getNumberOfElements() == 0 ? Collections.emptyList() : jobs.getContent();
+		
+		List<JobResponse> response=content.stream()
+				                          .map(j-> convertFromEntity(j))
+				                          .collect(Collectors.toList());
 
-		return new PagedResponse<>(content, jobs.getNumber(), jobs.getSize(), jobs.getTotalElements(),
+		return new PagedResponse<JobResponse>(response, jobs.getNumber(), jobs.getSize(), jobs.getTotalElements(),
 				jobs.getTotalPages(), jobs.isLast());
 	}
 	
@@ -87,9 +119,9 @@ public class JobService implements IJobService{
 		newJob.setName(jobDto.getName());
 		newJob.setDescription(jobDto.getDescription());
 		newJob.setSummary(jobDto.getSummary());
-		newJob.setInterviewDate(LocalDate.of(jobDto.getInterviewDate()));
-		newJob.setStartTime(LocalTime.of(jobDto.getStartTime());
-		newJob.setEndTime(LocalTime.of(jobDto.getEndTime());
+		newJob.setInterviewDate(jobDto.getInterviewDate());
+		newJob.setStartTime(jobDto.getStartTime());
+		newJob.setEndTime(jobDto.getEndTime());
 		newJob.setStatus(JobStatus.ACTIVE);
 		
 		return newJob;
@@ -98,7 +130,7 @@ public class JobService implements IJobService{
 	
 	
 	private JobResponse convertFromEntity(Job job){
-		JobResponse jobResponse=modelMapper.map(JobResponse,Job.class);
+		JobResponse jobResponse=modelMapper.map(job ,JobResponse.class);
 		return jobResponse;
 	}
 	
@@ -112,7 +144,7 @@ public class JobService implements IJobService{
 		}
 
 		if (size > AppConstants.MAX_PAGE_SIZE) {
-			throw new BadRequestException("Page size must not be greater than " +AppConstants. MAX_PAGE_SIZE);
+			throw new BadRequestException("Page size must not be greater than " +AppConstants.MAX_PAGE_SIZE);
 		}
 	}
 

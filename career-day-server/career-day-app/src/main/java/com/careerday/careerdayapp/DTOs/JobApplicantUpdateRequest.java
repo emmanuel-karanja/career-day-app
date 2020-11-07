@@ -3,7 +3,7 @@ package com.careerday.careerdayapp.DTOs;
 import javax.validation.constraints.*;
 
 import com.careerday.careerdayapp.Entities.LevelOfEducation;
-import com.careerday.careerdayapp.ValidationUtils.ValueOfEnum;
+import com.careerday.careerdayapp.Validation.ValueOfEnum;
 
 import lombok.Data;
 
@@ -20,7 +20,7 @@ public class JobApplicantUpdateRequest {
 
     // we need some regexp for phone number. Validates Kenyan numbers for now
     @NotBlank
-	@Pattern(regex="^(?:254|\+254|0)?(7(?:(?:[129][0-9])|(?:0[0-8])|(4[0-1]))[0-9]{6})$");
+	//@Pattern(regexp="^(?:254|\+254|0)?(7(?:(?:[129][0-9])|(?:0[0-8])|(4[0-1]))[0-9]{6})$");
     private String phone;
 
     // validated within certain enum ranges

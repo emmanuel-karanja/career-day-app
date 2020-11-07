@@ -2,6 +2,10 @@ package com.careerday.careerdayapp.DTOs;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
+
+import com.careerday.careerdayapp.Entities.JobTypeName;
+import com.careerday.careerdayapp.Validation.ValueOfEnum;
+
 import javax.validation.constraints.Future;
 import javax.validation.constraints.*;
 import lombok.Data;
@@ -29,7 +33,7 @@ public class JobCreateRequest {
     @NotEmpty
     @NotBlank
     @Future
-    private LocalDate interiewDate;
+    private LocalDate interviewDate;
 
     @NotEmpty
     @NotBlank

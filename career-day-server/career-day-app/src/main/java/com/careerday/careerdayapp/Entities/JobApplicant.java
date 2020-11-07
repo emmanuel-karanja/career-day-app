@@ -1,7 +1,8 @@
 package com.careerday.careerdayapp.Entities;
 
-import java.util.Set;
-
+import java.util.ArrayList;
+import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -12,6 +13,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -22,7 +24,7 @@ import lombok.experimental.Accessors;
 @Getter
 @NoArgsConstructor
 @Accessors(chain = true)
-@Table(name = "job_applicant",uniqueConstraints = { @UniqueConstraint(columnNames = { "phone-number" }),
+@Table(name = "job_applicant",uniqueConstraints = { @UniqueConstraint(columnNames = { "phone_number" }),
 		@UniqueConstraint(columnNames = { "email" }) })
 @Entity
 public class JobApplicant {
@@ -50,33 +52,27 @@ public class JobApplicant {
    @Column(name = "years_of_experience")
    private Integer yearsOfExperience;
 
-   @OneToMany(mappedBy="job_application",fetch = FetchType.EAGER,cascade = CascadeType.ALL, orphanRemoval = true )
-   private List<JobApplication> applications;
+   @OneToMany(mappedBy="applicant",fetch = FetchType.EAGER,cascade = CascadeType.ALL, orphanRemoval = true )
+   private List<JobApplication> applications = new ArrayList<>();
    
-   public JobApplicant(){
-	   this.applications=new HashSet<JobApplications>();
-   }
    
    public List<JobApplication> getApplications(){
 	   return applications;
    }
    
-   public void setApplications(Set<JobApplication> applications){
+   public void setApplications(List<JobApplication> applications){
 	      this.applications=applications;
    }
    
    public void addApplication(JobApplication application){
 	     applications.add(application);
+	     application.setApplicant(this);
    }
    
     public void removeApplication(JobApplication application){
-		if(application == null || application.size() ==0) return;
-		/*var updatedApplications=applications.stream()
-		                                    .filter(a-> a.getId() != application.getId())
-											.collect(Collectors.toList());
-	   applications=newApplications;*/
-	   
+		if(applications == null || applications.size() ==0) return; 
 	   applications.remove(application);
+	   application.setApplicant(null);
 	}
 
 }

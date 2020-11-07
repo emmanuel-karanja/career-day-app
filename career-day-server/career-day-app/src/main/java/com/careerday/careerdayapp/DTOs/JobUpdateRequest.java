@@ -2,6 +2,11 @@ package com.careerday.careerdayapp.DTOs;
 
 import lombok.Data;
 import javax.validation.constraints.*;
+
+import com.careerday.careerdayapp.Entities.JobTypeName;
+import com.careerday.careerdayapp.Entities.JobStatus;
+import com.careerday.careerdayapp.Validation.ValueOfEnum;
+
 import java.time.LocalDate;
 import java.time.LocalTime;
 
@@ -38,6 +43,12 @@ public class JobUpdateRequest {
 	@NotEmpty
 	@NotBlank
 	@ValueOfEnum(enumClass=JobTypeName.class)
-	private String jobType;
+    private String jobType;
+	
+	@NotEmpty
+	@NotBlank
+	@ValueOfEnum(enumClass=JobStatus.class)
+	private String status;
+    
 
 }

@@ -1,9 +1,9 @@
-package com.springrestapi.springrestapi.Exceptions;
-
-import com.springrestapi.springrestapi.Payload.ApiResponse;
+package com.careerday.careerdayapp.Exceptions;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
+
+import com.careerday.careerdayapp.DTOs.ApiResponse;
 
 import lombok.Setter;
 import lombok.Getter;

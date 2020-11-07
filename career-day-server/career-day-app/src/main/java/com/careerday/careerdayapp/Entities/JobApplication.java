@@ -1,10 +1,11 @@
 package com.careerday.careerdayapp.Entities;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -12,8 +13,10 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import lombok.EqualsAndHashCode;
 
 
+@EqualsAndHashCode
 @Entity
 @Table(name = "job_application")
 public class JobApplication {
@@ -22,24 +25,20 @@ public class JobApplication {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "job_id" nullable=false)
+    @JoinColumn(name = "job_id", nullable=false)
     private Job job;
 
     @ManyToOne
-    @JoinColumn(name = "applicant_id" nullable=false)
+    @JoinColumn(name = "applicant_id", nullable=false)
     private JobApplicant applicant;
 
     @Column(name = "application_date", columnDefinition = "TIMESTAMP")
-    private LocalDateTime applicationDate;
+    private LocalDate applicationDate;
 	
 	@Enumerated(EnumType.STRING)
 	private JobApplicationStatus status;
 	
-	public enum JobApplicationStatus{
-		ACTIVE,
-		CANCELLED,
-		EXPIRED		
-	}
+	
 	
 	public JobApplication(){}
 	
@@ -70,7 +69,8 @@ public class JobApplication {
 	 public void setApplicationDate(LocalDate applicationDate){
 		  this.applicationDate=applicationDate;
 	 }
-	 public void getStatus(){
+	 
+	 public JobApplicationStatus getStatus(){
 		  return status;
 	 }
 	 
@@ -87,7 +87,7 @@ public class JobApplication {
 		 this.job=job;
     }
 	
-	public JobApplication getApplicant(){
+	public JobApplicant getApplicant(){
 		 return applicant;
     }
 	

@@ -1,9 +1,8 @@
 package com.careerday.careerdayapp.Entities;
 
 public enum JobStatus{
-   PENDING,
+   ACTIVE,
    EXPIRED,
-   ONGOING,
    SUSPENDED,
    CANCELLED
 }

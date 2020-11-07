@@ -14,5 +14,4 @@ public class JobResponse {
     private LocalDate interviewDate;
     private LocalTime startTime;
     private LocalTime endTime;
-
 }

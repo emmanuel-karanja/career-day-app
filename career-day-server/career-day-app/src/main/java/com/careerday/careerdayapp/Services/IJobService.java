@@ -1,6 +1,10 @@
 package com.careerday.careerdayapp.Services;
 
 import com.careerday.careerdayapp.DTOs.ApiResponse;
+import com.careerday.careerdayapp.DTOs.JobCreateRequest;
+import com.careerday.careerdayapp.DTOs.JobResponse;
+import com.careerday.careerdayapp.DTOs.JobUpdateRequest;
+import com.careerday.careerdayapp.DTOs.PagedResponse;
 
 public interface IJobService {
     JobResponse create(JobCreateRequest createRequest);

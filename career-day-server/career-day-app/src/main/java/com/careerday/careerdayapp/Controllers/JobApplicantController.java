@@ -1,12 +1,39 @@
 package com.careerday.careerdayapp.Controllers;
 
+import java.util.List;
+
+import javax.validation.Valid;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.careerday.careerdayapp.DTOs.ApiResponse;
+import com.careerday.careerdayapp.DTOs.JobApplicantRegisterRequest;
+import com.careerday.careerdayapp.DTOs.JobApplicantResponse;
+import com.careerday.careerdayapp.DTOs.JobApplicantUpdateRequest;
+import com.careerday.careerdayapp.DTOs.JobApplicationCreateRequest;
+import com.careerday.careerdayapp.DTOs.JobApplicationResponse;
+import com.careerday.careerdayapp.DTOs.JobApplicationUpdateRequest;
+import com.careerday.careerdayapp.DTOs.PagedResponse;
+import com.careerday.careerdayapp.Services.IJobApplicantService;
+import com.careerday.careerdayapp.Utils.AppConstants;
+
 @RestController
 @RequestMapping("/api/v1/job-applicants")
 public class JobApplicantController{
 	
 	private final IJobApplicantService jobApplicantService;
 	
-	public(IJobApplicantService jobApplicantService){
+	public JobApplicantController(IJobApplicantService jobApplicantService){
 		this.jobApplicantService=jobApplicantService;
 	}
 	
@@ -14,14 +41,15 @@ public class JobApplicantController{
 	public ResponseEntity<PagedResponse<JobApplicantResponse>> getAll(
 	@RequestParam(name="page", required=false,defaultValue= AppConstants.DEFAULT_PAGE_NUMBER) Integer page,
 	@RequestParam(name="size",required=false, defaultValue=AppConstants.DEFAULT_PAGE_SIZE) Integer size){
-		PagedResponse<JobApplicantResponse>=jobApplicantService.getAllApplicants(page,size);
+    	
+		PagedResponse<JobApplicantResponse> response=jobApplicantService.getAllApplicants(page,size);
 		
 		return new ResponseEntity<>(response,HttpStatus.OK);
 	}
 	
 	@PostMapping
-	public ResponseEntity<JobApplicant> addJobApplicant(@Valid @RequestBody JobApplicantRegisterRequest request){
-		JobApplicantResponse response=jobApplicantService.addNew(request);
+	public ResponseEntity<JobApplicantResponse> addJobApplicant(@Valid @RequestBody JobApplicantRegisterRequest request){
+		JobApplicantResponse response=jobApplicantService.create(request);
 		
 		return new ResponseEntity<>(response,HttpStatus.CREATED);
 	}
@@ -33,7 +61,7 @@ public class JobApplicantController{
 	}
 	
 	@PutMapping("/{id}")
-	public ResponseEntity<JobApplicantResponse> updateApplicant(@PathVariable(value="id") Long Id, 
+	public ResponseEntity<JobApplicantResponse> updateApplicant(@PathVariable(value="id") Long id, 
 	        JobApplicantUpdateRequest request){
 				JobApplicantResponse response=jobApplicantService.update(id,request);
 				return new ResponseEntity<>(response,HttpStatus.OK);
@@ -71,7 +99,7 @@ public class JobApplicantController{
 	
 	@DeleteMapping("/{id}/applications/{applicationId}")
 	public ResponseEntity<ApiResponse> deleteApplication(@PathVariable(value="id") Long id,
-	@PathVariable(value="applicationId") Long applicationId{
+	@PathVariable(value="applicationId") Long applicationId){
 		ApiResponse response=jobApplicantService.deleteApplication(id,applicationId);
 		return new ResponseEntity<>(response,HttpStatus.OK);
 	}

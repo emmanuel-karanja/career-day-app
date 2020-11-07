@@ -1,4 +1,4 @@
-package com.springrestapi.springrestapi.Exceptions;
+package com.careerday.careerdayapp.Exceptions;
 
 import java.time.Instant;
 import java.util.Collections;
@@ -9,8 +9,6 @@ import java.util.stream.Collectors;
 
 import javax.validation.ConstraintViolationException;
 
-
-import com.springrestapi.springrestapi.Payload.ApiResponse;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -27,6 +25,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
+
+import com.careerday.careerdayapp.DTOs.ApiResponse;
 
 @ControllerAdvice
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
