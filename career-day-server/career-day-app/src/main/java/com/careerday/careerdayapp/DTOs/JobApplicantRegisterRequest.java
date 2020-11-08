@@ -24,16 +24,15 @@ public class JobApplicantRegisterRequest {
     @Email
     private String email;
 
-
-    @NotBlank
-	@NotEmpty
-	//@Pattern(regexp="^(?:254|\+254|0)?(7(?:(?:[129][0-9])|(?:0[0-8])|(4[0-1]))[0-9]{6})$");
+    @NotEmpty(message = "Phone number is required")
+    @Pattern(regexp="^\\(?(\\d{4})\\)?[- ]?(\\d{3})[- ]?(\\d{3})$",
+             message="Mobile phone number is invalid")
     private String phone;
 
     
 
     @NotBlank
-	@ValueOfEnum(enumClass=LevelOfEducation.class)
+    @ValueOfEnum(enumClass = LevelOfEducation.class, message="Leve of Education must be one of 'GRADUATE','UNDER_GRADUATE, HIGHSCHOOL,UNDER-GRADUATE STUDENT")
     private String levelOfEducation;
 
     @Positive

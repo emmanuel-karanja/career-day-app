@@ -20,16 +20,17 @@ public class PagedResponse<T> {
     }
 
     public PagedResponse(List<T> content, int page, int size, long totalElements, int totalPages, boolean last) {
-        setContent(content);
+    	setContent(content);
         this.page = page;
         this.size = size;
         this.totalElements = totalElements;
         this.totalPages = totalPages;
         this.last = last;
+              
     }
 
     public List<T> getContent() {
-        return content == null ? null : new ArrayList<>(content);
+    	return content == null ? null : new ArrayList<>(content);
     }
 
     public final void setContent(List<T> content) {

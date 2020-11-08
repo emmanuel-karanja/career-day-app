@@ -13,7 +13,7 @@ public class BadRequestException extends RuntimeException {
      */
     private static final long serialVersionUID = 1L;
 
-    private ApiResponse apiResponse;
+    private transient ApiResponse apiResponse;
 
     public BadRequestException(ApiResponse apiResponse){
         super();
@@ -32,5 +32,11 @@ public class BadRequestException extends RuntimeException {
     public ApiResponse getApiResponse(){
         return apiResponse;
     }
+    
+    public void setApiResponse(ApiResponse apiResponse) {
+    	this.apiResponse=apiResponse;
+    }
+    
+    
     
 }

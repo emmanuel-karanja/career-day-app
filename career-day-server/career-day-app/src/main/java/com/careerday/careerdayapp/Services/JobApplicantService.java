@@ -2,6 +2,8 @@ package com.careerday.careerdayapp.Services;
 
 
 import com.careerday.careerdayapp.DTOs.ApiResponse;
+import com.careerday.careerdayapp.DTOs.AvailabilityResponse;
+import com.careerday.careerdayapp.DTOs.CountResponse;
 import com.careerday.careerdayapp.DTOs.JobApplicantRegisterRequest;
 import com.careerday.careerdayapp.DTOs.JobApplicantResponse;
 import com.careerday.careerdayapp.DTOs.JobApplicantUpdateRequest;
@@ -13,21 +15,25 @@ import com.careerday.careerdayapp.Entities.Job;
 import com.careerday.careerdayapp.Entities.JobApplicant;
 import com.careerday.careerdayapp.Entities.JobApplication;
 import com.careerday.careerdayapp.Entities.JobApplicationStatus;
+import com.careerday.careerdayapp.Entities.JobStatus;
 import com.careerday.careerdayapp.Entities.LevelOfEducation;
 import com.careerday.careerdayapp.Exceptions.BadRequestException;
+import com.careerday.careerdayapp.Exceptions.DuplicateEntityException;
 import com.careerday.careerdayapp.Exceptions.ResourceNotFoundException;
 import com.careerday.careerdayapp.Repositories.JobApplicantRepository;
 import com.careerday.careerdayapp.Repositories.JobApplicationRepository;
 import com.careerday.careerdayapp.Repositories.JobRepository;
 import com.careerday.careerdayapp.Utils.AppConstants;
 
-
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -36,6 +42,8 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class JobApplicantService implements IJobApplicantService{
+	
+	Logger _logger=LoggerFactory.getLogger(JobApplicantService.class);
 	
 	private final JobApplicantRepository jobApplicantRepository;
 	private final ModelMapper modelMapper;
@@ -48,6 +56,7 @@ public class JobApplicantService implements IJobApplicantService{
 	public static String APPLICATION="Job Application";
 	public static String FIRST_NAME="first_name";
 	public static String JOB="Job";
+	public static String PHONE="Phone Number";
 	
 	
 
@@ -64,8 +73,13 @@ public class JobApplicantService implements IJobApplicantService{
 	
 	
 	@Override
-	public JobApplicantResponse create(JobApplicantRegisterRequest createApplicantRequest){
-		JobApplicant newApplicant=convertFromDTO(createApplicantRequest);
+	public JobApplicantResponse create(JobApplicantRegisterRequest request){
+		if(jobApplicantRepository.existsByEmail(request.getEmail())) {
+			throw new DuplicateEntityException(APPLICANT,EMAIL,request.getEmail());
+		}else if(jobApplicantRepository.existsByPhone(request.getPhone())) {
+			throw new DuplicateEntityException(APPLICANT,PHONE,request.getPhone());
+		}
+		JobApplicant newApplicant=convertFromDTO(request);
 		jobApplicantRepository.save(newApplicant);
 		
 		return convertFromEntity(newApplicant);
@@ -77,22 +91,24 @@ public class JobApplicantService implements IJobApplicantService{
 		                          orElseThrow(()-> new ResourceNotFoundException(APPLICANT,ID,id));
 		applicant.setFirstName(updatedApplicant.getFirstName());
 		applicant.setLastName(updatedApplicant.getLastName());
-		applicant.setLevelofEducation(LevelOfEducation.valueOf(updatedApplicant.getLevelOfEducation()));
+		applicant.setLevelOfEducation(LevelOfEducation.valueOf(updatedApplicant.getLevelOfEducation()));
 		applicant.setYearsOfExperience(updatedApplicant.getYearsOfExperience());
-		applicant.setPhone(updatedApplicant.getPhone());
 		
-		jobApplicantRepository.save(applicant);
 		
-		return convertFromEntity(applicant);
+		JobApplicant savedApplicant =jobApplicantRepository.save(applicant);
+		
+		return convertFromEntity(savedApplicant);
 	}
 	
-	@Override
+	/*@Override
 	public JobApplicantResponse getByEmail(String email){
-		JobApplicant applicant=jobApplicantRepository.findByEmail(email)
-		                       .orElseThrow(()-> new ResourceNotFoundException(APPLICANT,EMAIL,email));
+		JobApplicant applicant=jobApplicantRepository.findJobApplicantByEmail(email)
+				               .orElseThrow(()->new ResourceNotFoundException(APPLICANT,EMAIL,email));
+		                       
+		                       //new ResourceNotFoundException(APPLICANT,EMAIL,email));
 		
 	    return convertFromEntity(applicant);
-	}
+	}*/
 
     @Override
     public JobApplicantResponse getById(Long id){
@@ -104,7 +120,7 @@ public class JobApplicantService implements IJobApplicantService{
 	@Override
 	public PagedResponse<JobApplicantResponse> getAllApplicants(int page, int size){
 		validatePageNumberAndSize(page,size);
-		Pageable pageable=PageRequest.of(page,size,Sort.by(FIRST_NAME).descending());
+		Pageable pageable=PageRequest.of(page,size,Sort.by("firstName").descending());
 		
 		Page<JobApplicant> applicants = jobApplicantRepository.findAll(pageable);
 		
@@ -114,9 +130,20 @@ public class JobApplicantService implements IJobApplicantService{
 		                                                  .map(a-> convertFromEntity(a))
 														  .collect(Collectors.toList());
 
+		
 		return new PagedResponse<>(responseContent, applicants.getNumber(), applicants.getSize(), applicants.getTotalElements(),
 				applicants.getTotalPages(), applicants.isLast());
 		
+	}
+	
+	@Override
+	public List<JobApplicantResponse> getAllApplicants(){
+		List<JobApplicant> applicants=jobApplicantRepository.findAll();
+		
+		List<JobApplicantResponse> responses=applicants.stream()
+		                                                .map(a->convertFromEntity(a))
+														.collect(Collectors.toList());
+	    return responses;
 	}
 	
 	@Override
@@ -149,7 +176,16 @@ public class JobApplicantService implements IJobApplicantService{
 		                                 .orElseThrow(()->new ResourceNotFoundException(APPLICANT,ID,applicantId));
 		Job job=jobRepository.findById(request.getJobId())
 		                                 .orElseThrow(()-> new ResourceNotFoundException(JOB,ID,request.getJobId()));
-		JobApplication newApplication = new JobApplication(job,applicant);
+		
+		//prevent applicant from applying to the same job more than once
+		Optional<JobApplication> application=applicant.getApplications().stream()
+				                                      .filter(a-> a.getJob().getJobId()==request.getJobId())
+				                                      .findAny();
+		if(application.isPresent()) {
+			throw new DuplicateEntityException(APPLICATION,"for",job.getName());
+		}
+		//if(job.getStatus() != JobStatus.ACTIVE) throw new BadRequestException("Job is currently inactive");
+		JobApplication newApplication = new JobApplication(applicant,job);
 		JobApplication savedApplication=jobApplicationRepository.save(newApplication);
 		applicant.addApplication(savedApplication);
 		jobApplicantRepository.save(applicant);
@@ -190,12 +226,37 @@ public class JobApplicantService implements IJobApplicantService{
 		JobApplicant applicant=jobApplicantRepository.findById(applicantId)
 		                                 .orElseThrow(()->new ResourceNotFoundException(APPLICANT,ID,applicantId));
 	    Optional<JobApplication> application=applicant.getApplications().stream()
-		                                    .filter(a-> a.getId() == applicationId)
+		                                    .filter(a-> a.getApplicationId() == applicationId)
 											.findAny();
 	    if(!application.isPresent()) throw new ResourceNotFoundException(APPLICATION,ID,applicationId);
 
 		//else
 	   return convertApplicationFromEntity(application.get());
+	}
+	
+	@Override
+	public AvailabilityResponse checkEmailAvailability(String email) {
+		// TODO Auto-generated method stub
+		boolean exists=jobApplicantRepository.existsByEmail(email);
+		return new AvailabilityResponse(!exists);
+	}
+
+
+
+	@Override
+	public AvailabilityResponse checkPhoneNumberAvailability(String phone) {
+		// TODO Auto-generated method stub
+		boolean exists=jobApplicantRepository.existsByPhone(phone);
+		return new AvailabilityResponse(!exists);
+	}
+	
+	@Override
+	public CountResponse getApplicationCountByApplicant(Long applicantId) {
+		// TODO Auto-generated method stub
+		JobApplicant applicant=jobApplicantRepository.findById(applicantId)
+				               .orElseThrow(()-> new  ResourceNotFoundException(APPLICANT,ID,applicantId));
+		
+		return new CountResponse(applicant.getApplications().size());
 	}
 	
 	private JobApplicant convertFromDTO(JobApplicantRegisterRequest request){
@@ -211,16 +272,15 @@ public class JobApplicantService implements IJobApplicantService{
 	private JobApplicationResponse convertApplicationFromEntity(JobApplication application){
 		JobApplicationResponse response =new JobApplicationResponse();
 		
-		response.setId(application.getId());
-		response.setApplicationDate(application.getApplicationDate());
+		response.setApplicationId(application.getApplicationId());
+		response.setApplicationDate(application.getAppliedAt());
 		response.setJobName(application.getJob().getName());
-		response.setJobId(application.getJob().getId());
+		response.setJobId(application.getJob().getJobId());
 		response.setJobStatus(application.getJob().getStatus().name());
-		response.setApplicantId(application.getApplicant().getId());
+		response.setApplicantId(application.getApplicant().getApplicantId());
 		response.setApplicantFirstName(application.getApplicant().getFirstName());
 		response.setApplicantLastName(application.getApplicant().getLastName());
-		
-		
+		response.setApplicantEmail(application.getApplicant().getEmail());
 		return response;
 	}
 	private void validatePageNumberAndSize(int page, int size) {
@@ -236,8 +296,5 @@ public class JobApplicantService implements IJobApplicantService{
 			throw new BadRequestException("Page size must not be greater than " +AppConstants.MAX_PAGE_SIZE);
 		}
 	}
-
-
-
 	
 }

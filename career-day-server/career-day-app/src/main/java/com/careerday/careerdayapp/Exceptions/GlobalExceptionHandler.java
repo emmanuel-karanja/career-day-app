@@ -112,8 +112,15 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 	public ResponseEntity<ApiResponse> resolveException(AccessDeniedException exception) {
 		ApiResponse apiResponse = exception.getApiResponse();
 
-		return new ResponseEntity< >(apiResponse, HttpStatus.FORBIDDEN);
+		return new ResponseEntity<>(apiResponse, HttpStatus.FORBIDDEN);
     }
+	
+	@ExceptionHandler(DuplicateEntityException.class)
+	@ResponseBody
+	public ResponseEntity<ApiResponse> resolveException(DuplicateEntityException exception){
+		ApiResponse apiResponse=exception.getApiResponse();
+		return new ResponseEntity<>(apiResponse,HttpStatus.CONFLICT);
+	}
     
     //finally the catch all
 

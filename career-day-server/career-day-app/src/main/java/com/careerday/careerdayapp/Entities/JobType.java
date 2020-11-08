@@ -15,16 +15,13 @@ import lombok.Data;
 
 @Data
 @Entity
-@Table(name="job_types")
 public class JobType{
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name="job_type_id")
-	private Long id;
+	private Long jobTypeId;
 
 	@Enumerated(EnumType.STRING)
 	@NaturalId
-	@Column(name = "name")
 	private JobTypeName name;
 
 	public JobType(JobTypeName name) {

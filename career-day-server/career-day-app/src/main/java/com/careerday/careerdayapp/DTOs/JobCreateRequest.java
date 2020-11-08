@@ -30,22 +30,19 @@ public class JobCreateRequest {
     @Size(min = 5, max = 150)
     private String summary;
 
-    @NotEmpty
-    @NotBlank
+    @NotNull
     @Future
     private LocalDate interviewDate;
 
-    @NotEmpty
-    @NotBlank
+   @NotNull
     private LocalTime startTime;
-
-    @NotEmpty
-    @NotBlank
+ 
+    @NotNull
     private LocalTime endTime;
 	
 	@NotEmpty
 	@NotBlank
-	@ValueOfEnum(enumClass=JobTypeName.class)
+	@ValueOfEnum(enumClass=JobTypeName.class, message="Job type must a valid selection from the list")
 	private String jobType;
 
 }

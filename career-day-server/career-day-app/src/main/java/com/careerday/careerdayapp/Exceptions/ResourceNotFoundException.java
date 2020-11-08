@@ -19,7 +19,7 @@ public class ResourceNotFoundException extends RuntimeException {
      */
     private static final long serialVersionUID = 1L;
 
-    private ApiResponse apiResponse;
+    private transient ApiResponse apiResponse;
 
     private String resourceName;
     private String fieldName;
@@ -30,11 +30,20 @@ public class ResourceNotFoundException extends RuntimeException {
         this.resourceName=resourceName;
         this.fieldName=fieldName;
         this.fieldValue=fieldValue;
+        
+        setApiResponse();
+        
     }
 
     public ApiResponse getApiResponse(){
         return apiResponse;
     }
+    
+    private void setApiResponse() {
+		String message = String.format("%s with %s: '%s' not found", resourceName, fieldName, fieldValue);
+
+		apiResponse = new ApiResponse(Boolean.FALSE, message);
+	}
 
     
 }

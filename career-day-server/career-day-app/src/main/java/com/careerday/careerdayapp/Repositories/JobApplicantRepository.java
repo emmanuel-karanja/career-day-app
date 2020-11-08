@@ -1,17 +1,12 @@
 package com.careerday.careerdayapp.Repositories;
 
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
 import com.careerday.careerdayapp.Entities.JobApplicant;
 
-import java.util.Optional;
-
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotEmpty;
-
-import org.springframework.data.jpa.repository.JpaRepository;
-
-public interface JobApplicantRepository extends JpaRepository<JobApplicant, Long> {
-	
-	Optional<JobApplicant> findByEmail(@NotEmpty @Email String email);
-	Boolean existsByEmail (@NotEmpty @Email String email);
-	Boolean existsByPhone (@NotEmpty String phone);
+@Repository
+public interface JobApplicantRepository extends JpaRepository<JobApplicant,Long>{
+	Boolean existsByEmail(String email);
+	Boolean existsByPhone(String phone);
 }

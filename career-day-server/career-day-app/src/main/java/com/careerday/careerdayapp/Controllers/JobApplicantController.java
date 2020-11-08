@@ -17,6 +17,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.careerday.careerdayapp.DTOs.ApiResponse;
+import com.careerday.careerdayapp.DTOs.AvailabilityResponse;
+import com.careerday.careerdayapp.DTOs.CountResponse;
+import com.careerday.careerdayapp.DTOs.EmailRequest;
 import com.careerday.careerdayapp.DTOs.JobApplicantRegisterRequest;
 import com.careerday.careerdayapp.DTOs.JobApplicantResponse;
 import com.careerday.careerdayapp.DTOs.JobApplicantUpdateRequest;
@@ -24,11 +27,15 @@ import com.careerday.careerdayapp.DTOs.JobApplicationCreateRequest;
 import com.careerday.careerdayapp.DTOs.JobApplicationResponse;
 import com.careerday.careerdayapp.DTOs.JobApplicationUpdateRequest;
 import com.careerday.careerdayapp.DTOs.PagedResponse;
+import com.careerday.careerdayapp.DTOs.PhoneRequest;
 import com.careerday.careerdayapp.Services.IJobApplicantService;
 import com.careerday.careerdayapp.Utils.AppConstants;
 
+import io.swagger.annotations.Api;
+
 @RestController
 @RequestMapping("/api/v1/job-applicants")
+@Api(value="Job Applicants and Applications", description="Operations to manage job applicants and applications")
 public class JobApplicantController{
 	
 	private final IJobApplicantService jobApplicantService;
@@ -37,7 +44,13 @@ public class JobApplicantController{
 		this.jobApplicantService=jobApplicantService;
 	}
 	
-    @GetMapping
+	@GetMapping
+	public ResponseEntity<List<JobApplicantResponse>> getAll(){
+		List<JobApplicantResponse> response=jobApplicantService.getAllApplicants();
+		return new ResponseEntity<>(response,HttpStatus.OK);
+	}
+		
+   @GetMapping("/paged")
 	public ResponseEntity<PagedResponse<JobApplicantResponse>> getAll(
 	@RequestParam(name="page", required=false,defaultValue= AppConstants.DEFAULT_PAGE_NUMBER) Integer page,
 	@RequestParam(name="size",required=false, defaultValue=AppConstants.DEFAULT_PAGE_SIZE) Integer size){
@@ -46,6 +59,27 @@ public class JobApplicantController{
 		
 		return new ResponseEntity<>(response,HttpStatus.OK);
 	}
+   
+   //i can see how this could be dangerous without rate-limiting
+   @GetMapping("/email-available")
+   public ResponseEntity<AvailabilityResponse> checkEmailAvailability(@Valid @RequestBody EmailRequest request){
+	   AvailabilityResponse response=jobApplicantService.checkEmailAvailability(request.getEmail());
+	   
+	   return new ResponseEntity<>(response,HttpStatus.OK);
+   }
+	
+   @GetMapping("/phone-available")
+   public ResponseEntity<AvailabilityResponse> checkPhoneAvailability(@Valid @RequestBody PhoneRequest request){
+	   AvailabilityResponse response=jobApplicantService.checkPhoneNumberAvailability(request.getPhone());
+	   
+	   return new ResponseEntity<>(response,HttpStatus.OK);
+   }
+   
+   @GetMapping("/{id}/applications/count")
+   public ResponseEntity<CountResponse> getApplicationCountByApplicant(@PathVariable(value="id") Long id){
+	   CountResponse response=jobApplicantService.getApplicationCountByApplicant(id);
+	   return new ResponseEntity<>(response,HttpStatus.OK);
+   }
 	
 	@PostMapping
 	public ResponseEntity<JobApplicantResponse> addJobApplicant(@Valid @RequestBody JobApplicantRegisterRequest request){
@@ -62,7 +96,7 @@ public class JobApplicantController{
 	
 	@PutMapping("/{id}")
 	public ResponseEntity<JobApplicantResponse> updateApplicant(@PathVariable(value="id") Long id, 
-	        JobApplicantUpdateRequest request){
+	        @Valid @RequestBody JobApplicantUpdateRequest request){
 				JobApplicantResponse response=jobApplicantService.update(id,request);
 				return new ResponseEntity<>(response,HttpStatus.OK);
 	}
@@ -74,14 +108,12 @@ public class JobApplicantController{
 	}
 	
 	@GetMapping("/{id}/applications")
-	public ResponseEntity<List<JobApplicationResponse>> getApplications(
-	@RequestParam(value="size", required=false, defaultValue=AppConstants.DEFAULT_PAGE_NUMBER) Integer page,
-	@RequestParam(value="size",required=false,defaultValue=AppConstants.DEFAULT_PAGE_SIZE) Integer size,
-	@PathVariable(value="id") Long id){
+	public ResponseEntity<List<JobApplicationResponse>> getApplications(@PathVariable(value="id") Long id){
 		List<JobApplicationResponse> response=jobApplicantService.getAllApplications(id);
 		return new ResponseEntity<>(response, HttpStatus.OK);
 		
 	}
+	
 	
 	@GetMapping("/{id}/applications/{applicationId}")
 	public ResponseEntity<JobApplicationResponse> getApplication(@PathVariable(value="id") Long id, 
@@ -111,7 +143,5 @@ public class JobApplicantController{
 		JobApplicationResponse response=jobApplicantService.updateApplication(id,applicationId,request);
 		
 		return new ResponseEntity<>(response,HttpStatus.OK);
-	}
-	
-	
+	}	
 }

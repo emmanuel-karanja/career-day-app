@@ -19,7 +19,7 @@ import javax.validation.constraints.NotNull;
 public @interface ValueOfEnum {
     Class<? extends Enum<?>> enumClass();
 
-    String message() default "Value must be any of enum {enumClass}";
+    String message() default "Value must be one of the valid options";
 	
 	Class<?>[] groups() default {};
 

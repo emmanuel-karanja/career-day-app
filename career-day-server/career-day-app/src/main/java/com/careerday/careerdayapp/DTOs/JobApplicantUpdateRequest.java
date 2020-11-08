@@ -18,16 +18,11 @@ public class JobApplicantUpdateRequest {
     @Size(min = 2, max = 40)
     private String lastName;
 
-    // we need some regexp for phone number. Validates Kenyan numbers for now
-    @NotBlank
-	//@Pattern(regexp="^(?:254|\+254|0)?(7(?:(?:[129][0-9])|(?:0[0-8])|(4[0-1]))[0-9]{6})$");
-    private String phone;
-
-    // validated within certain enum ranges
-    @ValueOfEnum(enumClass = LevelOfEducation.class)
+    @NotEmpty
+    @ValueOfEnum(enumClass = LevelOfEducation.class, message="Leve of Education must be one of 'GRADUATE','UNDER_GRADUATE, HIGHSCHOOL,UNDER-GRADUATE STUDENT")
     private String levelOfEducation;
 	
-	@NotBlank
+	@NotNull
 	@Positive
 	@Max(40)
 	private Integer yearsOfExperience;

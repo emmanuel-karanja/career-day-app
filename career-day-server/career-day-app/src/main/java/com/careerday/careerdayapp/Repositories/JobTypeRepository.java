@@ -1,13 +1,14 @@
 package com.careerday.careerdayapp.Repositories;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
 import com.careerday.careerdayapp.Entities.JobType;
 
 import java.util.Optional;
 
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotBlank;
 
+@Repository
 public interface JobTypeRepository extends JpaRepository<JobType,Long>{
-	Optional<JobType> findByName(@NotEmpty @NotBlank String name);	
+	Optional<JobType> findByName(String name);	
 }

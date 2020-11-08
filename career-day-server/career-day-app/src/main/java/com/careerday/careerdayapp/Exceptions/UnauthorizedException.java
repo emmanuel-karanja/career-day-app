@@ -39,4 +39,8 @@ public class UnauthorizedException extends RuntimeException{
         return apiResponse;
     }
     
+    public void setApiResponse(ApiResponse apiResponse) {
+    	this.apiResponse=apiResponse;
+    }
+    
 }

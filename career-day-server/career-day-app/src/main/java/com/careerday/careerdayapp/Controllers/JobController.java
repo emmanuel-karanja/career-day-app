@@ -1,5 +1,7 @@
 package com.careerday.careerdayapp.Controllers;
 
+import java.util.List;
+
 import javax.validation.Valid;
 
 import org.springframework.http.HttpStatus;
@@ -22,8 +24,11 @@ import com.careerday.careerdayapp.DTOs.PagedResponse;
 import com.careerday.careerdayapp.Services.IJobService;
 import com.careerday.careerdayapp.Utils.AppConstants;
 
+import io.swagger.annotations.Api;
+
 @RestController
 @RequestMapping("/api/v1/jobs")
+@Api(value="Job Postings", description="Operations to manage Job Postings")
 public class JobController{
 	private final IJobService jobService;
 	
@@ -31,11 +36,17 @@ public class JobController{
 		this.jobService=jobService;
 	}
 	
-	@GetMapping
+	@GetMapping("/paged")
     public ResponseEntity<PagedResponse<JobResponse>> getAll(
 	@RequestParam(value="page", required=false, defaultValue=AppConstants.DEFAULT_PAGE_NUMBER) Integer page,
 	@RequestParam(value="size", required=false, defaultValue=AppConstants.DEFAULT_PAGE_SIZE) Integer size){
 		PagedResponse<JobResponse> response=jobService.getAllJobs(page,size);
+		return new ResponseEntity<>(response,HttpStatus.OK);
+	}
+	
+	@GetMapping
+	public ResponseEntity<List<JobResponse>> getAll(){
+		List<JobResponse> response=jobService.getAllJobs();
 		return new ResponseEntity<>(response,HttpStatus.OK);
 	}
 	
