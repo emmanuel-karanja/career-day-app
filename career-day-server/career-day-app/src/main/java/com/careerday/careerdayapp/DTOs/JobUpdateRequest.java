@@ -4,6 +4,7 @@ import lombok.Data;
 import javax.validation.constraints.*;
 
 import com.careerday.careerdayapp.Entities.JobTypeName;
+import com.careerday.careerdayapp.Entities.LevelOfEducation;
 import com.careerday.careerdayapp.Entities.JobStatus;
 import com.careerday.careerdayapp.Validation.ValueOfEnum;
 
@@ -48,6 +49,11 @@ public class JobUpdateRequest {
 	@NotBlank
 	@ValueOfEnum(enumClass=JobStatus.class)
 	private String status;
+	
+	@NotEmpty
+	@NotBlank
+	@ValueOfEnum(enumClass=LevelOfEducation.class)
+	private String levelOfEducation;
     
 
 }

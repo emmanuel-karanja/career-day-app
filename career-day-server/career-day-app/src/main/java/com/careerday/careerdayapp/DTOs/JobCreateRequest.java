@@ -4,6 +4,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 
 import com.careerday.careerdayapp.Entities.JobTypeName;
+import com.careerday.careerdayapp.Entities.LevelOfEducation;
 import com.careerday.careerdayapp.Validation.ValueOfEnum;
 
 import javax.validation.constraints.Future;
@@ -44,5 +45,10 @@ public class JobCreateRequest {
 	@NotBlank
 	@ValueOfEnum(enumClass=JobTypeName.class, message="Job type must a valid selection from the list")
 	private String jobType;
+	
+	@NotEmpty
+	@NotBlank
+	@ValueOfEnum(enumClass=LevelOfEducation.class)
+	private String levelOfEducation;
 
 }

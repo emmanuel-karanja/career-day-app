@@ -259,7 +259,7 @@ public class JobApplicantService implements IJobApplicantService{
 		return new CountResponse(applicant.getApplications().size());
 	}
 	
-	private JobApplicant convertFromDTO(JobApplicantRegisterRequest request){
+	/*private JobApplicant convertFromDTO(JobApplicantRegisterRequest request){
 		JobApplicant applicant=modelMapper.map(request,JobApplicant.class);
 		return applicant;
 	}
@@ -267,6 +267,31 @@ public class JobApplicantService implements IJobApplicantService{
 	private JobApplicantResponse convertFromEntity(JobApplicant applicant){
 		JobApplicantResponse jobResponse=modelMapper.map(applicant,JobApplicantResponse.class);
 		return jobResponse;
+	}*/
+	private JobApplicant convertFromDTO(JobApplicantRegisterRequest request) {
+		JobApplicant applicant=new JobApplicant();
+		
+		applicant.setEmail(request.getEmail());
+		applicant.setFirstName(request.getFirstName());
+		applicant.setLastName(request.getLastName());
+		applicant.setLevelOfEducation(LevelOfEducation.valueOf(request.getLevelOfEducation()));
+		applicant.setPhone(request.getPhone());
+		applicant.setYearsOfExperience(request.getYearsOfExperience());
+		
+		return applicant;
+	}
+	
+	private JobApplicantResponse convertFromEntity(JobApplicant applicant) {
+		JobApplicantResponse response=new JobApplicantResponse();
+		response.setApplicantId(applicant.getApplicantId());
+		response.setEmail(applicant.getEmail());
+		response.setFirstName(applicant.getFirstName());
+		response.setLastName(applicant.getLastName());
+		response.setLevelOfEducation(applicant.getLevelOfEducation().name());
+		response.setPhone(applicant.getPhone());
+		response.setYearsOfExperience(applicant.getYearsOfExperience());
+		
+		return response;
 	}
 	
 	private JobApplicationResponse convertApplicationFromEntity(JobApplication application){

@@ -23,6 +23,7 @@ import com.careerday.careerdayapp.Entities.Job;
 import com.careerday.careerdayapp.Entities.JobStatus;
 import com.careerday.careerdayapp.Entities.JobType;
 import com.careerday.careerdayapp.Entities.JobTypeName;
+import com.careerday.careerdayapp.Entities.LevelOfEducation;
 import com.careerday.careerdayapp.Exceptions.BadRequestException;
 import com.careerday.careerdayapp.Exceptions.DuplicateEntityException;
 import com.careerday.careerdayapp.Exceptions.ResourceNotFoundException;
@@ -77,6 +78,7 @@ public class JobService implements IJobService{
 		job.setInterviewStartTime(request.getStartTime());
 		job.setInterviewEndTime(request.getEndTime());
 		job.setStatus(JobStatus.valueOf(request.getStatus()));
+		
 		
 		/*JobType jobType=jobTypeRepository.findByName(updateRequest.getJobType())
 		                .orElseThrow(()-> new ResourceNotFoundException(JOB_TYPE,TYPE,updateRequest.getJobType()));*/
@@ -152,15 +154,30 @@ public class JobService implements IJobService{
 		newJob.setInterviewAt(jobDto.getInterviewDate());
 		newJob.setInterviewStartTime(jobDto.getStartTime());
 		newJob.setInterviewEndTime(jobDto.getEndTime());
+		newJob.setLevelOfEducation(LevelOfEducation.valueOf(jobDto.getLevelOfEducation()));
 		newJob.setStatus(JobStatus.ACTIVE);
 		
 		return newJob;
 	}
 	
 	private JobResponse convertFromEntity(Job job){
-		JobResponse jobResponse=modelMapper.map(job ,JobResponse.class);
-		return jobResponse;
+		//JobResponse jobResponse=modelMapper.map(job ,JobResponse.class);
+		//return jobResponse;
+		
+		 JobResponse jobResponse=new JobResponse();
+		 jobResponse.setId(job.getJobId());
+		 jobResponse.setName(job.getName());
+		 jobResponse.setDescription(job.getDescription());
+		 jobResponse.setInterviewDate(job.getInterviewAt());
+		 jobResponse.setSummary(job.getSummary());
+		 jobResponse.setStartTime(job.getInterviewStartTime());
+		 jobResponse.setEndTime(job.getInterviewEndTime());
+		 jobResponse.setStatus(job.getStatus());
+		 jobResponse.setType(job.getType().name());
+		 
+		 return jobResponse;
 	}
+	
 	
 	private void validatePageNumberAndSize(int page, int size) {
 		if (page < 0) {
