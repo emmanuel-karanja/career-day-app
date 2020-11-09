@@ -271,21 +271,7 @@ class JobServiceUnitTests {
 		return newJob;
 	}
 	
-	private JobResponse convertFromEntity(Job job){
-		JobResponse jobResponse=new JobResponse();
-		 jobResponse.setId(job.getJobId());
-		 jobResponse.setName(job.getName());
-		 jobResponse.setDescription(job.getDescription());
-		 jobResponse.setInterviewDate(job.getInterviewAt());
-		 jobResponse.setSummary(job.getSummary());
-		 jobResponse.setStartTime(job.getInterviewStartTime());
-		 jobResponse.setEndTime(job.getInterviewEndTime());
-		 jobResponse.setStatus(job.getStatus());
-		 jobResponse.setType(job.getType().name());
-		 
-		 return jobResponse;
-		 
-	}
+	
 	
 
 }

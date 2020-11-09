@@ -1,5 +1,8 @@
 package com.careerday.tests.controllers;
 
+import org.junit.jupiter.api.Test;
+
+
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -8,12 +11,10 @@ import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 
 import org.junit.Before;
 import org.junit.FixMethodOrder;
-import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.core.annotation.Order;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
@@ -33,7 +34,7 @@ import org.junit.runners.MethodSorters;
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 @AutoConfigureMockMvc
 @SpringBootTest
-class JobControllerTests {
+class JobApplicantControllerTests {
 	
 	@Autowired
 	private MockMvc mockMvc;
@@ -48,31 +49,31 @@ class JobControllerTests {
 	
 	
 	@Test
-	public void ut1_getAllJobs() throws Exception{
+	public void ut1_getAllJobApplicants() throws Exception{
 		mockMvc
-		   .perform(MockMvcRequestBuilders.get("/api/v1/jobs").accept(MediaType.APPLICATION_JSON))
+		   .perform(MockMvcRequestBuilders.get("/api/v1/job-applicants").accept(MediaType.APPLICATION_JSON))
 		   .andExpect(status().isOk())
 		   .andExpect(jsonPath("$",hasSize(1)))
 		   .andDo(print());
 	}
 	
 	@Test
-	public void ut2_getJobById() throws Exception{
+	public void ut2_getJobApplicantsById() throws Exception{
 		mockMvc
-		    .perform(MockMvcRequestBuilders.get("/api/v1/jobs/1").accept(MediaType.APPLICATION_JSON))
+		    .perform(MockMvcRequestBuilders.get("/api/v1/job-applicants/1").accept(MediaType.APPLICATION_JSON))
 		    .andExpect(status().isOk())
-		    .andExpect(jsonPath("$.name").exists())
-			.andExpect(jsonPath("$.status").exists())
-			.andExpect(jsonPath("$.summary").exists())
-			.andExpect(jsonPath("$.type").exists())
+		    .andExpect(jsonPath("$.FirstName").exists())
+			.andExpect(jsonPath("$.Email").exists())
+			.andExpect(jsonPath("$.LastName").exists())
+			.andExpect(jsonPath("$.Education").exists())
 		    .andDo(print());
 		    
 	}
 	
 	@Test
-	public void ut3_getJobByInvalidId() throws Exception{
+	public void ut3_getJobApplicantByInvalidId() throws Exception{
 		mockMvc
-		  .perform(MockMvcRequestBuilders.get("/api/v1/jobs/17").accept(MediaType.APPLICATION_JSON))
+		  .perform(MockMvcRequestBuilders.get("/api/v1/job-applicants/17").accept(MediaType.APPLICATION_JSON))
 		  .andExpect(status().isNotFound())
 		  .andExpect(jsonPath("$.success").value("false"))
 		  .andExpect(jsonPath("$.message").exists())
@@ -82,15 +83,16 @@ class JobControllerTests {
 	@Test
 	public void ut4_createJob() throws Exception{
 		mockMvc
-		  .perform(MockMvcRequestBuilders.post("/api/v1/jobs")
+		  .perform(MockMvcRequestBuilders.post("/api/v1/job-applicants")
 				  .contentType(MediaType.APPLICATION_JSON)
-				  .content("{\"name\":\"Serverless Engineer\",\"description\":\"A developer with at least 3 years experience developing GraphQL APIs in Node.js with Claudia.js\",\"summary\":\"Summary of Job 1\",\"jobType\":\"API_ENGINEER\",\"interviewDate\":\"2021-01-11\",\"startTime\":\"10:00\",\"endTime\":\"17:00\",\"levelOfEducation\":\"GRADUATE\"}")
+				  .content("{\"firstName\":\"Miriam\",\"lastName\":\"Nyoks\",\"email\":\"miriamhawks2@mm1.com\",\"levelOfEducation\":\"POST_GRADUATE\",\"yearsOfExperience\":\"9\",\"phone\":\"0712400896\"}")
 				  .accept(MediaType.APPLICATION_JSON))
 		  .andExpect(status().isCreated())
-		  .andExpect(jsonPath("$.name").exists())
-		  .andExpect(jsonPath("$.status").exists())
-		  .andExpect(jsonPath("$.summary").exists())
-		  .andExpect(jsonPath("$.type").exists())
+		  .andExpect(jsonPath("$.FirstName").exists())
+		  .andExpect(jsonPath("$.ApplicantId").exists())
+		  .andExpect(jsonPath("$.LastName").exists())
+		  .andExpect(jsonPath("$.Email").exists())
+		  .andExpect(jsonPath("$.Education").exists())
 		  .andDo(print());
 		          
 	}
@@ -98,9 +100,9 @@ class JobControllerTests {
 	
 	@Test
 	public void ut5_createJobDuplicate() throws Exception{
-		mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/jobs")
+		mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/job-applicants")
 			   .contentType(MediaType.APPLICATION_JSON)
-			   .content("{\"name\":\"Serverless Engineer\",\"description\":\"A developer with at least 3 years experience developing GraphQL APIs in Node.js with Claudia.js\",\"summary\":\"Summary of Job 1\",\"jobType\":\"API_ENGINEER\",\"interviewDate\":\"2021-01-11\",\"startTime\":\"10:00\",\"endTime\":\"17:00\",\"levelOfEducation\":\"GRADUATE\"}")
+			   .content("{\"firstName\":\"Miriam\",\"lastName\":\"Nyoks\",\"email\":\"miriamhawks2@mm1.com\",\"levelOfEducation\":\"POST_GRADUATE\",\"yearsOfExperience\":\"9\",\"phone\":\"0712400896\"}")
 			   .accept(MediaType.APPLICATION_JSON))
 		   .andExpect(status().isConflict())
 		   .andExpect(jsonPath("$.success").value("false"))
@@ -108,14 +110,15 @@ class JobControllerTests {
 		   .andDo(print());
 	}
 	
-	@Test
+	
+	/*@Test
 	public void ut6_beleteJobSuccessful() throws Exception{
 		mockMvc
-		    .perform(MockMvcRequestBuilders.delete("/api/v1/jobs/1").accept(MediaType.APPLICATION_JSON))
+		    .perform(MockMvcRequestBuilders.delete("/api/v1/job-applicants/1").accept(MediaType.APPLICATION_JSON))
 		    .andExpect(status().isOk())
 		    .andExpect(jsonPath("$.success").value("true"))
 		    .andExpect(jsonPath("$.message").exists())
 		    .andDo(print());
-	}
-	
+	}*/
 }
+
