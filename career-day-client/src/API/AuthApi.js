@@ -10,11 +10,12 @@ const client =axios.create({
     },
 });
 
-export const userApi={
-    login,logout,getAuthHeader,
+const authApi={
+    login,logout,getAuthBearerToken,
 }
 
 function login(credentials){
+    
     const authResponse=client.get(`/login`,credentials);
 
     localStorage.setItem('user',JSON.stringify(authResponse));
@@ -22,17 +23,19 @@ function login(credentials){
     return Response;
 }
 
-function getAuthHeader() {
+function getAuthBearerToken() {
     // return authorization header with jwt token
     let user = JSON.parse(localStorage.getItem('user'));
 
     if (user && user.token) {
-        return { 'Authorization': 'Bearer ' + user.token };
+        return `'Bearer ' + ${user.token}` ;
     } else {
-        return {};
+        return "";
     }
 }
 
 function logout(){
     localStorage.removeItem('user');
 }
+
+export default authApi;
