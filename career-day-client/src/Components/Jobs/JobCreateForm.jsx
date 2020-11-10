@@ -29,7 +29,6 @@ const jobCreateSchema=Yup.object().shape({
               ,"*Invalid job type")
               .required("*Job Type is required"),
    interviewDate: Yup.date("* Job Interview date must be a valid date")
-                     .future("*Interview Date must be in the future")
                      .required("*Job interview date is required"),
    levelOfEducation: Yup.string()
               .oneOf(['POST_GRADUATE','GRADUATE','UNDER_GRADUATE_STUDENT','HIGHSCHOOL']

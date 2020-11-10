@@ -1,6 +1,6 @@
 
 import history from '../Utils/history';
-import authApi from '../API';
+import authApi from '../API/AuthApi';
 import {alertActions} from './alerts';
 
 export const userConstants = {
@@ -16,7 +16,7 @@ export const userConstants = {
 };
 
 
-export function authReducer(authentication = {}, action) {
+export default function authReducer(authentication = {}, action) {
     switch (action.type) {
         case userConstants.LOGIN_REQUEST:
           return {
@@ -43,7 +43,7 @@ export const authActions = {
     logout,
 };
 
-function login(credentials) {
+export function login(credentials) {
     const {email}=credentials;
     return dispatch => {
         dispatch(request({ email }));

@@ -1,6 +1,6 @@
 
 import {alertActions} from './alerts';
-import {jobApplicantApi} from '../API';
+import {jobApplicantApi} from '../API/JobApplicantApi';
 
 export const ApplicantConstants={
    FETCH_APPLICANTS_SUCCEEDED: 'FETCH_APPLICANTS_SUCCEEDED',
@@ -131,7 +131,7 @@ export const fetchApplicants=()=>{
    return async dispatch=>{
      dispatch(alertActions.clear());
      try{
-       await jobApplicantApu.deleteApplicant(id)
+       await jobApplicantApi.deleteApplicant(id)
        dispatch(deleteApplicantSucceeded(id));
        dispatch(alertActions.success('Applicant Deleted'));
      }catch(error){
@@ -151,7 +151,7 @@ export const fetchApplicants=()=>{
 export const fetchApplicant=(id)=>{
   return async dispatch=>{
     try{
-      const data=await jobApplicant.getApplicantById(id);
+      const data=await jobApplicantApi.getApplicantById(id);
       dispatch(setCurrentApplicant(data));
       dispatch(alertActions.success(`Applicant ${data.firstName} fetched successfuly`))
     }catch(error){

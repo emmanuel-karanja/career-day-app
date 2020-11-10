@@ -2,15 +2,13 @@ import React from 'react';
 import { Formik} from 'formik';
 import * as Yup from 'yup';
 import PropTypes from 'prop-types';
-import {Form,Container,Button} from 'react-bootstrap';
+import {Form} from 'react-bootstrap';
 
 import {MyTextInput,
         MyStyledButton,
         MyStyledContainer,
         MyStyledForm,
   } from '../Common/MyFormComponents';
-
-
 
 
 const loginSchema=Yup.object().shape({
@@ -66,7 +64,7 @@ const LoginForm=(props)=>{
     );
 }
 
-JobApplicantUpdateForm.propTypes={
+ LoginForm.propTypes={
     login: PropTypes.func.isRequired,
     
 }

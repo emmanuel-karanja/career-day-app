@@ -1,6 +1,6 @@
 
 import {alertActions} from './alerts';
-import {jobApi} from '../API';
+import {jobApi} from '../API/JobApi';
 
 export const JobConstants={
    FETCH_JOBS_SUCCEEDED: 'FETCH_JOBS_SUCCEEDED',
@@ -28,12 +28,12 @@ export default function jobsReducer(jobs=[],action){
       return  action.payload;
     }
 
-    case JOBConstants.CREATE_JOB_SUCCEEDED:{
+    case JobConstants.CREATE_JOB_SUCCEEDED:{
        return  jobs.concat(action.payload);
     }
 
-    case JOBConstants.EDIT_JOB_SUCCEEDED:{
-      const nextJOBs=JOBs.map(job=>{
+    case JobConstants.EDIT_JOB_SUCCEEDED:{
+      const nextJobs=jobs.map(job=>{
         if(job.jobId===action.payload.jobId){
             Object.assign({},job,action.payload);
         }
@@ -43,7 +43,7 @@ export default function jobsReducer(jobs=[],action){
     }
 
     case JobConstants.DELETE_JOB_SUCCEEDED:{
-      const nextJOBs=jobs.filter(job=>job.jobId !== action.payload);
+      const nextJobs=jobs.filter(job=>job.jobId !== action.payload.id);
       return  nextJobs;
     }
 
@@ -72,7 +72,7 @@ export const fetchJobs=()=>{
   }
 }
 
- const fetchJobsSucceeded=(Jobs)=>{
+ const fetchJobsSucceeded=(jobs)=>{
    return{
      type: JobConstants.FETCH_JOBS_SUCCEEDED,
      payload:jobs
@@ -85,8 +85,8 @@ export const fetchJobs=()=>{
    return async dispatch=>{
      dispatch(alertActions.clear())
      try{
-       const {data}=await jobApi.createJOB(newJOB);
-       dispatch(createJOBSucceeded(data));
+       const {data}=await jobApi.createJOB(newJob);
+       dispatch(createJobSucceeded(data));
        dispatch(alertActions.success('Job Created Succesfully'));
        dispatch(fetchJob(data.jobId));
      }catch(error){
@@ -106,7 +106,7 @@ export const fetchJobs=()=>{
    return async dispatch=>{
      dispatch(alertActions.clear())
      try{
-        const data=await jobApi.updateJob(JOB);
+        const data=await jobApi.updateJob(job);
         dispatch(editJobSucceeded(data));
         dispatch(alertActions.success('Job Updated'));
         dispatch(fetchJob(data.jobId));

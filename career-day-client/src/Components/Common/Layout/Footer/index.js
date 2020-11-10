@@ -11,7 +11,7 @@ class Footer extends Component {
         <div className="container">
           <div className="footer">
             <hr style={ { margin: "30px 0 10px 0" } } />
-            <p>&copy;&nbsp;<Link to='/'>Author : Emmanuel Karanja</Link> 2017</p>
+            <p>&copy;&nbsp;<Link to='/'><small>Author : Emmanuel Karanja</small></Link> <small>Nov 2020</small></p>
           </div>
         </div>
       </div>

@@ -26,7 +26,8 @@ const ViewJobItem = props => {
   
 };
 
-function mapStateToProps(state, ownProps) {
+export default ViewJobItem;
+/*function mapStateToProps(state, ownProps) {
   return {
     job: state.jobs[ownProps.jobId],
   };
@@ -34,4 +35,4 @@ function mapStateToProps(state, ownProps) {
 
 const connectedJobItem= connect(mapStateToProps)(ViewJobItem);
 
-export {connectedJobItem as ViewJobItem};
+export {connectedJobItem as ViewJobItem};*/

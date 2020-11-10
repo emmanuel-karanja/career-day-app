@@ -4,7 +4,11 @@ import './style.css';
 class Contact extends Component {
   render() {
     return (
-      <h1>Contact Email : existentialkaranja@gmail.com</h1>
+      <div>
+        <h5>Our Contact Information </h5>
+        <hr/>
+        <p>Lorem ipsum blah blah blah</p>
+      </div>
     )
   }
 }

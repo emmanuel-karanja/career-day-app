@@ -1,10 +1,15 @@
 import React, { Component } from 'react';
+import ViewJobPage from '../../../Jobs/ViewJobsPage';
 import './style.css';
 
 class Home extends Component {
   render() {
     return (
-      <h1>Home</h1>
+      <div className="Container">
+         <h2>Home</h2>
+        <hr/>
+        <ViewJobPage/>
+      </div>
     )
   }
 }

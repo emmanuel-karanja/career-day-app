@@ -1,8 +1,9 @@
 import React,{Component} from 'react'
 import {createJob,updateJob,deleteJob} from '../../modules/jobs';
 import JobCreateForm from './JobCreateForm';
-import {connect,bindActionCreators} from 'react-redux';
+import {connect} from 'react-redux';
 import AdminJobList from './AdminJobList';
+import {bindActionCreators} from 'redux';
 
 
 
@@ -13,8 +14,6 @@ class AdminJobsPage extends Component {
         showNewJobCardForm: false,
       };
     }
-  
-  
   
     toggleForm = () => {
       this.setState({ showNewJobCardForm: !this.state.showNewJobCardForm });
@@ -33,7 +32,7 @@ class AdminJobsPage extends Component {
     }
   
     render() {
-      if (this.props.isLoading) {
+     if (this.props.isLoading) {
         return <div className="jobs-loading">Loading...</div>;
       }
   
@@ -45,15 +44,15 @@ class AdminJobsPage extends Component {
               + New Job
             </button>
           </div>
-          {this.state.showNewJobCardForm && JobCreateForm} 
-          <div className="job-lists">{this.renderTaskLists()}</div>
+          {this.state.showNewJobCardForm && <JobCreateForm createJob={this.props.createJob}/> } 
+          <div className="job-lists">{this.renderJobLists()}</div>
         </div>
       );
     }
   }
   
   function mapStateToProps(state) {
-    const { isLoading } = state.alert;
+    const { isLoading } = state.alerts;
   
     return {
       jobs : state.jobs,

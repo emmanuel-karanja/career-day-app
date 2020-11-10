@@ -1,5 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import {Link} from 'react-router-dom';
+import {Button} from 'react-bootstrap';
 
 /*const JobStatuses=[
     'ACTIVE','SUSPENDED','CANCELLED','EXPIRED'
@@ -17,25 +19,33 @@ const AdminJobItem = props => {
       <hr />
       <div className="job-body">
         <p>
-          {props.job.description}
+          {props.job.summary}
         </p>
       </div>
-  <div>{/* we'll add an edit and delete button here to redirect to those pages*/}</div>
+     <div>
+        <Link to={`/updatejob/${props.job.jobId}`}>Edit</Link>
+        <br/>
+        <Link to={`/jobdetails/${props.job.jobId}`}>Details</Link>
+        <br/>
+        <Button variant="danger" type="button" onClick={props.deleteJob}>Delete</Button>
+     </div>
     </div>
   );
 
   
 };
 
-function mapStateToProps(state, ownProps) {
+export default AdminJobItem;
+
+/*function mapStateToProps(state, ownProps) {
   return {
     job: state.jobs[ownProps.jobId],
   };
 }
 
-const connectedJobAdminItem= connect(mapStateToProps)(AdminJobItem);
+export connect(mapStateToProps)(AdminJobItem);*/
 
-export {connectedJobAdminItem as JobAdminItem};
+
 
 
 

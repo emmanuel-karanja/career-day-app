@@ -7,20 +7,20 @@ import './style.css';
 class Header extends Component {
   render() {
     return (
-      <div role="navigation" className="navbar navbar-inverse navbar-fixed-top">
+
+          <div role="navigation" className="navbar navbar-expand-lg navbar-light bg-light">
+          <a className="navbar-brand" href="#">CareerDay App</a>
         <div className="container">
-          <div className="navbar-header">
-            <button type="button" data-toggle="collapse" data-target=".navbar-collapse" className="navbar-toggle"><span className="icon-bar"></span><span className="icon-bar"></span><span className="icon-bar"></span></button><Link to="/" className="navbar-brand">Program Name</Link>
-          </div>
-          <div className="collapse navbar-collapse">
-            <ul className="nav navbar-nav">
+            <ul className="navbar-nav mr-auto">
               <LiNavLink activeClassName='active' exact={true} to="/">Home</LiNavLink>
+              <LiNavLink activeClassName='active' exact={true} to="/login">Log-in</LiNavLink>
+              <LiNavLink activeClassName='active' exact={true} to="/registerapplicant">Register</LiNavLink>
               <LiNavLink activeClassName='active' exact={true} to="/about">About</LiNavLink>
               <LiNavLink activeClassName='active' exact={true} to="/contact">Contact</LiNavLink>
             </ul>
           </div>
         </div>
-      </div>
+      
     )
   }
 }

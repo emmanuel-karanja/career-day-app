@@ -1,5 +1,6 @@
 
 import AdminJobItem from './AdminJobItem';
+
 const AdminJobList=(props)=>{
     return (
         <div className="job-list">
@@ -9,7 +10,7 @@ const AdminJobList=(props)=>{
           {props.jobs.map(job => (
             <AdminJobItem key={job.jobId} job={job} 
                           deleteJob={props.deleteJob} 
-                          updatedJob={props.updateJob}/>
+                          updateJob={props.updateJob}/>
           ))}
         </div>
       );

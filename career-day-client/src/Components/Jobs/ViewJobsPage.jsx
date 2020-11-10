@@ -2,13 +2,13 @@
 //and acts as the container component for the jobs view
 
 import React,{Component} from 'react';
-import JobList from './ViewJobList';
-import connect from 'react-redux';
+import ViewJobList from './ViewJobList';
+import {connect} from 'react-redux';
 
-class JobsPage extends Component{
+class ViewJobsPage extends Component{
     render(){
         if (this.props.isLoading) {
-            return <div className="tasks-loading">Loading...</div>;
+            return <div className="jobs-loading">Loading...</div>;
           }
           //else
         return(
@@ -18,14 +18,14 @@ class JobsPage extends Component{
                  <input onChange={this.onSearch} type="text" placeholder="Search..." />
               </div>
             </div>
-            <JobList jobs={this.state.jobs}/>
+            <ViewJobList jobs={this.props.jobs}/>
         </div>
         )
     }
 }
 
 function mapStateToProps(state) {
-    const { isLoading,jobs } = state.jobs;
+    const { isLoading,jobs } = state;
   
     return {
       isLoading,jobs
@@ -34,4 +34,4 @@ function mapStateToProps(state) {
   
   
   
-  export default connect(mapStateToProps)(JobsPage);
+  export default connect(mapStateToProps)(ViewJobsPage);
