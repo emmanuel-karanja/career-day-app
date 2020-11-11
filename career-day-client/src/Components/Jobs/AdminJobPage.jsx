@@ -1,5 +1,5 @@
 import React,{Component} from 'react'
-import {createJob,updateJob,deleteJob, getFilteredJobs} from '../../modules/jobs';
+import {createJob,updateJob,deleteJob, fetchJobs,getFilteredJobs,filterJobs} from '../../modules/jobs';
 import JobCreateForm from './JobCreateForm';
 import {connect} from 'react-redux';
 import AdminJobList from './AdminJobList';
@@ -15,6 +15,9 @@ class AdminJobsPage extends Component {
       };
     }
   
+    componentDidMount(){
+		this.props.fetchJobs();
+	}
     toggleForm = () => {
       this.setState({ showNewJobCardForm: !this.state.showNewJobCardForm });
     }
@@ -65,7 +68,7 @@ class AdminJobsPage extends Component {
   function mapDispatchToProps(dispatch) {
     return bindActionCreators(
       {
-        createJob, updateJob,deleteJob
+        createJob, updateJob,deleteJob,fetchJobs,filterJobs
       },
       dispatch
     );

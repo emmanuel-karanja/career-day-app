@@ -13,11 +13,7 @@ public class CorsConfig implements WebMvcConfigurer {
     public void addCorsMappings(CorsRegistry registry){
         final long MAX_AGE_IN_SECS=3600;
 
-        registry.addMapping("/**")
-                .allowedOrigins(allowedOrigins)
-                .allowedMethods("GET","POST","PUT","DELETE")
-                .allowedHeaders("*")
-                .maxAge(MAX_AGE_IN_SECS);
+        registry.addMapping("/**");
 
     }
 }

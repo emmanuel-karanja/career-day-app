@@ -19,14 +19,17 @@ import JobApplicantRegistrationPage from './Components/JobApplicants/JobApplican
 import JobApplicantUpdatePage from './Components/JobApplicants/JobApplicantUpdatePage';
 import ViewJobList from './Components/Jobs/ViewJobList';
 import JobDetailsPage from './Components/Jobs/JobDetailsPage'
+import JobUpdatePage from './Components/Jobs/JobUpdatePage';
 import LoginPage from './Dashboards/LoginPage';
+import JobApplicantDetailsPage from './Components/JobApplicants/JobApplicantDetailsPage';
+import ViewJobApplicationsPage from './Components/JobApplications/ViewJobApplicationsPage';
 
 function App() {
   return (
    <Provider store={store}>
     <BrowserRouter>
         <div>
-          <Header/>
+          <AdminHeader/>
           
           <div className="container">
             <Switch>
@@ -36,8 +39,11 @@ function App() {
               <Route path="/adminjobpage" component={AdminJobPage} />
               <Route path="/viewjoblist" component={ViewJobList}/>
               <Route path="/jobdetails/:jobId" component={JobDetailsPage}/>
+			  <Route path="/updatejob/:jobId" component={JobUpdatePage}/>
               <Route path="/registerapplicant" component={JobApplicantRegistrationPage}/>
-              <Route path="/updateapplicant/:jobId" component={JobApplicantUpdatePage}/>
+              <Route path="/updateapplican/:applicantId" component={JobApplicantUpdatePage}/>
+              <Route path="/applicantdetails/:applicantId" component={JobApplicantDetailsPage}/>
+              <Route path="/applicationspage/:applicantId" component={ViewJobApplicationsPage}/>
               <Route path="/contact" component={Contact} />
               <Route component={NotFound} />
             </Switch>

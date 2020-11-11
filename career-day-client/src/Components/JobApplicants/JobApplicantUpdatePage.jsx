@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { Link, withRouter } from "react-router-dom";
 import PropTypes from "prop-types";
 import { connect} from "react-redux";
-import {createApplicant,fetchJob} from "../../modules/jobApplicants";
+import {createApplicant,fetchApplicant} from "../../modules/jobApplicants";
 import JobApplicantUpdateForm from './JobApplicantUpdateForm';
 import {bindActionCreators} from 'redux';
 
@@ -41,6 +41,7 @@ class JobApplicantUpdatePage extends Component {
 
 JobApplicantUpdatePage.propTypes = {
   updateApplicant: PropTypes.func.isRequired,
+  applicant : PropTypes.object.isRequired
 };
 
 
@@ -54,7 +55,13 @@ const mapDispatchToProps=(dispatch)=> {
     );
   }
 
+  const mapStateToProps=(state)=>{
+    const currentApplicant=state.currentApplicant;
+    return{
+       applicant: currentApplicant,
+    }
+  }
 export default connect(
-  null,
+  mapStateToProps,
   mapDispatchToProps
 )(withRouter(JobApplicantUpdatePage));

@@ -3,15 +3,19 @@ import { Formik} from 'formik';
 import * as Yup from 'yup';
 import PropTypes from 'prop-types';
 import {Form} from 'react-bootstrap';
+import {parseDateString,isSameOrBefore} from '../../Utils/dateUtils';
+import DatePicker from "react-datepicker"
+import "react-datepicker/dist/react-datepicker.css";
 
 import {MyTextInput,
         MyStyledButton,
         MyStyledContainer,
         MyStyledForm,
-        MySelectInput,    
+        MySelectInput,   
+        StyledLabel 
   } from '../Common/MyFormComponents';
 
-
+const today=new Date();
        
 const JobUpdateSchema=Yup.object().shape({
    name: Yup.string()
@@ -29,12 +33,15 @@ const JobUpdateSchema=Yup.object().shape({
               ,"*Invalid job type")
               .required("*Job Type is required"),
    interviewDate: Yup.date("* Job Interview date must be a valid date")
-                   .required("*Job interview date is required"),
+              .transform(parseDateString).min(today)
+              .required("*Interview Date is required"),
    levelOfEducation: Yup.string()
               .oneOf(['POST_GRADUATE','GRADUATE','UNDER_GRADUATE_STUDENT','HIGHSCHOOL']
               ,"*Invalid level of education type")
               .required("*Job level of education is required"),
    yearsOfExperience : Yup.number()
+                   .positive("*Invalid Input.Years of Experience must be positive")
+                   .integer("*Invalid input. Years of experience must be an integer")
                    .min(1,'*Job years of experience must be at least 1 year')
                    .max(40,'*Job years of experience must be at most 40 years')
                    .required("Years of experience is required"),
@@ -42,9 +49,29 @@ const JobUpdateSchema=Yup.object().shape({
               .oneOf(['ACTIVE','SUSPENDED','CANCELLED','EXPIRED']
               ,"*Invalid Job Status type")
               .required("*Job Status is required"),
+              startTime: Yup.string()
+              .test(
+                'not empty',
+                'Start time cant be empty',
+                function(value) {
+                  return !!value;
+                }
+              )
+              .test(
+                "",
+                "Start time must be before end time",
+                function(value) {
+                  const { endTime } = this.parent;
+                  return isSameOrBefore(value, endTime);
+                }
+              )
+              .default('09:00'),
+    endTime: Yup.string().default('17:00')
+    
 });
 
 const JobUpdateForm=(props)=>{
+    console.log(`inside jobupdate form ${props.job.name}`);
     return(
         <MyStyledContainer fluid>
             <Formik 
@@ -55,12 +82,13 @@ const JobUpdateForm=(props)=>{
 							   levelOfEducation:props.job.levelOfEducation,
 							   status: props.job.status,
 							   type: props.job.type,
-							   yearsOfExperience: props.job.experience,
+                               startTime: props.job.startTime,
+                               endTime:props.job.endTime,
                                }}
                validationSchema={JobUpdateSchema}
                onSubmit={(values, {setSubmitting, resetForm})=>{
                    setSubmitting(true);
-                       //alert(JSON.stringify(values,null,2));
+                       alert(JSON.stringify(values,null,2));
                        //send the axios request here
                        const updatedJob={id: props.job.jobId,...values};
                        props.updateJob(updatedJob);
@@ -68,7 +96,7 @@ const JobUpdateForm=(props)=>{
                        setSubmitting(false);
                }}
                >
-                   {({handleSubmit, isSubmitting})=>(
+                   {({handleSubmit, isSubmitting,setFieldValue,values})=>(
                        <MyStyledForm onSubmit={handleSubmit} className="mx-auto"> 
                                <Form.Group>  
                                <MyTextInput label="Job Title"
@@ -99,10 +127,26 @@ const JobUpdateForm=(props)=>{
                                 </MySelectInput>
                                 </Form.Group>
                                 <Form.Group>
-								<MyTextInput label="Job Interview Date"
-                                           name="interviewDate"
+                                <StyledLabel>Interview Date</StyledLabel>
+								<DatePicker 
+                                  selected={values.interviewDate}
+                                  dateFormat="MMMM d, yyyy"
+                                  className="form-control"
+                                  name="interviewDate"
+                                  onChange={date => setFieldValue('interviewDate', date)}
+                                />
+                                <Form.Group>
+								<MyTextInput label="Interview StartTime"
+                                           name="startTime"
                                            type="text"
-                                           placeholder="Job Interview Date...."/>
+                                           placeholder="Interview StartTime...."/>
+                                </Form.Group>
+                                <Form.Group>
+                                <MyTextInput label="Interview EndTime"
+                                           name="endTime"
+                                           type="text"
+                                           placeholder="Interview EndTime...."/>
+                                </Form.Group>
                                  </Form.Group>
                                  <Form.Group>
 							    <MySelectInput label="Level Of Education" name="levelOfEducation">

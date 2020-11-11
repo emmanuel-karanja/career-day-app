@@ -6,6 +6,8 @@ import applicantsReducer from './jobApplicants';
 import authReducer from './auth';
 import applicationsReducer from './jobApplications';
 import searchReducer from './search';
+import currentApplicantReducer from './currentApplicant'
+import currentJobReducer from './currentJob';
 
 
 
@@ -14,6 +16,8 @@ export * from './jobApplicants';
 export * from './alerts';
 export * from './auth';
 export * from './jobApplications';
+export * from './currentApplicant';
+export * from './currentJob';
 
 
 
@@ -24,6 +28,8 @@ const rootReducer=combineReducers({
   authentication: authReducer,
   applications: applicationsReducer,
   searchTerm : searchReducer,
+  currentApplicant: currentApplicantReducer,
+  currentJob: currentJobReducer,
   //-------------add more reducers here---------//
 })
 

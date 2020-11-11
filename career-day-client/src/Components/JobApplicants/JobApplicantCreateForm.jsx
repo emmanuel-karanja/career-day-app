@@ -34,8 +34,10 @@ const jobApplicantCreateSchema=Yup.object().shape({
               ,"*Invalid level of education type")
               .required("*Job level of education is required"),
    yearsOFExperience : Yup.number()
-                   .min(1,'*Job years of experience must be at least 1 year')
-                   .max(40,'*Job years of experience must be at most 40 years')
+                   .positive("*Invalid Input.Years of Experience must be positive")
+                   .integer("*Invalid input. Years of experience must be an integer")
+                   .min(1,'*Years of experience must be at least 1 year')
+                   .max(40,'*Years of experience must be at most 40 years')
                    .required("Years of experience is required")
 });
 

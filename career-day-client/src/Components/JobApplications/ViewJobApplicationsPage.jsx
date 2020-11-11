@@ -2,7 +2,6 @@
 //and acts as the container component for the jobs view
 
 import React,{Component} from 'react';
-import ViewJobList from './ViewJobList';
 import {connect} from 'react-redux';
 import {filterApplications, getFilteredApplications} from '../../modules/jobApplications';
 import ViewJobApplicationList from './ViewJobApplicationList';
@@ -30,8 +29,9 @@ class ViewJobApplicationsPage extends Component{
     }
 }
 
-function mapStateToProps(state) {
+function mapStateToProps(state,ownProps) {
     const{isLoading}=state.alerts;
+   // const {applicantId}=ownProps.match.params;
     return {
       applications : getFilteredApplications(state),
       isLoading

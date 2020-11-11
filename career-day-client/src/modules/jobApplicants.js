@@ -1,6 +1,7 @@
 
 import {alertActions} from './alerts';
 import {jobApplicantApi} from '../API/JobApplicantApi';
+import {createSelector} from 'reselect';
 
 export const ApplicantConstants={
    FETCH_APPLICANTS_SUCCEEDED: 'FETCH_APPLICANTS_SUCCEEDED',
@@ -8,7 +9,8 @@ export const ApplicantConstants={
    EDIT_APPLICANT_SUCCEEDED: 'EDIT_APPLICANT_SUCCEEDED',
    DELETE_APPLICANT_SUCCEEDED: 'DELETE_APPLICANT_SUCCEEDED',
 
-   FILTER_APPLICANTS: 'FILTER_APPLICANTS'
+   FILTER_APPLICANTS: 'FILTER_APPLICANTS',
+   SET_CURRENT_APPLICANT: 'SET_CURRENT_APPLICANT'
 
 };
 
@@ -155,7 +157,7 @@ export const fetchApplicant=(id)=>{
   }
 }
 
-const setCurrentApplicant=(applicant)=>{
+export const setCurrentApplicant=(applicant)=>{
   return {
     type: ApplicantConstants.SET_CURRENT_APPLICANT,
     payload: applicant

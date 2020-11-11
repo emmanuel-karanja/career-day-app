@@ -12,10 +12,12 @@ const client =axios.create({
 });
 
 export const jobApi={
+	
     fetchAllJobs,updateJob,createJob,deleteJob,fetchJobById
 }
 
 function fetchAllJobs(){
+	console.log('called api.fetchjobs');
     return client.get('/jobs');
 }
 

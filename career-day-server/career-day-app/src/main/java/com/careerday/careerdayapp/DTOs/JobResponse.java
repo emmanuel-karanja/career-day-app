@@ -15,7 +15,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 @NoArgsConstructor
 public class JobResponse {
 	
-	@JsonProperty("Id")
+	@JsonProperty("jobId")
     private Long id;
     private String name;
     private String type;

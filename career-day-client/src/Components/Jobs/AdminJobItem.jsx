@@ -8,6 +8,7 @@ import {Button} from 'react-bootstrap';
 ];*/
 
 const AdminJobItem = props => {
+	console.log(`jobId from adminjobItem: ${props.job.jobId}`);
   return (
     <div className="job-item">
       <div className="job-item-header">

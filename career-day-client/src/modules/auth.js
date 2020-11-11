@@ -2,35 +2,32 @@
 import history from '../Utils/history';
 import authApi from '../API/AuthApi';
 import {alertActions} from './alerts';
+import {ApplicantConstants,setCurrentApplicant} from './jobApplicants';
 
-export const userConstants = {
+export const AuthConstants = {
     LOGIN_REQUEST: 'USERS_LOGIN_REQUEST',
     LOGIN_SUCCESS: 'USERS_LOGIN_SUCCESS',
     LOGIN_FAILURE: 'USERS_LOGIN_FAILURE',
     
     LOGOUT: 'USERS_LOGOUT',
-
-    GETALL_REQUEST: 'USERS_GETALL_REQUEST',
-    GETALL_SUCCESS: 'USERS_GETALL_SUCCESS',
-    GETALL_FAILURE: 'USERS_GETALL_FAILURE',
 };
 
 
 export default function authReducer(authentication = {}, action) {
     switch (action.type) {
-        case userConstants.LOGIN_REQUEST:
+        case AuthConstants.LOGIN_REQUEST:
           return {
             loggingIn: true,
             user: action.user
           };
-        case userConstants.LOGIN_SUCCESS:
+        case AuthConstants.LOGIN_SUCCESS:
           return {
             loggedIn: true,
             user: action.user
           };
-        case userConstants.LOGIN_FAILURE:
+        case AuthConstants.LOGIN_FAILURE:
           return {};
-        case userConstants.LOGOUT:
+        case AuthConstants.LOGOUT:
           return {};
         default:
           return authentication
@@ -38,55 +35,45 @@ export default function authReducer(authentication = {}, action) {
 }
 
 
-export const authActions = {
-    login,
-    logout,
-};
-
-export function login(credentials) {
-    const {email}=credentials;
-    return dispatch => {
-        dispatch(request({ email }));
-
-        authApi.login(credentials)
-            .then(
-                user => { 
-                    dispatch(success(user));
-                    history.push('/');
-                },
-                error => {
-                    dispatch(failure(error));
-                    dispatch(alertActions.error(error));
-                }
-            );
-    };
-
-    
+export const login=(credentials)=>{
+  const{email}=credentials;
+  return async dispatch=>{
+    dispatch(requestLogin(email))
+    try{
+      const data=await authApi.login(credentials);
+      dispatch(setCurrentApplicant(data));
+      dispatch(loginSuccess(`Applicant ${data.firstName} fetched successfuly`));
+      history.push('/');
+    }catch(error){
+     dispatch(loginFailure('Failed to fetch Applicant',error.message));
+    }
+  }
 }
 
-function logout() {
+
+const logout=()=> {
     authApi.logout();
     return {
-         type: userConstants.LOGOUT 
+         type: AuthConstants.LOGOUT 
         };
 }
 
-function request(user) { 
+function requestLogin(user) { 
     return { 
-         type: userConstants.LOGIN_REQUEST, 
+         type: AuthConstants.LOGIN_REQUEST, 
          payload: user 
      } 
 }
 
-function success(user) {
+function loginSuccess(user) {
      return{
-           type: userConstants.LOGIN_SUCCESS, 
+           type: AuthConstants.LOGIN_SUCCESS, 
            payload:user 
       } 
     }
-function failure(error) {
+function loginFailure(error) {
      return {
-          type: userConstants.LOGIN_FAILURE, 
+          type: AuthConstants.LOGIN_FAILURE, 
           payload: error 
         } 
     }

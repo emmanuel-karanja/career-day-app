@@ -5,7 +5,7 @@ const AdminJobList=(props)=>{
     return (
         <div className="job-list">
           <div className="job-list-title">
-            <strong>{props.job.status}</strong>
+            <strong>Currently Posted Jobs</strong>
           </div>
           {props.jobs.map(job => (
             <AdminJobItem key={job.jobId} job={job} 

@@ -1,7 +1,7 @@
 //import {projectActions} from './projects';
 import {alertActions}  from './alerts';
 import { jobApplicantApi } from '../API/JobApplicantApi';
-import {createSelector} from 'reselect';
+import { createSelector } from 'reselect';
 
 export const ApplicationConstants={
    FETCH_APPLICATIONS_SUCCEEDED: 'FETCH_APPLICATIONS_SUCCEEDED',
@@ -135,10 +135,15 @@ export const filterApplications=(searchTerm)=>{
 /// ----SELECTORS---//
 
 export const getApplications=(state)=>{
-    return state.applications;
+    const applicantId=state.currentApplicant.applicantId;
+    if (!applicantId) {
+      return [];
+    }
+    const selected= state.applications.filter(application=> application.applicationId===applicantId);
+    return selected;
   }
   
-  const getSearchTerm=(state)=>state.searchTerm;
+  const getSearchTerm=(state,applicantId)=>state.searchTerm;
   
   export const getFilteredApplications=createSelector(
     [getApplications,getSearchTerm],
@@ -152,3 +157,5 @@ export const getApplications=(state)=>{
       });
     }
   );
+
+  
