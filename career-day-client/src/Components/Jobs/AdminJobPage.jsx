@@ -1,5 +1,5 @@
 import React,{Component} from 'react'
-import {createJob,updateJob,deleteJob} from '../../modules/jobs';
+import {createJob,updateJob,deleteJob, getFilteredJobs} from '../../modules/jobs';
 import JobCreateForm from './JobCreateForm';
 import {connect} from 'react-redux';
 import AdminJobList from './AdminJobList';
@@ -18,7 +18,9 @@ class AdminJobsPage extends Component {
     toggleForm = () => {
       this.setState({ showNewJobCardForm: !this.state.showNewJobCardForm });
     }
-    
+    onSearch=(searchTerm)=>{
+      this.props.filterJobs(searchTerm);
+    }
     renderJobLists() { 
         return (
           <AdminJobList
@@ -55,7 +57,7 @@ class AdminJobsPage extends Component {
     const { isLoading } = state.alerts;
   
     return {
-      jobs : state.jobs,
+      jobs : getFilteredJobs(state),
       isLoading,
     };
   }

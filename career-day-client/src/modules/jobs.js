@@ -1,6 +1,7 @@
 
 import {alertActions} from './alerts';
 import {jobApi} from '../API/JobApi';
+import {createSelector} from 'reselect';
 
 export const JobConstants={
    FETCH_JOBS_SUCCEEDED: 'FETCH_JOBS_SUCCEEDED',
@@ -8,8 +9,8 @@ export const JobConstants={
    EDIT_JOB_SUCCEEDED: 'EDIT_JOB_SUCCEEDED',
    DELETE_JOB_SUCCEEDED: 'DELETE_JOB_SUCCEEDED',
 
-   CURRENT_JOB_CHANGED:'CURRENT_JOB_CHANGED',
-   SET_CURRENT_JOB:'SET_CURRENT_JOB',
+   
+   FILTER_JOBS: 'FILTER_JOBS',
    
 };
 
@@ -43,7 +44,7 @@ export default function jobsReducer(jobs=[],action){
     }
 
     case JobConstants.DELETE_JOB_SUCCEEDED:{
-      const nextJobs=jobs.filter(job=>job.jobId !== action.payload.id);
+      const nextJobs=jobs.filter(job=>job.jobId !== action.payload);
       return  nextJobs;
     }
 
@@ -163,5 +164,32 @@ const setCurrentJob=(job)=>{
   }
 }
 
+export const filterJobs=(searchTerm)=>{
+  return {
+    type: JobConstants.FILTER_JOBS,
+    payload: searchTerm,
+  }
 
+}
+
+
+///SELECTORS
+export const getJobs=(state)=>{
+  return state.jobs;
+}
+
+const getSearchTerm=(state)=>state.searchTerm;
+
+export const getFilteredJobs=createSelector(
+  [getJobs,getSearchTerm],
+  (jobs,searchTerm)=>{
+    return jobs.filter(job=>{
+      const match =job.name.match(new RegExp(searchTerm,'i')) ||
+                   job.description.match(new RegExp(searchTerm,'i')) ||
+                   job.type.match(new RegExp(searchTerm,'i')) ||
+                   job.type.levelOfEducation(new RegExp(searchTerm,'i'));
+      return match;
+    });
+  }
+);
 

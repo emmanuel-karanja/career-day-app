@@ -4,19 +4,20 @@ import React from 'react';
     'ACTIVE','SUSPENDED','CANCELLED','EXPIRED'
 ];*/
 
-const ViewJobItem = props => {
+const ViewJobApplicationItem = props => {
   return (
     <div className="job-item">
       <div className="job-item-header">
         <div>
-          {props.job.name}
+          {props.application.jobName}
         </div>
-          {props.job.status}
+          {props.application.status}
+          {props.application.interviewDate}
       </div>
       <hr />
       <div className="job-body">
         <p>
-          {props.job.description}
+          {props.applicant.jobSummary}
         </p>
       </div>
     </div>
@@ -25,4 +26,4 @@ const ViewJobItem = props => {
   
 };
 
-export default ViewJobItem;
+export default ViewJobApplicationItem;

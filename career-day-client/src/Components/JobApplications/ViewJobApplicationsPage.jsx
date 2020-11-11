@@ -4,12 +4,12 @@
 import React,{Component} from 'react';
 import ViewJobList from './ViewJobList';
 import {connect} from 'react-redux';
-import {filterJobs, getFilteredJobs} from '../../modules/jobs';
-
-class ViewJobsPage extends Component{
+import {filterApplications, getFilteredApplications} from '../../modules/jobApplications';
+import ViewJobApplicationList from './ViewJobApplicationList';
+class ViewJobApplicationsPage extends Component{
 
     onSearch=(searchTerm)=>{
-      this.props.filterJobs(searchTerm);
+      this.props.filterApplications(searchTerm);
     }
     render(){
         if (this.props.isLoading) {
@@ -23,7 +23,8 @@ class ViewJobsPage extends Component{
                  <input onChange={this.onSearch} type="text" placeholder="Search..." />
               </div>
             </div>
-            <ViewJobList jobs={this.props.jobs}/>
+            <h4>Job Applications</h4>
+            <ViewJobApplicationList applications={this.props.applications}/>
         </div>
         )
     }
@@ -32,11 +33,11 @@ class ViewJobsPage extends Component{
 function mapStateToProps(state) {
     const{isLoading}=state.alerts;
     return {
-      jobs : getFilteredJobs(state),
+      applications : getFilteredApplications(state),
       isLoading
     };
   }
   
   
   
-  export default connect(mapStateToProps,{filterJobs})(ViewJobsPage);
+  export default connect(mapStateToProps,{filterApplications})(ViewJobApplicationsPage);

@@ -5,6 +5,7 @@ import { connect} from "react-redux";
 import JobUpdateForm from './JobUpdateForm';
 import {bindActionCreators} from 'redux';
 import {createJob} from '../../modules/jobs';
+import {withRouter} from 'react-router-dom';
 
  class JobUpdatePage extends Component{
     render(){

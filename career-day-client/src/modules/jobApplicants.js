@@ -8,12 +8,7 @@ export const ApplicantConstants={
    EDIT_APPLICANT_SUCCEEDED: 'EDIT_APPLICANT_SUCCEEDED',
    DELETE_APPLICANT_SUCCEEDED: 'DELETE_APPLICANT_SUCCEEDED',
 
-   CURRENT_APPLICANT_CHANGED:'CURRENT_APPLICANT_CHANGED',
-   SET_CURRENT_APPLICANT:'SET_CURRENT_APPLICANT',
-   //editing the taskIds per Applicant
-   ADD_APPLICATION: 'ADD_APPLICATION',
-   EDIT_APPLICATION:'EDIT_APPLICATION',
-   DELETE_APPLICATION:'DELETE_APPLICATION',
+   FILTER_APPLICANTS: 'FILTER_APPLICANTS'
 
 };
 
@@ -166,6 +161,35 @@ const setCurrentApplicant=(applicant)=>{
     payload: applicant
   }
 }
+
+export const filterApplicants=(searchTerm)=>{
+  return {
+    type: ApplicantConstants.FILTER_APPLICANTS,
+    payload: searchTerm,
+  }
+
+}
+
+
+///-----SELECTORS-----//
+
+export const getApplicants=(state)=>{
+  return state.applicants;
+}
+
+const getSearchTerm=(state)=>state.searchTerm;
+
+export const getFilteredApplicants=createSelector(
+  [getApplicants,getSearchTerm],
+  (applicants,searchTerm)=>{
+    return applicants.filter(applicant=>{
+      const match =applicant.firstName.match(new RegExp(searchTerm,'i')) ||
+                   applicant.lastName(new RegExp(searchTerm,'i')) ||
+                   applicant.levelOfEducation(new RegExp(searchTerm,'i'));
+      return match;
+    });
+  }
+);
 
 
 
