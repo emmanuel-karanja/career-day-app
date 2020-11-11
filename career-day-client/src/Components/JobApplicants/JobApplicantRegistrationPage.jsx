@@ -5,6 +5,7 @@ import { connect} from "react-redux";
 import {createApplicant} from "../../modules/jobApplicants";
 import JobApplicantCreateForm from './JobApplicantCreateForm';
 import {bindActionCreators} from 'redux';
+import {login} from "../../modules/auth";
 
 
 
@@ -43,17 +44,21 @@ class JobApplicantRegisterPage extends Component {
 
 JobApplicantRegisterPage.propTypes = {
   login: PropTypes.func.isRequired,
+  createApplicant: PropTypes.func.isRequired,
   authentication: PropTypes.object.isRequired,
 };
 
-const mapStateToProps = state => ({
-  authentication: state.authentication,
-});
+const mapStateToProps = state => {
+	
+	return {
+		authentication: state.authentication
+	}
+}
 
 const mapDispatchToProps=(dispatch)=> {
     return bindActionCreators(
       {
-        createApplicant
+        createApplicant,login
       },
       dispatch
     );

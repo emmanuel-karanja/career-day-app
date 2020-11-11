@@ -33,12 +33,17 @@ const jobApplicantCreateSchema=Yup.object().shape({
               .oneOf(['POST_GRADUATE','GRADUATE','UNDER_GRADUATE_STUDENT','HIGHSCHOOL']
               ,"*Invalid level of education type")
               .required("*Job level of education is required"),
-   yearsOFExperience : Yup.number()
+   yearsOfExperience : Yup.number()
                    .positive("*Invalid Input.Years of Experience must be positive")
                    .integer("*Invalid input. Years of experience must be an integer")
                    .min(1,'*Years of experience must be at least 1 year')
                    .max(40,'*Years of experience must be at most 40 years')
-                   .required("Years of experience is required")
+                   .required("Years of experience is required"),
+    password: Yup.string()
+	          .min(6,"*Password must be at least 6 characters")
+	          .required('Password is required'),
+   confirmPassword: Yup.string()
+                 .oneOf([Yup.ref('password'), null], 'Passwords must match')
 });
 
 const JobApplicantCreateForm=(props)=>{
@@ -50,19 +55,21 @@ const JobApplicantCreateForm=(props)=>{
 							   email:"",
 							   phone:"",
 							   levelOfEducation:"",
-							   yearsOfExperience:"",
+							   yearsOfExperience:1,
+							   password:"",
+							   confirmPassword:"",
                                }}
                validationSchema={jobApplicantCreateSchema}
                onSubmit={(values, {setSubmitting, resetForm})=>{
                    setSubmitting(true);
-                      // alert(JSON.stringify(values,null,2));
+                      //alert(JSON.stringify(values,null,2));
                        //send the axios request here
                        props.createApplicant(values);
                        resetForm();
                        setSubmitting(false);
                }}
                >
-                   {({handleSubmit, isSubmitting})=>(
+                   {({handleSubmit, isSubmitting,values})=>(
                        <MyStyledForm onSubmit={handleSubmit} className="mx-auto">   
                                 <Form.Group>
                                <MyTextInput label="First Name"
@@ -90,10 +97,10 @@ const JobApplicantCreateForm=(props)=>{
                                 </Form.Group>
                                 <Form.Group>
 							    <MySelectInput label="Level Of Education" name="levelOfEducation">
-                                    <option value="POST_GRADUATE">UI Engineer</option>
-                                    <option value="GRADUATE">API Engineer</option>
-                                    <option value="UNDER_GRADUATE_STUDENT">DevOps_Engineer</option>
-                                    <option value="HIGHSCHOOL">Data Engineer</option>
+                                    <option value="POST_GRADUATE">Post-Graduate</option>
+                                    <option value="GRADUATE">Graduate</option>
+                                    <option value="UNDER_GRADUATE_STUDENT">Under-Graduate Student</option>
+                                    <option value="HIGH_SCHOOL">High School</option>
                                 </MySelectInput>
                                 </Form.Group>
                                 <Form.Group>
@@ -101,6 +108,18 @@ const JobApplicantCreateForm=(props)=>{
                                            name="yearsOfExperience"
                                            type="text"
                                            placeholder="Years of experience...."/>
+                                </Form.Group>
+								<Form.Group>
+								<MyTextInput label="Password"
+                                           name="password"
+                                           type="password"
+                                           placeholder="Password(at least 6 characters mix numbers...."/>
+                                </Form.Group>
+								<Form.Group>
+								<MyTextInput label="Confirm Password"
+                                           name="confirmPassword"
+                                           type="password"
+                                           placeholder="Confirm password..."/>
                                 </Form.Group>
                              <Form.Group>
                            <MyStyledButton variant="primary" type="submit"

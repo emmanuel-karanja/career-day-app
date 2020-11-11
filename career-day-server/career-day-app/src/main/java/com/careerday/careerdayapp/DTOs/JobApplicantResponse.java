@@ -11,24 +11,24 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class JobApplicantResponse {
 	
-	@JsonProperty("ApplicantId")
+	
 	private Long applicantId;
 	
-	@JsonProperty("FirstName")
+	
     private String firstName;
-	@JsonProperty("LastName")
+	
     private String lastName;
 	
 	
-	@JsonProperty("Email")
+	
     private String email;
     
-    @JsonProperty("Education")
+    @JsonProperty("education")
     private String levelOfEducation;
     
-    @JsonProperty("PhoneNumber")
+    
     private String phone;
     
-    @JsonProperty("YearsOfExperience")
+    
     private Integer yearsOfExperience;
 }

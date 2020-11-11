@@ -12,6 +12,7 @@ class AdminHeader extends Component {
         <div className="container">
             <ul className="navbar-nav mr-auto">
               <LiNavLink activeClassName='active' exact={true} to="/adminjobpage">Jobs</LiNavLink>
+			  <LiNavLink activeClassName='active' exact={true} to="/registerapplicant">Register</LiNavLink>
               <LiNavLink activeClassName='active' exact={true} to="/">Home</LiNavLink>
               <LiNavLink activeClassName='active' exact={true} to="/about">About</LiNavLink>
               <LiNavLink activeClassName='active' exact={true} to="/contact">Contact</LiNavLink>              

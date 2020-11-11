@@ -7,7 +7,8 @@ const client =axios.create({
     baseURL: API_BASE_URL,
     headers:{
         'Content-Type' : 'application/json',
-        'Authorization' : authApi.getAuthBearerToken(),
+        //'Authorization' : authApi.getAuthBearerToken(),
+	   'Access-Control-Allow-Origin' : 'http://localhost:3000'
     },
 });
 
@@ -22,10 +23,12 @@ function fetchAllJobs(){
 }
 
 function fetchJobById(id){
+     console.log(`jobApi.fetchJob jobId: ${id}`);
     return client.get(`/jobs/${id}`);
 }
 
 function createJob(newJob){
+	console.log(`inside jobApi.createJob jobName : ${newJob.name}`);
     return client.post(`/jobs`,newJob);
 }
 
@@ -34,5 +37,6 @@ function updateJob(updatedJob){
 }
 
 function deleteJob(id){
+	console.log(`jobApi.deleteJob called jobId :${id}`);
     return client.delete(`/jobs/${id}`);
 }

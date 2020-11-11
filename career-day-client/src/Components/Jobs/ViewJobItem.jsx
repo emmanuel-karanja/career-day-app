@@ -9,15 +9,18 @@ const ViewJobItem = props => {
     <div className="job-item">
       <div className="job-item-header">
         <div>
-          {props.job.name}
+          <h3>{props.job.name}</h3>
         </div>
           {props.job.status}
       </div>
       <hr />
       <div className="job-body">
         <p>
-          {props.job.description}
+          {props.job.description} <br/>	 	 
         </p>
+		<strong>Interview On : {props.job.InterviewOn}</strong> <br/>
+		 Interview StartTime : {props.job.StartTime} <br/>
+		 Interview EndTime   : {props.job.EndTime}
       </div>
     </div>
   );

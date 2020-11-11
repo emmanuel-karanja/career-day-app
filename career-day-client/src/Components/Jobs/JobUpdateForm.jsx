@@ -28,28 +28,22 @@ const JobUpdateSchema=Yup.object().shape({
    summary:Yup.string()
              .min(50,"*Job Summary must be at least 5 characters long")
              .required('*Job Summary is required'),
-   type: Yup.string()
-              .oneOf(['UI_Engineer','API_Engineer','DevOps_Engineer','Data_Engineer','Automation_Engineer','QA_Engineer']
+   jobType: Yup.string()
+              .oneOf(['UI_ENGINEER','API_ENGINEER','DEVOPS_ENGINEER','DATA_ENGINEER','AUTOMATION_ENGINEER','QA_ENGINEER']
               ,"*Invalid job type")
               .required("*Job Type is required"),
    interviewDate: Yup.date("* Job Interview date must be a valid date")
               .transform(parseDateString).min(today)
               .required("*Interview Date is required"),
    levelOfEducation: Yup.string()
-              .oneOf(['POST_GRADUATE','GRADUATE','UNDER_GRADUATE_STUDENT','HIGHSCHOOL']
+              .oneOf(['POST_GRADUATE','GRADUATE','UNDER_GRADUATE_STUDENT','HIGH_SCHOOL']
               ,"*Invalid level of education type")
               .required("*Job level of education is required"),
-   yearsOfExperience : Yup.number()
-                   .positive("*Invalid Input.Years of Experience must be positive")
-                   .integer("*Invalid input. Years of experience must be an integer")
-                   .min(1,'*Job years of experience must be at least 1 year')
-                   .max(40,'*Job years of experience must be at most 40 years')
-                   .required("Years of experience is required"),
     status: Yup.string()
               .oneOf(['ACTIVE','SUSPENDED','CANCELLED','EXPIRED']
               ,"*Invalid Job Status type")
               .required("*Job Status is required"),
-              startTime: Yup.string()
+    startTime: Yup.string()
               .test(
                 'not empty',
                 'Start time cant be empty',
@@ -71,19 +65,18 @@ const JobUpdateSchema=Yup.object().shape({
 });
 
 const JobUpdateForm=(props)=>{
-    console.log(`inside jobupdate form ${props.job.name}`);
     return(
         <MyStyledContainer fluid>
             <Formik 
                initialValues={{name:props.job.name, 
                                description:props.job.description,
 							   summary:props.job.summary,
-							   interviewDate:props.job.interviewDate,
+							   interviewDate:props.job.interviewOn,
 							   levelOfEducation:props.job.levelOfEducation,
 							   status: props.job.status,
 							   type: props.job.type,
-                               startTime: props.job.startTime,
-                               endTime:props.job.endTime,
+                               startTime: props.job.StartTime,
+                               endTime:props.job.EndTime,
                                }}
                validationSchema={JobUpdateSchema}
                onSubmit={(values, {setSubmitting, resetForm})=>{
@@ -91,6 +84,7 @@ const JobUpdateForm=(props)=>{
                        alert(JSON.stringify(values,null,2));
                        //send the axios request here
                        const updatedJob={id: props.job.jobId,...values};
+					   
                        props.updateJob(updatedJob);
                        resetForm();
                        setSubmitting(false);
@@ -107,7 +101,7 @@ const JobUpdateForm=(props)=>{
                                 <Form.Group>
                                 <MyTextInput label="Job Description"
                                            name="description"
-                                           type="text-area"
+                                           type="textarea"
                                            placeholder="Job Description...."/>
                                 </Form.Group>
                                 <Form.Group>
@@ -117,13 +111,13 @@ const JobUpdateForm=(props)=>{
                                            placeholder="Job Summary...."/>
                                 </Form.Group>
                                 <Form.Group>
-							    <MySelectInput label="Job Type" name="type">
-                                    <option value="UI_Engineer">UI Engineer</option>
-                                    <option value="API_Engineer">API Engineer</option>
-                                    <option value="DevOps_Engineer">DevOps_Engineer</option>
-                                    <option value="Data_Engineer">Data Engineer</option>
-									<option value="QA_Engineer">QA Engineer</option>
-                                    <option value="Automation_Engineer">Automation Engineer</option>
+							    <MySelectInput label="Job Type" name="jobType">
+                                    <option value="UI_ENGINEER">UI Engineer</option>
+                                    <option value="API_ENGINEER">API Engineer</option>
+                                    <option value="DEVOPS_ENGINEER">DevOps_Engineer</option>
+                                    <option value="DATA_ENGINEER">Data Engineer</option>
+									<option value="QA_ENGINEER">QA Engineer</option>
+                                    <option value="AUTOMATION_ENGINEER">Automation Engineer</option>
                                 </MySelectInput>
                                 </Form.Group>
                                 <Form.Group>
@@ -153,7 +147,7 @@ const JobUpdateForm=(props)=>{
                                     <option value="POST_GRADUATE">Post-Graduate</option>
                                     <option value="GRADUATE">Graduate</option>
                                     <option value="UNDER_GRADUATE_STUDENT">Under-Graduate Student</option>
-                                    <option value="HIGHSCHOOL">High School Certificate</option>
+                                    <option value="HIGH_SCHOOL">High School</option>
                                 </MySelectInput>
                                 </Form.Group>
                                 <Form.Group>
@@ -164,18 +158,9 @@ const JobUpdateForm=(props)=>{
                                     <option value="EXPIRED">Expired</option>
                                 </MySelectInput> 
                                 </Form.Group>
-                                <Form.Group>               
-								<MyTextInput label="Years of Experience"
-                                           name="yearsOfExperience"
-                                           type="text"
-                                           placeholder="Years of experience...."/>
-                                </Form.Group>
                                 <Form.Group>
                            <MyStyledButton variant="primary" type="submit"
                              disabled={isSubmitting}>Save</MyStyledButton>
-                            <MyStyledButton variant="danger" type="button"
-                              disabled={false}
-                              onClick={props.deleteJob(props.job.jobId)}>Delete</MyStyledButton>
                               </Form.Group>
                        </MyStyledForm>
                    )}

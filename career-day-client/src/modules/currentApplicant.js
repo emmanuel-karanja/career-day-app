@@ -1,4 +1,4 @@
-import ApplicantConstants from './jobApplicants';
+import {ApplicantConstants} from './jobApplicants';
 
 export default function currentApplicantReducer(currentApplicant={},action){
     switch(action.type){

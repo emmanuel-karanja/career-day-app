@@ -72,7 +72,7 @@ hr {
   padding-top: 20px;
 }
 
-/* TaskList */
+
 .new-job-form {
   margin-bottom: 10px;
 }
@@ -90,7 +90,7 @@ hr {
   justify-content: space-between;
 }
 
-/* Task */
+/* job */
 .job {
   margin-bottom: 15px;
   background: #fff;
@@ -114,13 +114,13 @@ hr {
   font-weight: bold;
 }
 
-.task-lists {
+.job-lists {
   display: flex;
   justify-content: space-between;
 }
 
 .job-list {
-  width: 300px;
+  width: 100%;
 }
 
 .job-list-title {

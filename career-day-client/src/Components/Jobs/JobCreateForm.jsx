@@ -29,8 +29,8 @@ const jobCreateSchema=Yup.object().shape({
              .min(10,"*Job Summary must be at least 5 characters long")
              .max(200,"*Write a shorter summary")
              .required('*Job Summary is required'),
-   type: Yup.string()
-              .oneOf(['UI_Engineer','API_Engineer','DevOps_Engineer','Data_Engineer','Automation_Engineer','QA_Engineer']
+   jobType: Yup.string()
+              .oneOf(['UI_ENGINEER','API_ENGINEER','DEVOPS_ENGINEER','DATA_ENGINEER','AUTOMATION_ENGINEER','QA_ENGINEER']
               ,"*Invalid job type")
               .required("*Job Type is required"),
    interviewDate: Yup.date("* Job Interview date must be a valid date")
@@ -77,7 +77,8 @@ const JobCreateForm=(props)=>{
                validationSchema={jobCreateSchema}
                onSubmit={(values, {setSubmitting, resetForm})=>{
                    setSubmitting(true);
-                       //alert(JSON.stringify(values,null,2));
+				       console.log('job create form onsubmit');
+                       alert(JSON.stringify(values,null,2));
                        //send the axios request here
                        props.createJob(values);
                        resetForm();
@@ -105,13 +106,13 @@ const JobCreateForm=(props)=>{
                                            placeholder="Job Summary...."/>
                                 </Form.Group>
                                 <Form.Group>
-							    <MySelectInput label="Job Type" name="type">
-                                    <option value="UI_Engineer">UI Engineer</option>
-                                    <option value="API_Engineer">API Engineer</option>
-                                    <option value="DevOps_Engineer">DevOps_Engineer</option>
-                                    <option value="Data_Engineer">Data Engineer</option>
-									<option value="QA_Engineer">QA Engineer</option>
-                                    <option value="Automation_Engineer">Automation Engineer</option>
+							    <MySelectInput label="Job Type" name="jobType">
+                                    <option value="UI_ENGINEER">UI Engineer</option>
+                                    <option value="API_ENGINEER">API Engineer</option>
+                                    <option value="DEVOPS_ENGINEER">DevOps_Engineer</option>
+                                    <option value="DATA_ENGINEER">Data Engineer</option>
+									<option value="QA_ENGINEER">QA Engineer</option>
+                                    <option value="AUTOMATION_ENGINEER">Automation Engineer</option>
                                 </MySelectInput>
                                 </Form.Group>
                                 <Form.Group>
@@ -141,7 +142,7 @@ const JobCreateForm=(props)=>{
                                     <option value="POST_GRADUATE">Post-Graduate</option>
                                     <option value="GRADUATE">Graduate</option>
                                     <option value="UNDER_GRADUATE_STUDENT">Under-Graduate Student</option>
-                                    <option value="HIGHSCHOOL">High School</option>
+                                    <option value="HIGH_SCHOOL">High School</option>
                                 </MySelectInput>
                                 </Form.Group>
                                 

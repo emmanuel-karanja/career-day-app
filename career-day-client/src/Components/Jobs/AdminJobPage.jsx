@@ -30,7 +30,7 @@ class AdminJobsPage extends Component {
             jobs={this.props.jobs}
             createJob={this.props.createJob}
             updatedJob={this.props.updateJob}
-            deleteJobb={this.props.deleteJob}
+            deleteJob={this.props.deleteJob}
           />
         );
     

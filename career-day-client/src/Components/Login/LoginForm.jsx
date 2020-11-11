@@ -16,7 +16,7 @@ const loginSchema=Yup.object().shape({
              .email("*Must be a valid email address")
              .max(100, "*Email must be less than 100 characters")
               .required("*Email is required"),
-   phone: Yup.string()
+   password: Yup.string()
             .min(6, "*Password must be at least 6 characters long")
             .required("*Password is required"), 
 });
@@ -44,13 +44,13 @@ const LoginForm=(props)=>{
                                <Form.Group>   
 								<MyTextInput label="Email"
                                            name="email"
-                                           type="text"
+                                           type="email"
                                            placeholder="email..."/>
                                 </Form.Group>
                                 <Form.Group>
 								<MyTextInput label="Password"
-                                           name="phone"
-                                           type="passoword"
+                                           name="password"
+                                           type="password"
                                            placeholder="Password...."/>
                                 </Form.Group>           
 	                       <Form.Group>

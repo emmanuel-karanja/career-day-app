@@ -14,26 +14,20 @@ class JobApplicantUpdatePage extends Component {
     }
   }
   componentDidMount(){
-     const  {jobId}=this.props.match.params;
-     const currentApplicant=this.props.fetchApplicant(jobId);
-     this.setState({job: currentApplicant});
+	 const {applicantId}=this.props.match.params;
+     this.props.fetchApplicant(applicantId);
   }
   render() {
 
     return (
-      <div className="container">
-        <div className="row">
-          <div className="col s8 offset-s2">
-            <Link to="/" className="btn-flat waves-effect"> Back to home</Link>
+      <div className="container">         
+            <Link to="/"> Back to home</Link>
             <div className="col s12" style={{ paddingLeft: "11.250px" }}>
               <h4>
                 <b>Update Your Applicant Profile</b> below
-              </h4>
-              
+              </h4>              
             </div>
             <JobApplicantUpdateForm updateApplicant={this.props.updateApplicant} applicant={this.state.applicant}/>
-          </div>
-        </div>
       </div>
     );
   }
@@ -56,9 +50,8 @@ const mapDispatchToProps=(dispatch)=> {
   }
 
   const mapStateToProps=(state)=>{
-    const currentApplicant=state.currentApplicant;
     return{
-       applicant: currentApplicant,
+       applicant: state.currentApplicant,
     }
   }
 export default connect(

@@ -6,42 +6,47 @@ import JobUpdateForm from './JobUpdateForm';
 import {bindActionCreators} from 'redux';
 import {updateJob,fetchJob,deleteJob,getJobById} from '../../modules/jobs';
 import {withRouter} from 'react-router-dom';
+import {jobApi} from '../../API/JobApi';
+
+
 
  class JobUpdatePage extends Component{
-	componentDidMount(){
-		const {jobId}=this.props.match.params;
-		console.log(`jobid from jobupdate page : ${jobId}`);
-		this.props.fetchJob(jobId);
-	}
-    render(){
+   	 
+   componentDidMount(){
+	   const {jobId}=this.props.match.params;
+	   this.props.fetchJob(jobId);
+	   
+   }
+   
+   render(){ 
+        
+			
+		//console.log(this.props);
         return(
             <div>
-                <JobUpdateForm job={this.props.job} 
-				                   updateJob={this.props.updateJob}
-								   deleteJob={this.props.deleteJob}/>
+               <JobUpdateForm job={this.props.job} updatejob={this.props.updateJob}/>
             </div>
-        );
-    }
+        ); 
+   }
 }
 
-JobUpdatePage.propTypes = {
-    updateJob: PropTypes.func.isRequired,
-	deleteJob: PropTypes.func.isRequired,
-    job: PropTypes.object.isRequired,
-  };
+JobUpdatePage.propTypes={
+	job: PropTypes.object.isRequired,
+	updateJob: PropTypes.func.isRequired,
+	fetchJob: PropTypes.func.isRequired,
+}
   
-  const mapStateToProps = (state) => (
-      //const {jobId}=ownProps.match.params; 
-      	  
-        {
-           job: state.currentJob
+ const mapStateToProps= (state,ownProps)=>{
+      const {jobId}=ownProps.match.params; 
+       return {
+	       job : state.currentJob
         }
-	);
+ }
   
   const mapDispatchToProps=(dispatch)=> {
       return bindActionCreators(
         {
-          fetchJob,updateJob,deleteJob
+          fetchJob,updateJob
         },
         dispatch
       );

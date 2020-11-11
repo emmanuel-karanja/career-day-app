@@ -63,11 +63,10 @@ export const fetchJobs=()=>{
     dispatch(alertActions.clear());
     try{
       const {data}=await jobApi.fetchAllJobs();
-	  console.log(`the jobs : ${data.jobs}`);
-    dispatch(fetchJobsSucceeded(data));
-        const defaultJobId=data[0].jobId;
-		//console.log(`current job id:${defaultJobId}`);
-        dispatch(setCurrentJob(data[0]));
+	 
+     dispatch(fetchJobsSucceeded(data));
+     const defaultJobId=data[0].jobId;
+      dispatch(setCurrentJob(data[0]));
       dispatch(alertActions.success('Jobs fetched successfully'))
     }catch(error){
       dispatch(alertActions.failure('Failed to fetch jobs',error.message));
@@ -87,10 +86,11 @@ export const fetchJobs=()=>{
 
  export const createJob=(newJob)=>{
    //const newJOB={title,description,status};
+   console.log(`create job called jobname : ${newJob.name}`);
    return async dispatch=>{
      dispatch(alertActions.clear())
      try{
-       const {data}=await jobApi.createJOB(newJob);
+       const {data}=await jobApi.createJob(newJob);
        dispatch(createJobSucceeded(data));
        dispatch(alertActions.success('Job Created Succesfully'));
        //dispatch(fetchJob(data.jobId));
@@ -151,14 +151,14 @@ export const fetchJobs=()=>{
 
 export const fetchJob=(id)=>{
   console.log(`entering fetchjob jobId: ${id}`);
-  return (dispatch,getState)=>{
+  return async(dispatch)=>{
     try{
-		console.log('inside fetchjob try');
-      const job=getState.jobs.filter(job=>job.jobId===id);
-	  console.log(job.name);
-      dispatch(setCurrentJob(job));
-	  console.log(`fetchJob called ${job.name}`);
-      dispatch(alertActions.success(`JOB ${job.name} fetched successfuly`))
+		
+		const {data} = await jobApi.fetchJobById(id);
+	    console.log(`fetchJob data ${data.name}`);
+        dispatch(setCurrentJob(data));
+	  //console.log(`fetchJob called ${data.name}`);
+      dispatch(alertActions.success(`JOB ${data.name} fetched successfuly`))
     }catch(error){
      dispatch(alertActions.failure('Failed to fetch JOB',error.message));
     }
@@ -166,6 +166,7 @@ export const fetchJob=(id)=>{
 }
 
 export const setCurrentJob=(job)=>{
+  console.log(`set current job ${job.name}`);
   return {
     type: JobConstants.SET_CURRENT_JOB,
     payload: job
@@ -191,10 +192,12 @@ export const getJobs=(state)=>{
 
 export const getJobById=(state,id)=>{
 	if(!state.jobs){
-		return [];
+		return {};
 	}
 	
-	return state.jobs.filter(job=> job.jobId ===id);
+	const job= state.jobs.filter(job=> job.jobId ===id);
+	console.log(`get job by id ${job}`);
+	return job;
 }
 
 const getSearchTerm=(state)=>state.searchTerm;

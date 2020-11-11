@@ -1,9 +1,9 @@
-import JobConstants from './jobs';
+import {JobConstants} from './jobs';
 
 export default function currentJobReducer(currentJob={},action){
     switch(action.type){
         case JobConstants.SET_CURRENT_JOB :{
-             return action.payload ;
+             return action.payload 		 
         }
         default:
             return currentJob;
