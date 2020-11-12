@@ -6,6 +6,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
 
 import com.careerday.careerdayapp.DTOs.AuthenticationResponse;
 import com.careerday.careerdayapp.DTOs.LoginRequest;
@@ -15,6 +16,7 @@ import com.careerday.careerdayapp.Repositories.RoleRepository;
 import com.careerday.careerdayapp.Repositories.UserRepository;
 import com.careerday.careerdayapp.Security.JwtTokenProvider;
 
+@Service
 public class AuthService implements IAuthService{
 	@Autowired
     private AuthenticationManager authenticationManager;
@@ -32,7 +34,7 @@ public class AuthService implements IAuthService{
 	@Override
 	public AuthenticationResponse authenticate(LoginRequest loginRequest) {
 		User user=userRepository.findByEmail(loginRequest.getEmail())
-				      .orElseThrow(()-> new ResourceNotFoundException("AuthService","Email",loginRequest.getEmail()));
+				      .orElseThrow(()-> new ResourceNotFoundException("User","Email",loginRequest.getEmail()));
 		Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         loginRequest.getEmail(),
@@ -48,7 +50,7 @@ public class AuthService implements IAuthService{
         AuthenticationResponse response=new AuthenticationResponse();
         response.setEmail(user.getEmail());
         response.setFirstName(user.getFirstName());
-        response.setLastName(user.getFirstName());
+        response.setLastName(user.getLastName());
         response.setAdmin(user.isAdmin());
         response.setJwtToken(jwt);
         

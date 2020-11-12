@@ -1,10 +1,13 @@
 package com.careerday.careerdayapp.Services;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.List;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.careerday.careerdayapp.DTOs.AuthenticationResponse;
@@ -15,6 +18,7 @@ import com.careerday.careerdayapp.DTOs.UserResponse;
 import com.careerday.careerdayapp.Entities.Role;
 import com.careerday.careerdayapp.Entities.RoleName;
 import com.careerday.careerdayapp.Entities.User;
+import com.careerday.careerdayapp.Exceptions.AppException;
 import com.careerday.careerdayapp.Exceptions.ResourceNotFoundException;
 import com.careerday.careerdayapp.Repositories.RoleRepository;
 import com.careerday.careerdayapp.Repositories.UserRepository;
@@ -26,14 +30,16 @@ public class UserService implements IUserService {
 	private final ModelMapper modelMapper;
 	private final UserRepository userRepository;
 	private final RoleRepository roleRepository;
-	private BCryptPasswordEncoder passwordEncoder;
+	private PasswordEncoder passwordEncoder;
 	
 	public UserService(UserRepository userRepository,
 			          RoleRepository roleRepository,
-			          ModelMapper modelMapper) {
+			          ModelMapper modelMapper,
+			          PasswordEncoder passwordEncoder) {
 		this.userRepository=userRepository;
 		this.roleRepository=roleRepository;
 		this.modelMapper=modelMapper;
+		this.passwordEncoder=passwordEncoder;
 	}
 	 
 
@@ -44,14 +50,19 @@ public class UserService implements IUserService {
 		Long count=userRepository.count();
 		Role userRole;
 		User user= convertFromDTO(registerRequest);
+		List<Role> roles = new ArrayList<>();
 		if(count ==0) {		
-		   userRole=roleRepository.findByRoleName(RoleName.ADMIN);
+		   userRole=roleRepository.findByName(RoleName.ADMIN)
+				      .orElseThrow(()-> new AppException("User role not set"));
+				           ;
 			user.setAdmin(true);
 		}else {
-			userRole=roleRepository.findByRoleName(RoleName.APPLICANT);
+			userRole=roleRepository.findByName(RoleName.APPLICANT)
+					 .orElseThrow(()-> new AppException("User role not set"));
 			user.setAdmin(false);
 		}
-		user.setRoles(new HashSet<>(Arrays.asList(userRole)));
+		roles.add(userRole);
+		user.setRoles(roles);
 		
 		User savedUser=userRepository.save(user);
 		
@@ -79,6 +90,7 @@ public class UserService implements IUserService {
 		user.setPassword(passwordEncoder.encode(request.getPassword()));
 		user.setPhone(request.getPhone());
 		
+		return user;
 	}
 
 	@Override

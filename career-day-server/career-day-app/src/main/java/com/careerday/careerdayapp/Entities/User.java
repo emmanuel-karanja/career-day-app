@@ -1,6 +1,10 @@
 package com.careerday.careerdayapp.Entities;
 
 import java.util.Collection;
+import java.util.HashSet;
+import java.util.List;
+
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -24,9 +28,10 @@ import lombok.NoArgsConstructor;
 @Table(name="users",uniqueConstraints={@UniqueConstraint(columnNames={"phone"}),
 @UniqueConstraint(columnNames={"email"}) })
 public class User {
-    @Id
-    @GeneratedValue(strategy=GenerationType.IDENTITY)
-    private Long userId;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "id")
+	private Long id;
 
     
     private String firstName;
@@ -40,11 +45,14 @@ public class User {
 
     @NaturalId
     private String phone;
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "user_role",
-            joinColumns = {@JoinColumn(name = "user_id")},
-            inverseJoinColumns = {@JoinColumn(name = "role_id")})
-    private Collection<Role> roles;
+    @ManyToMany(fetch = FetchType.EAGER)
+	@JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
+	      inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
+	private List<Role> roles;
+    
+    
+    
+    
 
     public String getFullName() {
         return firstName != null ? firstName.concat(" ").concat(lastName) : "";

@@ -85,7 +85,7 @@ public class JobApplicantController{
 	   return new ResponseEntity<>(response,HttpStatus.OK);
    }
 	
-	@PostMapping
+	@PostMapping("/register")
 	public ResponseEntity<JobApplicantResponse> addJobApplicant(@Valid @RequestBody JobApplicantRegisterRequest request){
 		JobApplicantResponse response=jobApplicantService.create(request);
 		
@@ -154,7 +154,7 @@ public class JobApplicantController{
 			@PathVariable(value="id") Long id,
 	        @PathVariable(value="applicationId") Long applicationId,
 	        @Valid @RequestBody JobApplicationUpdateRequest request){
-		JobApplicationResponse response=jobApplicantService.updateApplication(currentUser,applicationId,request);
+		JobApplicationResponse response=jobApplicantService.updateApplication(currentUser,id,applicationId,request);
 		
 		return new ResponseEntity<>(response,HttpStatus.OK);
 	}	

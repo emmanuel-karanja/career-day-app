@@ -1,36 +1,33 @@
 package com.careerday.careerdayapp.Entities;
 
-import java.util.Collection;
-
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
-import lombok.Getter;
-import lombok.Setter;
+import org.hibernate.annotations.NaturalId;
+
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.experimental.Accessors;
 
 
-@Getter
-@Setter
-@NoArgsConstructor
-@Accessors(chain = true)
 @Entity
-@Table(name = "role")
+@Data
+@NoArgsConstructor
+@Table(name = "roles")
 public class Role {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
 
-    @ManyToMany(mappedBy = "roles")
-    private Collection<User> users;
+	@Enumerated(EnumType.STRING)
+	@NaturalId
+	private RoleName name;
 
-    @Enumerated(EnumType.STRING)
-    private RoleName role;
+	public Role(RoleName name) {
+		this.name = name;
+	}
 }
