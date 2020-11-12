@@ -3,6 +3,7 @@ import { Formik} from 'formik';
 import * as Yup from 'yup';
 import PropTypes from 'prop-types';
 import {Form} from 'react-bootstrap';
+import history from '../../Utils/history';
 
 import {MyTextInput,
         MyStyledButton,
@@ -60,7 +61,8 @@ const JobApplicantUpdateForm=(props)=>{
                        const updatedApplicant={id: props.applicant.applicantId,...values};
                        props.updateApplicant(updatedApplicant);
                        resetForm();
-                       setSubmitting(false);                 
+                       setSubmitting(false);  
+                       history.push("/registrationsuccess");             
                }}
                >
                    {({handleSubmit, isSubmitting})=>(
@@ -91,6 +93,7 @@ const JobApplicantUpdateForm=(props)=>{
                                 </Form.Group>
                                 <Form.Group>
 							    <MySelectInput label="Level Of Education" name="levelOfEducation">
+                                    <option value="">Select a level of Education..</option>
                                     <option value="POST_GRADUATE">UI Engineer</option>
                                     <option value="GRADUATE">API Engineer</option>
                                     <option value="UNDER_GRADUATE_STUDENT">DevOps_Engineer</option>

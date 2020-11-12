@@ -45,7 +45,7 @@ class AdminJobsPage extends Component {
         <div className="jobs">
           <div className="jobs-header">
             <input onChange={this.onSearch} type="text" placeholder="Search..." />
-            <button className="button button-default" onClick={this.toggleForm}>
+            <button className="btn btn-success" onClick={this.toggleForm}>
               + New Job
             </button>
           </div>

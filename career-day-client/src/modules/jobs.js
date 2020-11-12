@@ -208,8 +208,7 @@ export const getFilteredJobs=createSelector(
     return jobs.filter(job=>{
       const match =job.name.match(new RegExp(searchTerm,'i')) ||
                    job.description.match(new RegExp(searchTerm,'i')) ||
-                   job.type.match(new RegExp(searchTerm,'i')) ||
-                   job.type.levelOfEducation(new RegExp(searchTerm,'i'));
+                   job.type.match(new RegExp(searchTerm,'i'));
       return match;
     });
   }

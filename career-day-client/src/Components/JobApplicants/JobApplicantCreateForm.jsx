@@ -97,6 +97,7 @@ const JobApplicantCreateForm=(props)=>{
                                 </Form.Group>
                                 <Form.Group>
 							    <MySelectInput label="Level Of Education" name="levelOfEducation">
+                                    <option value="">Select a level of Education..</option>
                                     <option value="POST_GRADUATE">Post-Graduate</option>
                                     <option value="GRADUATE">Graduate</option>
                                     <option value="UNDER_GRADUATE_STUDENT">Under-Graduate Student</option>

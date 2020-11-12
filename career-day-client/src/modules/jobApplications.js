@@ -150,9 +150,7 @@ export const getApplications=(state)=>{
     (applications,searchTerm)=>{
       return applications.filter(application=>{
         const match =application.firstName.match(new RegExp(searchTerm,'i')) ||
-                     application.lastName(new RegExp(searchTerm,'i'))  ||
-                     application.jobName(new RegExp(searchTerm,'i'))  ||
-                     application.JobSummary.match(new RegExp(searchTerm,'i'));
+                     application.lastName(new RegExp(searchTerm,'i'));
         return match;
       });
     }

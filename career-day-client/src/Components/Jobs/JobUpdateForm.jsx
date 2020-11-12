@@ -6,6 +6,7 @@ import {Form} from 'react-bootstrap';
 import {parseDateString,isSameOrBefore} from '../../Utils/dateUtils';
 import DatePicker from "react-datepicker"
 import "react-datepicker/dist/react-datepicker.css";
+import history from '../../Utils/history';
 
 import {MyTextInput,
         MyStyledButton,
@@ -70,24 +71,27 @@ const JobUpdateForm=(props)=>{
             <Formik 
                initialValues={{name:props.job.name, 
                                description:props.job.description,
-							   summary:props.job.summary,
-							   interviewDate:props.job.interviewOn,
-							   levelOfEducation:props.job.levelOfEducation,
-							   status: props.job.status,
-							   type: props.job.type,
+							                 summary:props.job.summary,
+							                interviewDate:props.job.interviewOn,
+							                levelOfEducation:props.job.levelOfEducation,
+							                status: props.job.status,
+							                type: props.job.type,
                                startTime: props.job.StartTime,
                                endTime:props.job.EndTime,
                                }}
                validationSchema={JobUpdateSchema}
                onSubmit={(values, {setSubmitting, resetForm})=>{
                    setSubmitting(true);
-                       alert(JSON.stringify(values,null,2));
+                       //alert(JSON.stringify(values,null,2));
                        //send the axios request here
                        const updatedJob={id: props.job.jobId,...values};
 					   
                        props.updateJob(updatedJob);
                        resetForm();
                        setSubmitting(false);
+                       history.push("/adminjobpage");
+
+
                }}
                >
                    {({handleSubmit, isSubmitting,setFieldValue,values})=>(
@@ -101,7 +105,8 @@ const JobUpdateForm=(props)=>{
                                 <Form.Group>
                                 <MyTextInput label="Job Description"
                                            name="description"
-                                           type="textarea"
+                                           as="textarea"
+                                           rows="8"
                                            placeholder="Job Description...."/>
                                 </Form.Group>
                                 <Form.Group>
@@ -112,11 +117,12 @@ const JobUpdateForm=(props)=>{
                                 </Form.Group>
                                 <Form.Group>
 							    <MySelectInput label="Job Type" name="jobType">
+                                    <option value="">Select a Job Type..</option>
                                     <option value="UI_ENGINEER">UI Engineer</option>
                                     <option value="API_ENGINEER">API Engineer</option>
                                     <option value="DEVOPS_ENGINEER">DevOps_Engineer</option>
                                     <option value="DATA_ENGINEER">Data Engineer</option>
-									<option value="QA_ENGINEER">QA Engineer</option>
+								                  	<option value="QA_ENGINEER">QA Engineer</option>
                                     <option value="AUTOMATION_ENGINEER">Automation Engineer</option>
                                 </MySelectInput>
                                 </Form.Group>
@@ -144,6 +150,7 @@ const JobUpdateForm=(props)=>{
                                  </Form.Group>
                                  <Form.Group>
 							    <MySelectInput label="Level Of Education" name="levelOfEducation">
+                                    <option value="">Select A Level of Education</option>
                                     <option value="POST_GRADUATE">Post-Graduate</option>
                                     <option value="GRADUATE">Graduate</option>
                                     <option value="UNDER_GRADUATE_STUDENT">Under-Graduate Student</option>

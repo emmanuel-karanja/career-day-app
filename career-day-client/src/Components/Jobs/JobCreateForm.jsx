@@ -80,7 +80,7 @@ const JobCreateForm=(props)=>{
 				       console.log('job create form onsubmit');
                        alert(JSON.stringify(values,null,2));
                        //send the axios request here
-                       props.createJob(values);
+                      // props.createJob(values);
                        resetForm();
                        setSubmitting(false);
                }}
@@ -96,7 +96,8 @@ const JobCreateForm=(props)=>{
                                 <Form.Group>
                                 <MyTextInput label="Job Description"
                                            name="description"
-                                           type="textarea"
+                                           as="textarea"
+                                           rows="8"
                                            placeholder="Job Description...."/>
                                 </Form.Group>
                                 <Form.Group>
@@ -107,6 +108,7 @@ const JobCreateForm=(props)=>{
                                 </Form.Group>
                                 <Form.Group>
 							    <MySelectInput label="Job Type" name="jobType">
+                                    <option value="">Select a Job Type..</option>
                                     <option value="UI_ENGINEER">UI Engineer</option>
                                     <option value="API_ENGINEER">API Engineer</option>
                                     <option value="DEVOPS_ENGINEER">DevOps_Engineer</option>
@@ -139,6 +141,7 @@ const JobCreateForm=(props)=>{
                                 </Form.Group>
                                 <Form.Group>
 							    <MySelectInput label="Level Of Education" name="levelOfEducation">
+                                    <option value="">Select A Level of Education</option>
                                     <option value="POST_GRADUATE">Post-Graduate</option>
                                     <option value="GRADUATE">Graduate</option>
                                     <option value="UNDER_GRADUATE_STUDENT">Under-Graduate Student</option>

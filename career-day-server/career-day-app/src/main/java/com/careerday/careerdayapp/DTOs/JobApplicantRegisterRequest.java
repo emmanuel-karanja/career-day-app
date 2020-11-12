@@ -38,4 +38,10 @@ public class JobApplicantRegisterRequest {
     @Positive
     @Max(40)
     private Integer yearsOfExperience;
+    
+    //this a hack for the purposes of this app only!!!
+    
+    @Size(min=6)
+    @NotEmpty
+    private String password;
 }

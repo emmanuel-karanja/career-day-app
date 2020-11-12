@@ -9,26 +9,12 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class JobApplicantResponse {
-	
-	
-	private Long applicantId;
-	
-	
-    private String firstName;
-	
-    private String lastName;
-	
-	
-	
+public class JobApplicantResponse {	
+	private Long applicantId;	
+    private String firstName;	
+    private String lastName;	
     private String email;
-    
-    @JsonProperty("education")
-    private String levelOfEducation;
-    
-    
-    private String phone;
-    
-    
-    private Integer yearsOfExperience;
+    private String levelOfEducation;   
+    private String phone;   
+    private Integer yearsOfExperience;   
 }

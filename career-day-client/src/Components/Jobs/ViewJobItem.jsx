@@ -11,7 +11,7 @@ const ViewJobItem = props => {
         <div>
           <h3>{props.job.name}</h3>
         </div>
-          {props.job.status}
+          Job Status: {props.job.status}
       </div>
       <hr />
       <div className="job-body">

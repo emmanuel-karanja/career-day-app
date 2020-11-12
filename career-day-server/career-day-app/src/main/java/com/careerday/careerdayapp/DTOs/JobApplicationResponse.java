@@ -18,28 +18,20 @@ public class JobApplicationResponse {
 	@JsonProperty("ApplicationId")
     private Long applicationId;
 	
-	@JsonProperty("AppliedOn")
     private Instant applicationDate;
 	
-	@JsonProperty("JobTitle")
     private String jobName;
 	
-	@JsonProperty("JobId")
     private Long jobId;
 	
-	@JsonProperty("JobStatus")
     private String jobStatus;
 	
-	@JsonProperty("ApplicantId")
 	private Long applicantId;
 	
-	@JsonProperty("FirstName")
 	private String applicantFirstName;
 	
-	@JsonProperty("LastName")
 	private String applicantLastName;
-	
-	@JsonProperty("Email")
+
     private String applicantEmail;
     
 }

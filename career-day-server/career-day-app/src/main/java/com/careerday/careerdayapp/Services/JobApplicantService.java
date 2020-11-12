@@ -11,12 +11,14 @@ import com.careerday.careerdayapp.DTOs.JobApplicationCreateRequest;
 import com.careerday.careerdayapp.DTOs.JobApplicationResponse;
 import com.careerday.careerdayapp.DTOs.JobApplicationUpdateRequest;
 import com.careerday.careerdayapp.DTOs.PagedResponse;
+import com.careerday.careerdayapp.DTOs.UserRegisterRequest;
 import com.careerday.careerdayapp.Entities.Job;
 import com.careerday.careerdayapp.Entities.JobApplicant;
 import com.careerday.careerdayapp.Entities.JobApplication;
 import com.careerday.careerdayapp.Entities.JobApplicationStatus;
 import com.careerday.careerdayapp.Entities.JobStatus;
 import com.careerday.careerdayapp.Entities.LevelOfEducation;
+import com.careerday.careerdayapp.Entities.User;
 import com.careerday.careerdayapp.Exceptions.BadRequestException;
 import com.careerday.careerdayapp.Exceptions.DuplicateEntityException;
 import com.careerday.careerdayapp.Exceptions.ResourceNotFoundException;
@@ -46,7 +48,8 @@ public class JobApplicantService implements IJobApplicantService{
 	Logger _logger=LoggerFactory.getLogger(JobApplicantService.class);
 	
 	private final JobApplicantRepository jobApplicantRepository;
-	private final ModelMapper modelMapper;
+	//this is a hack!
+	private final IUserService userService;
 	private final JobApplicationRepository jobApplicationRepository;
 	private final JobRepository jobRepository;
 	
@@ -63,11 +66,11 @@ public class JobApplicantService implements IJobApplicantService{
 	public JobApplicantService( JobApplicantRepository jobApplicantRepository,
 		                        JobApplicationRepository jobApplicationRepository,
 		                        JobRepository jobRepository,
-		                        ModelMapper modelMapper){
+		                        IUserService userService){
 			 this.jobApplicantRepository=jobApplicantRepository;
 			 this.jobApplicationRepository=jobApplicationRepository;
 			 this.jobRepository=jobRepository;
-			 this.modelMapper=modelMapper;
+			 this.userService=userService;
 	}
 	
 	
@@ -79,10 +82,21 @@ public class JobApplicantService implements IJobApplicantService{
 		}else if(jobApplicantRepository.existsByPhone(request.getPhone())) {
 			throw new DuplicateEntityException(APPLICANT,PHONE,request.getPhone());
 		}
-		JobApplicant newApplicant=convertFromDTO(request);
-		jobApplicantRepository.save(newApplicant);
 		
-		return convertFromEntity(newApplicant);
+		
+		JobApplicant newApplicant=convertFromDTO(request);
+		JobApplicant savedApplicant=jobApplicantRepository.save(newApplicant);
+		//This a hack! for the purposes of this app only, we quietly register a new user
+		//using the applicant credentials!!!!!
+		UserRegisterRequest user=new UserRegisterRequest();
+		
+	    user.setEmail(savedApplicant.getEmail());
+	    user.setFirstName(savedApplicant.getFirstName());
+	    user.setLastName(savedApplicant.getLastName());
+	    user.setPhone(savedApplicant.getPhone());
+	    user.setPassword(request.getPassword());
+	    userService.register(user);
+		return convertFromEntity(savedApplicant);
 	}
 	
 	@Override
@@ -100,15 +114,6 @@ public class JobApplicantService implements IJobApplicantService{
 		return convertFromEntity(savedApplicant);
 	}
 	
-	/*@Override
-	public JobApplicantResponse getByEmail(String email){
-		JobApplicant applicant=jobApplicantRepository.findJobApplicantByEmail(email)
-				               .orElseThrow(()->new ResourceNotFoundException(APPLICANT,EMAIL,email));
-		                       
-		                       //new ResourceNotFoundException(APPLICANT,EMAIL,email));
-		
-	    return convertFromEntity(applicant);
-	}*/
 
     @Override
     public JobApplicantResponse getById(Long id){
