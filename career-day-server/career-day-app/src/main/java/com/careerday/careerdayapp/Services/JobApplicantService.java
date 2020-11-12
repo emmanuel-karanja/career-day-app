@@ -16,24 +16,22 @@ import com.careerday.careerdayapp.Entities.Job;
 import com.careerday.careerdayapp.Entities.JobApplicant;
 import com.careerday.careerdayapp.Entities.JobApplication;
 import com.careerday.careerdayapp.Entities.JobApplicationStatus;
-import com.careerday.careerdayapp.Entities.JobStatus;
 import com.careerday.careerdayapp.Entities.LevelOfEducation;
-import com.careerday.careerdayapp.Entities.User;
 import com.careerday.careerdayapp.Exceptions.BadRequestException;
 import com.careerday.careerdayapp.Exceptions.DuplicateEntityException;
 import com.careerday.careerdayapp.Exceptions.ResourceNotFoundException;
+import com.careerday.careerdayapp.Exceptions.UnauthorizedException;
 import com.careerday.careerdayapp.Repositories.JobApplicantRepository;
 import com.careerday.careerdayapp.Repositories.JobApplicationRepository;
 import com.careerday.careerdayapp.Repositories.JobRepository;
+import com.careerday.careerdayapp.Security.UserPrincipal;
 import com.careerday.careerdayapp.Utils.AppConstants;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -41,6 +39,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+
 
 @Service
 public class JobApplicantService implements IJobApplicantService{
@@ -100,9 +99,12 @@ public class JobApplicantService implements IJobApplicantService{
 	}
 	
 	@Override
-	public JobApplicantResponse update(Long id,JobApplicantUpdateRequest updatedApplicant){
+	public JobApplicantResponse update(UserPrincipal currentUser,Long id,JobApplicantUpdateRequest updatedApplicant){
 		JobApplicant applicant=jobApplicantRepository.findById(id).
 		                          orElseThrow(()-> new ResourceNotFoundException(APPLICANT,ID,id));
+		if(currentUser.getEmail() != applicant.getEmail()) {
+			throw new UnauthorizedException("You are not authorized to perform this action");
+		}
 		applicant.setFirstName(updatedApplicant.getFirstName());
 		applicant.setLastName(updatedApplicant.getLastName());
 		applicant.setLevelOfEducation(LevelOfEducation.valueOf(updatedApplicant.getLevelOfEducation()));
@@ -152,20 +154,24 @@ public class JobApplicantService implements IJobApplicantService{
 	}
 	
 	@Override
-	public ApiResponse delete(Long id){
+	public ApiResponse delete(UserPrincipal currentUser,Long id){
 		JobApplicant applicant=jobApplicantRepository.findById(id)
                                        .orElseThrow(()-> new ResourceNotFoundException(APPLICANT,ID,id));
-		
+		if(currentUser.getEmail() != applicant.getEmail()) {
+			throw new UnauthorizedException("You are not authorized to perform this action");
+		}
 		jobApplicantRepository.delete(applicant);
 		                      
 		return new ApiResponse(Boolean.TRUE,"Job Applicant Successfully deleted");
 	}
 	
 	@Override
-	public List<JobApplicationResponse> getAllApplications(Long id){
+	public List<JobApplicationResponse> getAllApplications(UserPrincipal currentUser,Long id){
 		JobApplicant applicant=jobApplicantRepository.findById(id)
 		                                 .orElseThrow(()->new ResourceNotFoundException(APPLICANT,ID,id));
-		
+		if(currentUser.getEmail() != applicant.getEmail()) {
+			throw new UnauthorizedException("You are not authorized to perform this action");
+		}
 		List<JobApplication> applications = applicant.getApplications();
 		List<JobApplicationResponse> response=applications.stream()
 		                                                  .map(a->convertApplicationFromEntity(a))
@@ -176,9 +182,12 @@ public class JobApplicantService implements IJobApplicantService{
 	}
 	
 	@Override
-	public JobApplicationResponse createApplication(Long applicantId,JobApplicationCreateRequest request){
+	public JobApplicationResponse createApplication(UserPrincipal currentUser,Long applicantId,JobApplicationCreateRequest request){
 		JobApplicant applicant=jobApplicantRepository.findById(applicantId)
 		                                 .orElseThrow(()->new ResourceNotFoundException(APPLICANT,ID,applicantId));
+		if(currentUser.getEmail() != applicant.getEmail()) {
+			throw new UnauthorizedException("You are not authorized to perform this action");
+		}
 		Job job=jobRepository.findById(request.getJobId())
 		                                 .orElseThrow(()-> new ResourceNotFoundException(JOB,ID,request.getJobId()));
 		
@@ -199,10 +208,14 @@ public class JobApplicantService implements IJobApplicantService{
 	}
 
     @Override
-    public JobApplicationResponse updateApplication(Long id, Long applicationId,JobApplicationUpdateRequest request){
+    public JobApplicationResponse updateApplication(UserPrincipal currentUser,Long id, Long applicationId,
+    		JobApplicationUpdateRequest request){
 
-        //JobApplicant applicant=jobApplicantRepository.findById(id)
-		//                                 .orElseThrow(()->new ResourceNotFoundException(APPLICANT,ID,applicationId));
+        JobApplicant applicant=jobApplicantRepository.findById(id)
+		                                .orElseThrow(()->new ResourceNotFoundException(APPLICANT,ID,applicationId));
+        if(currentUser.getEmail() != applicant.getEmail()) {
+			throw new UnauthorizedException("You are not authorized to perform this action");
+		}
 	    JobApplication application=jobApplicationRepository.findById(applicationId)
                                        .orElseThrow(()->new ResourceNotFoundException(APPLICANT,ID,applicationId));
 
@@ -214,9 +227,13 @@ public class JobApplicantService implements IJobApplicantService{
   }
 	
 	@Override
-	public ApiResponse deleteApplication(Long applicantId, Long applicationId){
+	public ApiResponse deleteApplication(UserPrincipal currentUser,Long applicantId, Long applicationId){
 		JobApplicant applicant=jobApplicantRepository.findById(applicantId)
 		                                 .orElseThrow(()->new ResourceNotFoundException(APPLICANT,ID,applicantId));
+		if(currentUser.getEmail() != applicant.getEmail()) {
+			throw new UnauthorizedException("You are not authorized to perform this action");
+		}
+		
 	    JobApplication application=jobApplicationRepository.findById(applicationId)
 		                                 .orElseThrow(()->new ResourceNotFoundException(APPLICATION,ID,applicationId));
 	    applicant.removeApplication(application);
@@ -227,9 +244,12 @@ public class JobApplicantService implements IJobApplicantService{
 	}
 	
 	@Override
-	public JobApplicationResponse getApplication(Long applicantId, Long applicationId){
+	public JobApplicationResponse getApplication(UserPrincipal currentUser,Long applicantId, Long applicationId){
 		JobApplicant applicant=jobApplicantRepository.findById(applicantId)
 		                                 .orElseThrow(()->new ResourceNotFoundException(APPLICANT,ID,applicantId));
+		if(currentUser.getEmail() != applicant.getEmail()) {
+			throw new UnauthorizedException("You are not authorized to perform this action");
+		}
 	    Optional<JobApplication> application=applicant.getApplications().stream()
 		                                    .filter(a-> a.getApplicationId() == applicationId)
 											.findAny();
@@ -241,7 +261,6 @@ public class JobApplicantService implements IJobApplicantService{
 	
 	@Override
 	public AvailabilityResponse checkEmailAvailability(String email) {
-		// TODO Auto-generated method stub
 		boolean exists=jobApplicantRepository.existsByEmail(email);
 		return new AvailabilityResponse(!exists);
 	}
@@ -250,17 +269,17 @@ public class JobApplicantService implements IJobApplicantService{
 
 	@Override
 	public AvailabilityResponse checkPhoneNumberAvailability(String phone) {
-		// TODO Auto-generated method stub
 		boolean exists=jobApplicantRepository.existsByPhone(phone);
 		return new AvailabilityResponse(!exists);
 	}
 	
 	@Override
-	public CountResponse getApplicationCountByApplicant(Long applicantId) {
-		// TODO Auto-generated method stub
+	public CountResponse getApplicationCountByApplicant(UserPrincipal currentUser,Long applicantId) {
 		JobApplicant applicant=jobApplicantRepository.findById(applicantId)
 				               .orElseThrow(()-> new  ResourceNotFoundException(APPLICANT,ID,applicantId));
-		
+		if(currentUser.getEmail() != applicant.getEmail()) {
+			throw new UnauthorizedException("You are not authorized to perform this action");
+		}
 		return new CountResponse(applicant.getApplications().size());
 	}
 	

@@ -11,7 +11,7 @@ const client =axios.create({
 });
 
 const authApi={
-    login,logout,getAuthBearerToken,
+    login,logout,getAuthBearerToken,getCurrentUser
 }
 
 function login(credentials){
@@ -31,6 +31,15 @@ function getAuthBearerToken() {
         return `'Bearer ' + ${user.token}` ;
     } else {
         return "";
+    }
+}
+
+function getCurrentUser(){
+    let user=JSON.parse(localStorage.getItem('user'));
+    if(user){
+        return {user}
+    }else{
+        return{};
     }
 }
 

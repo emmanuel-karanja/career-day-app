@@ -23,6 +23,7 @@ import com.careerday.careerdayapp.DTOs.JobUpdateRequest;
 import com.careerday.careerdayapp.DTOs.PagedResponse;
 import com.careerday.careerdayapp.Services.IJobService;
 import com.careerday.careerdayapp.Utils.AppConstants;
+import org.springframework.security.access.prepost.PreAuthorize;
 
 import io.swagger.annotations.Api;
 
@@ -57,6 +58,7 @@ public class JobController{
 	}
 	
 	@PostMapping
+	@PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity<JobResponse> addJob(@Valid @RequestBody JobCreateRequest request){
 		JobResponse response=jobService.create(request);
 		
@@ -64,6 +66,7 @@ public class JobController{
 	}
 	
 	@PutMapping("/{id}")
+	@PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity<JobResponse> updateJob(@PathVariable(value="id") Long id, 
 	       @Valid @RequestBody JobUpdateRequest request){
 		JobResponse response=jobService.update(id,request);
@@ -71,6 +74,7 @@ public class JobController{
 	}
 	
 	@DeleteMapping("/{id}")
+	@PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity<ApiResponse> deleteJob(@PathVariable(value="id") Long id){
 		ApiResponse response=jobService.delete(id);
 		return new ResponseEntity<>(response,HttpStatus.OK);

@@ -6,6 +6,7 @@ import javax.validation.Valid;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -28,6 +29,8 @@ import com.careerday.careerdayapp.DTOs.JobApplicationResponse;
 import com.careerday.careerdayapp.DTOs.JobApplicationUpdateRequest;
 import com.careerday.careerdayapp.DTOs.PagedResponse;
 import com.careerday.careerdayapp.DTOs.PhoneRequest;
+import com.careerday.careerdayapp.Security.UserPrincipal;
+import com.careerday.careerdayapp.Security.CurrentUser;
 import com.careerday.careerdayapp.Services.IJobApplicantService;
 import com.careerday.careerdayapp.Utils.AppConstants;
 
@@ -76,8 +79,9 @@ public class JobApplicantController{
    }
    
    @GetMapping("/{id}/applications/count")
-   public ResponseEntity<CountResponse> getApplicationCountByApplicant(@PathVariable(value="id") Long id){
-	   CountResponse response=jobApplicantService.getApplicationCountByApplicant(id);
+   @PreAuthorize("hasRole('APPLICANT')")
+   public ResponseEntity<CountResponse> getApplicationCountByApplicant(@CurrentUser UserPrincipal currentUser,@PathVariable(value="id") Long id){
+	   CountResponse response=jobApplicantService.getApplicationCountByApplicant(currentUser,id);
 	   return new ResponseEntity<>(response,HttpStatus.OK);
    }
 	
@@ -89,58 +93,68 @@ public class JobApplicantController{
 	}
 	
 	@GetMapping("/{id}")
-	public ResponseEntity<JobApplicantResponse> getApplicant(@PathVariable(value="id") Long id){
+	@PreAuthorize("hasRole('APPLICANT')")
+	public ResponseEntity<JobApplicantResponse> getApplicant(@PathVariable(value="id") Long id,
+			@CurrentUser UserPrincipal currentUser){
 	   JobApplicantResponse response=jobApplicantService.getById(id);
        return new ResponseEntity<>(response,HttpStatus.OK);	   
 	}
 	
 	@PutMapping("/{id}")
-	public ResponseEntity<JobApplicantResponse> updateApplicant(@PathVariable(value="id") Long id, 
+	@PreAuthorize("hasRole('APPLICANT')")
+	public ResponseEntity<JobApplicantResponse> updateApplicant(@CurrentUser UserPrincipal currentUser,@PathVariable(value="id") Long id, 
 	        @Valid @RequestBody JobApplicantUpdateRequest request){
-				JobApplicantResponse response=jobApplicantService.update(id,request);
+				JobApplicantResponse response=jobApplicantService.update(currentUser,id,request);
 				return new ResponseEntity<>(response,HttpStatus.OK);
 	}
 	
 	@DeleteMapping("/{id}")
-	public ResponseEntity<ApiResponse> deleteApplicant(@PathVariable(value="id") Long id){
-		ApiResponse response=jobApplicantService.delete(id);
+	@PreAuthorize("hasRole('APPLICANT')")
+	public ResponseEntity<ApiResponse> deleteApplicant(@PathVariable(value="id") Long id,
+			@CurrentUser UserPrincipal currentUser){
+		ApiResponse response=jobApplicantService.delete(currentUser,id);
 		return new ResponseEntity<>(response,HttpStatus.OK);
 	}
 	
 	@GetMapping("/{id}/applications")
-	public ResponseEntity<List<JobApplicationResponse>> getApplications(@PathVariable(value="id") Long id){
-		List<JobApplicationResponse> response=jobApplicantService.getAllApplications(id);
+	@PreAuthorize("hasRole('APPLICANT')")
+	public ResponseEntity<List<JobApplicationResponse>> getApplications(@CurrentUser UserPrincipal currentUser,@PathVariable(value="id") Long id){
+		List<JobApplicationResponse> response=jobApplicantService.getAllApplications(currentUser,id);
 		return new ResponseEntity<>(response, HttpStatus.OK);
 		
 	}
 	
 	
 	@GetMapping("/{id}/applications/{applicationId}")
-	public ResponseEntity<JobApplicationResponse> getApplication(@PathVariable(value="id") Long id, 
+	@PreAuthorize("hasRole('APPLICANT')")
+	public ResponseEntity<JobApplicationResponse> getApplication(@CurrentUser UserPrincipal currentUser,@PathVariable(value="id") Long id, 
 	@PathVariable(value="applicationId") Long applicationId){
-		JobApplicationResponse response=jobApplicantService.getApplication(id,applicationId);
+		JobApplicationResponse response=jobApplicantService.getApplication(currentUser,id,applicationId);
 		return new ResponseEntity<>(response,HttpStatus.OK);
 	}
 	
 	@PostMapping("/{id}/applications")
-	public ResponseEntity<JobApplicationResponse> addApplication(@PathVariable(value="id") Long id,
+	@PreAuthorize("hasRole('APPLICANT')")
+	public ResponseEntity<JobApplicationResponse> addApplication(@CurrentUser UserPrincipal currentUser,@PathVariable(value="id") Long id,
 	@Valid @RequestBody JobApplicationCreateRequest request){
-		JobApplicationResponse response=jobApplicantService.createApplication(id,request);
+		JobApplicationResponse response=jobApplicantService.createApplication(currentUser,id,request);
 		return new ResponseEntity<>(response,HttpStatus.OK);
 	}
 	
 	@DeleteMapping("/{id}/applications/{applicationId}")
-	public ResponseEntity<ApiResponse> deleteApplication(@PathVariable(value="id") Long id,
+	@PreAuthorize("hasRole('APPLICANT')")
+	public ResponseEntity<ApiResponse> deleteApplication(@CurrentUser UserPrincipal currentUser,@PathVariable(value="id") Long id,
 	@PathVariable(value="applicationId") Long applicationId){
-		ApiResponse response=jobApplicantService.deleteApplication(id,applicationId);
+		ApiResponse response=jobApplicantService.deleteApplication(currentUser,id,applicationId);
 		return new ResponseEntity<>(response,HttpStatus.OK);
 	}
 	
 	@PutMapping("/{id}/applications/{applicationId}")
-	public ResponseEntity<JobApplicationResponse> updateApplication(@PathVariable(value="id") Long id,
-	@PathVariable(value="applicationId") Long applicationId,
-	@Valid @RequestBody JobApplicationUpdateRequest request){
-		JobApplicationResponse response=jobApplicantService.updateApplication(id,applicationId,request);
+	public ResponseEntity<JobApplicationResponse> updateApplication(@CurrentUser UserPrincipal currentUser,
+			@PathVariable(value="id") Long id,
+	        @PathVariable(value="applicationId") Long applicationId,
+	        @Valid @RequestBody JobApplicationUpdateRequest request){
+		JobApplicationResponse response=jobApplicantService.updateApplication(currentUser,applicationId,request);
 		
 		return new ResponseEntity<>(response,HttpStatus.OK);
 	}	

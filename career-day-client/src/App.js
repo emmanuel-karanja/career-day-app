@@ -21,6 +21,7 @@ import JobUpdatePage from './Components/Jobs/JobUpdatePage';
 import LoginPage from './Dashboards/LoginPage';
 import JobApplicantDetailsPage from './Components/JobApplicants/JobApplicantDetailsPage';
 import ViewJobApplicationsPage from './Components/JobApplications/ViewJobApplicationsPage';
+import authApi from './API/AuthApi';
 
 let App=(props)=> {
   return (
@@ -53,15 +54,11 @@ let App=(props)=> {
 
 
 const mapStateToProps=(state)=>{
-  const user={
-    firstName: 'emmanuel',
-    lastName:'karanja',
-    username: 'skaikru@koder.kom',
-
- }
+  
    return{
-      admin:true,
-      appName: 'CAREERDAY'
+      admin : true,
+      appName: 'CAREERDAY',
+      currentUser: authApi.getCurrentUser()
    }
 }
 

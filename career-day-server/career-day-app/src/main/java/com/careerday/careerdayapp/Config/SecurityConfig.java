@@ -21,10 +21,6 @@ import com.careerday.careerdayapp.Security.JwtAuthenticationEntryPoint;
 import com.careerday.careerdayapp.Security.JwtAuthenticationFilter;
 
 
-/**
- * Created by rajeevkumarsingh on 01/08/17.
- */
-
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(

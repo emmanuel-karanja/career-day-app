@@ -55,7 +55,7 @@ public class UserService implements IUserService {
 		
 		User savedUser=userRepository.save(user);
 		
-		return convertToDTO(user);
+		return convertToDTO(savedUser);
 	}
 
 	@Override

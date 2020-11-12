@@ -12,11 +12,12 @@ class AdminJobsPage extends Component {
       super(props);
       this.state = {
         showNewJobCardForm: false,
+        jobs:[],
       };
     }
   
     componentDidMount(){
-		this.props.fetchJobs();
+     this.props.fetchJobs();
 	}
     toggleForm = () => {
       this.setState({ showNewJobCardForm: !this.state.showNewJobCardForm });
@@ -24,6 +25,7 @@ class AdminJobsPage extends Component {
     onSearch=(searchTerm)=>{
       this.props.filterJobs(searchTerm);
     }
+    
     renderJobLists() { 
         return (
           <AdminJobList

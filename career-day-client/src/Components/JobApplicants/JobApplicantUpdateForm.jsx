@@ -3,7 +3,7 @@ import { Formik} from 'formik';
 import * as Yup from 'yup';
 import PropTypes from 'prop-types';
 import {Form} from 'react-bootstrap';
-import history from '../../Utils/history';
+import {withRouter} from 'react-router-dom';
 
 import {MyTextInput,
         MyStyledButton,
@@ -58,6 +58,7 @@ const JobApplicantUpdateForm=(props)=>{
                    setSubmitting(true);
                        //alert(JSON.stringify(values,null,2));
                        //send the axios request here
+                       const {history}=props;
                        const updatedApplicant={id: props.applicant.applicantId,...values};
                        props.updateApplicant(updatedApplicant);
                        resetForm();
@@ -123,6 +124,5 @@ const JobApplicantUpdateForm=(props)=>{
 JobApplicantUpdateForm.propTypes={
     updateApplicant: PropTypes.func.isRequired,
     applicant: PropTypes.object.isRequired,
-    deleteApplicant: PropTypes.func.isRequired,
 }
-export default JobApplicantUpdateForm;
+export default withRouter(JobApplicantUpdateForm);

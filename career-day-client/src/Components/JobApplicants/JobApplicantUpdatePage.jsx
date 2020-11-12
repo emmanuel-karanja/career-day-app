@@ -2,27 +2,43 @@ import React, { Component } from "react";
 import { Link, withRouter } from "react-router-dom";
 import PropTypes from "prop-types";
 import { connect} from "react-redux";
-import {createApplicant,fetchApplicant} from "../../modules/jobApplicants";
+import {createApplicant} from "../../modules/jobApplicants";
 import JobApplicantUpdateForm from './JobApplicantUpdateForm';
 import {bindActionCreators} from 'redux';
+import jobApplicantApi from '../../API/JobApplicantApi';
+import Error from '../Common/Error';
 
 class JobApplicantUpdatePage extends Component {
   constructor(){
     super();
     this.state={
-       job: null,
+       applicant: {},
+       error:"",
+       hasErrors:false
     }
   }
-  componentDidMount(){
-	 const {applicantId}=this.props.match.params;
-     this.props.fetchApplicant(applicantId);
+  async componentDidMount(){
+   const{applicantId}=this.props.match.params;
+   try{
+      const response=await jobApplicantApi.fetchApplicant(applicantId);
+      if(!response.ok){
+        throw new  Error(response.statusText);
+      }
+      this.setState({applicant: response.data})
+   }catch(error){
+     this.setState({hasErrors:true,error:error.data, applicant:{}});
+   }
   }
   render() {
-
+    if(this.state.hasErrors){
+      return (
+          <Error message={this.state.error}/>
+      );
+    }else{
     return (
       <div className="container">         
             <Link to="/"> Back to home</Link>
-            <div className="col s12" style={{ paddingLeft: "11.250px" }}>
+            <div style={{ paddingLeft: "11.250px" }}>
               <h4>
                 <b>Update Your Applicant Profile</b> below
               </h4>              
@@ -30,12 +46,12 @@ class JobApplicantUpdatePage extends Component {
             <JobApplicantUpdateForm updateApplicant={this.props.updateApplicant} applicant={this.state.applicant}/>
       </div>
     );
+    }
   }
 }
 
 JobApplicantUpdatePage.propTypes = {
   updateApplicant: PropTypes.func.isRequired,
-  applicant : PropTypes.object.isRequired
 };
 
 
@@ -43,18 +59,14 @@ JobApplicantUpdatePage.propTypes = {
 const mapDispatchToProps=(dispatch)=> {
     return bindActionCreators(
       {
-        createApplicant,fetchApplicant
+        createApplicant
       },
       dispatch
     );
   }
 
-  const mapStateToProps=(state)=>{
-    return{
-       applicant: state.currentApplicant,
-    }
-  }
+  
 export default connect(
-  mapStateToProps,
+  null,
   mapDispatchToProps
 )(withRouter(JobApplicantUpdatePage));
