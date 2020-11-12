@@ -62,7 +62,7 @@ export const fetchApplicants=()=>{
   return  async (dispatch)=>{
     dispatch(alertActions.clear());
     try{
-      const data=await jobApplicantApi.fetchAllApplicants();
+      const {data}=await jobApplicantApi.fetchAllApplicants();
     dispatch(fetchApplicantsSucceeded(data));
         const defaultApplicantId=data[0].applicantId;
         dispatch(fetchApplicant(defaultApplicantId));
@@ -107,7 +107,7 @@ export const fetchApplicants=()=>{
    return async dispatch=>{
      dispatch(alertActions.clear())
      try{
-        const data=await jobApplicantApi.editApplicant(applicant);
+        const {data}=await jobApplicantApi.editApplicant(applicant);
         dispatch(editApplicantSucceeded(data));
         dispatch(alertActions.success('Applicant Updated'));
         dispatch(fetchApplicant(data.applicantId));
@@ -148,7 +148,7 @@ export const fetchApplicants=()=>{
 export const fetchApplicant=(id)=>{
   return async dispatch=>{
     try{
-      const data=await jobApplicantApi.getApplicantById(id);
+      const {data}=await jobApplicantApi.getApplicantById(id);
       dispatch(setCurrentApplicant(data));
       dispatch(alertActions.success(`Applicant ${data.firstName} fetched successfuly`))
     }catch(error){

@@ -18,10 +18,11 @@ import RegistrationSuccess from './Components/JobApplicants/RegistrationSuccess'
 import ViewJobList from './Components/Jobs/ViewJobList';
 import JobDetailsPage from './Components/Jobs/JobDetailsPage'
 import JobUpdatePage from './Components/Jobs/JobUpdatePage';
-import LoginPage from './Dashboards/LoginPage';
+import LoginPage from './Components/Login/LoginPage';
 import JobApplicantDetailsPage from './Components/JobApplicants/JobApplicantDetailsPage';
 import ViewJobApplicationsPage from './Components/JobApplications/ViewJobApplicationsPage';
 import authApi from './API/AuthApi';
+import LogoutPage from './Components/Logout/LogoutPage';
 
 let App=(props)=> {
   return (
@@ -34,13 +35,14 @@ let App=(props)=> {
             <Switch>
               <Route exact path="/" component={Home} />
               <Route path="/login" component={LoginPage}/>
-              <Route path="/adminjobpage" component={AdminJobPage} />
+              <Route path="/logout" component={LogoutPage}/>
+              <Route path="/registerapplicant" component={JobApplicantRegistrationPage}/>
+              <Route path="/adminjobpage" component={AdminJobPage}/>
               <Route path="/viewjoblist" component={ViewJobList}/>
               <Route path="/jobdetails/:jobId" component={JobDetailsPage}/>
-			        <Route path="/updatejob/:jobId" component={JobUpdatePage}/>
-              <Route path="/registerapplicant" component={JobApplicantRegistrationPage}/>
+			        <Route path="/updatejob/:jobId" component={JobUpdatePage}/>    
               <Route path="/registrationsuccess" component={RegistrationSuccess}/>
-              <Route path="/updateapplican/:applicantId" component={JobApplicantUpdatePage}/>
+              <Route path="/updateapplicant/:applicantId" component={JobApplicantUpdatePage}/>
               <Route path="/applicantdetails/:applicantId" component={JobApplicantDetailsPage}/>
               <Route path="/applicationspage/:applicantId" component={ViewJobApplicationsPage}/>
               <Route component={NotFound} />

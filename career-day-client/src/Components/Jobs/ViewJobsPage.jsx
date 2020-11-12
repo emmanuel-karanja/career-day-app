@@ -7,25 +7,25 @@ import {connect} from 'react-redux';
 import {filterJobs, getFilteredJobs,getJobs,fetchJobs} from '../../modules/jobs';
 import PropType from 'prop-types';
 import {bindActionCreators} from 'redux';
+import Error from '../Common/Error';
 
 class ViewJobsPage extends Component{
-	constructor(props){
-		super(props);
-	}
+	
 	componentDidMount(){
-		console.log(this.props);
 		this.props.fetchJobs();
 	}
 
-    onSearch=(searchTerm)=>{
+  onSearch=(searchTerm)=>{
       this.props.filterJobs(searchTerm);
-    }
-    render(){
-        if (this.props.isLoading) {
+  }
+  render(){
+     if (this.props.isLoading) {
             return <div className="jobs-loading">Loading...</div>;
-          }
+      }
           //else
-          console.log(this.props.jobs);
+      if(this.props.errors){
+        return (<Error message={this.props.message}/>);
+      }else{
         return(
         <div>
             <div className="jobs">
@@ -35,7 +35,8 @@ class ViewJobsPage extends Component{
             </div>
             <ViewJobList jobs={this.props.jobs}/>
         </div>
-        )
+        );
+      }
     }
 }
 
@@ -54,10 +55,12 @@ const mapDispatchToProps=(dispatch)=> {
       );
     }
 function mapStateToProps(state) {
-    const{isLoading}=state.alerts;
+    const{isLoading,errors,message}=state.alerts;
     return {
       jobs : getJobs(state),
-      isLoading
+      isLoading,
+      errors,
+      message,
     };
   }
   

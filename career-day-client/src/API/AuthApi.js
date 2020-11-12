@@ -27,8 +27,8 @@ function getAuthBearerToken() {
     // return authorization header with jwt token
     let user = JSON.parse(localStorage.getItem('user'));
 
-    if (user && user.token) {
-        return `'Bearer ' + ${user.token}` ;
+    if (user && user.jwtToken) {
+        return `'Bearer ' + ${user.jwtToken}` ;
     } else {
         return "";
     }

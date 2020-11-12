@@ -1,8 +1,8 @@
 
 import history from '../Utils/history';
 import authApi from '../API/AuthApi';
+import {setCurrentApplicant} from './jobApplicants';
 import {alertActions} from './alerts';
-import {ApplicantConstants,setCurrentApplicant} from './jobApplicants';
 
 export const AuthConstants = {
     LOGIN_REQUEST: 'USERS_LOGIN_REQUEST',
@@ -18,12 +18,13 @@ export default function authReducer(authentication = {}, action) {
         case AuthConstants.LOGIN_REQUEST:
           return {
             loggingIn: true,
-            user: action.user
+            user: action.payload
           };
+
         case AuthConstants.LOGIN_SUCCESS:
           return {
             loggedIn: true,
-            user: action.user
+            user: action.payload
           };
         case AuthConstants.LOGIN_FAILURE:
           return {};
@@ -38,42 +39,46 @@ export default function authReducer(authentication = {}, action) {
 export const login=(credentials)=>{
   const{email}=credentials;
   return async dispatch=>{
-    dispatch(requestLogin(email))
+    dispatch(requestLogin(email));
+    dispatch(alertActions.clear());
     try{
-      const data=await authApi.login(credentials);
+      //to get data from from axios you response.data
+      const {data}=await authApi.login(credentials);
       dispatch(setCurrentApplicant(data));
-      dispatch(loginSuccess(`Applicant ${data.firstName} fetched successfuly`));
+      dispatch(loginSuccess(data));
+      dispatch(alertActions.success(`User ${data.firstName} fetched successfuly`));
       history.push('/');
     }catch(error){
-     dispatch(loginFailure('Failed to fetch Applicant',error.message));
+     dispatch(alertActions.failure('Failed to fetch Applicant',error.message));
+     dispatch(loginFailure('Failed to fetch user',error.message));
     }
   }
 }
 
 
-const logout=()=> {
+export const logout=()=> {
     authApi.logout();
     return {
          type: AuthConstants.LOGOUT 
         };
 }
 
-function requestLogin(user) { 
+const requestLogin=(user)=>{ 
     return { 
          type: AuthConstants.LOGIN_REQUEST, 
          payload: user 
      } 
 }
 
-function loginSuccess(user) {
+const loginSuccess=(user)=> {
      return{
            type: AuthConstants.LOGIN_SUCCESS, 
            payload:user 
       } 
-    }
-function loginFailure(error) {
+}
+const loginFailure=(error)=> {
      return {
           type: AuthConstants.LOGIN_FAILURE, 
           payload: error 
         } 
-    }
+}

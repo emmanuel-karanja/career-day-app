@@ -26,7 +26,7 @@ export default function applicationsReducer(applications=[],action){
   
       case ApplicationConstants.EDIT_APPLICANT_SUCCEEDED:{
         const nextApplications=applications.map(applicant=>{
-          if(applicant.applicantId===action.payload.id){
+          if(applicant.applicantId===action.payload){
               Object.assign({},applicant,action.payload);
           }
           return applications;
@@ -48,11 +48,10 @@ export default function applicationsReducer(applications=[],action){
 
 
 export const fetchApplications=(id)=>{
-  return  async (dispatch,getState)=>{
+  return  async (dispatch)=>{
     dispatch(alertActions.clear());
-    try{
-     
-      const data=await jobApplicantApi.fetchAllApplications(id);
+    try{ 
+      const {data}=await jobApplicantApi.fetchAllApplications(id);
       dispatch(fetchApplicationsSucceeded(data));
       dispatch(alertActions.success('Applications fetched successfully'))
     }catch(error){
@@ -73,8 +72,8 @@ export const fetchApplications=(id)=>{
    return async (dispatch,getState)=>{
      dispatch(alertActions.clear());
      try{
-       const data=await jobApplicantApi.createApplication(id,newApplication);
-       //dispatch(projectActions.addApplication(data));
+       const {data}=await jobApplicantApi.createApplication(id,newApplication);
+       dispatch(createApplicationSucceeded(data));
        dispatch(alertActions.success('Application Created Succesfully'));
      }catch(error){
       dispatch(alertActions.failure('Failed to createApplication',error));
@@ -82,6 +81,12 @@ export const fetchApplications=(id)=>{
    }
  }
 
+  const createApplicationSucceeded=(application)=>{
+    return{
+      type: ApplicationConstants.CREATE_APPLICATION_SUCCEEDED,
+      payload:application,
+    }
+  }
 
  export const updateApplication=(id,application)=>{
    return async (dispatch,getState)=>{

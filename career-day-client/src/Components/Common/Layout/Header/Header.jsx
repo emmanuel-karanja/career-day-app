@@ -29,7 +29,7 @@ const LoggedInView = props => {
             <ul className="navbar-nav mr-auto">
               <LiNavLink activeClassName='active' exact={true} to="/">Home</LiNavLink>
               <LiNavLink activeClassName='active' exact={true} to={`/applicationspage/${props.currentUser.userId}`}>Jobs</LiNavLink>
-              <LiNavLink activeClassName='active' exact={true} to="/profile">My Profile</LiNavLink> 
+              <LiNavLink activeClassName='active' exact={true} to="/updateapplicant">My Profile</LiNavLink> 
               <LiNavLink activeClassName='active' exact={true} to="/logout">Sign-out</LiNavLink> 
               <LiNavLink activeClassName='active' to={`/@${props.currentUser.username}`}
                      className="nav-link">

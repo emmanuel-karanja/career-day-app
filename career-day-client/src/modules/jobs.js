@@ -63,9 +63,7 @@ export const fetchJobs=()=>{
     dispatch(alertActions.clear());
     try{
       const {data}=await jobApi.fetchAllJobs();
-	 
-     dispatch(fetchJobsSucceeded(data));
-     const defaultJobId=data[0].jobId;
+      dispatch(fetchJobsSucceeded(data));
       dispatch(setCurrentJob(data[0]));
       dispatch(alertActions.success('Jobs fetched successfully'))
     }catch(error){
@@ -85,15 +83,12 @@ export const fetchJobs=()=>{
 
 
  export const createJob=(newJob)=>{
-   //const newJOB={title,description,status};
-   console.log(`create job called jobname : ${newJob.name}`);
    return async dispatch=>{
      dispatch(alertActions.clear())
      try{
        const {data}=await jobApi.createJob(newJob);
        dispatch(createJobSucceeded(data));
        dispatch(alertActions.success('Job Created Succesfully'));
-       //dispatch(fetchJob(data.jobId));
      }catch(error){
       dispatch(alertActions.failure('Failed to create job',error.message));
      }
@@ -111,10 +106,9 @@ export const fetchJobs=()=>{
    return async dispatch=>{
      dispatch(alertActions.clear())
      try{
-        const data=await jobApi.updateJob(job);
+        const {data}=await jobApi.updateJob(job);
         dispatch(editJobSucceeded(data));
         dispatch(alertActions.success('Job Updated'));
-        //dispatch(fetchJob(data.jobId));
      }catch(error){
        dispatch(alertActions.failure('Failed to update Job',error.message));
      }
@@ -150,23 +144,19 @@ export const fetchJobs=()=>{
 
 
 export const fetchJob=(id)=>{
-  console.log(`entering fetchjob jobId: ${id}`);
   return async(dispatch)=>{
     try{
 		
 		const {data} = await jobApi.fetchJobById(id);
-	    console.log(`fetchJob data ${data.name}`);
-        dispatch(setCurrentJob(data));
-	  //console.log(`fetchJob called ${data.name}`);
-      dispatch(alertActions.success(`JOB ${data.name} fetched successfuly`))
+      dispatch(setCurrentJob(data));
+      dispatch(alertActions.success(`Job ${data.name} fetched successfuly`))
     }catch(error){
-     dispatch(alertActions.failure('Failed to fetch JOB',error.message));
+     dispatch(alertActions.failure('Failed to fetch Job',error.message));
     }
   }
 }
 
 export const setCurrentJob=(job)=>{
-  console.log(`set current job ${job.name}`);
   return {
     type: JobConstants.SET_CURRENT_JOB,
     payload: job
@@ -190,15 +180,7 @@ export const getJobs=(state)=>{
   return state.jobs;
 }
 
-export const getJobById=(state,id)=>{
-	if(!state.jobs){
-		return {};
-	}
-	
-	const job= state.jobs.filter(job=> job.jobId ===id);
-	console.log(`get job by id ${job}`);
-	return job;
-}
+
 
 const getSearchTerm=(state)=>state.searchTerm;
 

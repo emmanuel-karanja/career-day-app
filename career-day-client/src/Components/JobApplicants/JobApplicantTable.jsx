@@ -1,3 +1,8 @@
+import React from 'react';
+import {Link} from 'react-router-dom';
+import PropTypes from 'prop-types';
+import {Table} from 'react-bootstrap';
+
 const JobApplicantRow=(props)=>{
     return(
              <tr onClick={onJobApplicantRowClicked}>
@@ -47,9 +52,9 @@ const JobApplicantTable =(props)=>{
 
 }
 
-JobTable.propTypes={
-    jobs: PropTypes.array.isRequired,
-    deleteJob:PropTypes.func.isRequired,
+JobApplicantTable.propTypes={
+    applicants: PropTypes.array.isRequired,
+    deleteApplicant:PropTypes.func.isRequired,
 }
 
 export default JobApplicantTable;

@@ -1,4 +1,11 @@
+import React from 'react';
+import {Link} from 'react-router-dom';
+import PropTypes from 'prop-types';
+import {Table,Button} from 'react-bootstrap';
 const JobRow=(props)=>{
+    function onDelete(){
+        props.deleteJob(props.job.jobId);
+    }
     return(
              <tr onClick={onJobRowClicked}>
                 <td><Link to={`/jobDetails/${props.job.jobId}`}>
@@ -9,6 +16,7 @@ const JobRow=(props)=>{
 				<td>{props.job.yearsOfExperience}</td>
 				<td>{props.job.interviewDate.toLocaleDateString()}</td>
                 <td>{props.job.status}</td>
+                <td><Button variant="danger" type="button" onClick={onDelete}>Delete</Button></td>
             </tr>
     )
 }

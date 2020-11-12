@@ -4,15 +4,13 @@ import JobCreateForm from './JobCreateForm';
 import {connect} from 'react-redux';
 import AdminJobList from './AdminJobList';
 import {bindActionCreators} from 'redux';
-
-
+import Error from '../Common/Error';
 
 class AdminJobsPage extends Component {
     constructor(props) {
       super(props);
       this.state = {
         showNewJobCardForm: false,
-        jobs:[],
       };
     }
   
@@ -42,7 +40,10 @@ class AdminJobsPage extends Component {
      if (this.props.isLoading) {
         return <div className="jobs-loading">Loading...</div>;
       }
-  
+     if(this.props.error){
+       return(<Error message={this.props.message}/>);
+     }
+     else{
       return (
         <div className="jobs">
           <div className="jobs-header">
@@ -55,15 +56,18 @@ class AdminJobsPage extends Component {
           <div className="job-lists">{this.renderJobLists()}</div>
         </div>
       );
+     }
     }
   }
   
   function mapStateToProps(state) {
-    const { isLoading } = state.alerts;
+    const { isLoading,error,message } = state.alerts;
   
     return {
       jobs : getFilteredJobs(state),
       isLoading,
+      error,
+      message,
     };
   }
   

@@ -4,8 +4,15 @@ import {connect} from 'react-redux';
 import {withRouter} from 'react-router-dom';
 import {createApplication} from '../../modules/jobApplications';
 import {Button} from 'react-bootstrap';
- 
+import Error from '../Common/Error';
+
 const JobDetailsPage=(props)=>{
+	if (props.isLoading) {
+        return <div className="jobs-loading">Loading...</div>;
+      }
+     if(props.error){
+       return(<Error message={props.message}/>);
+     }
     return(
         <div className="container">
 		    Job Details
@@ -34,21 +41,22 @@ const JobDetailsPage=(props)=>{
 	</div>
     );
 	
-	function onApply(){
-		
+	function onApply(){	
 		const application={
 			jobId: props.job.jobId,	
-		}
-		
-		props.createApplication(props.currentApplicant.applicantId,application);
-		
+		}	
+		props.createApplication(props.currentApplicant.applicantId,application);		
 	}	
 }
 
-const mapStateToProps=(state,ownProps)=>{
+const mapStateToProps=(state)=>{
+	const {isLoading,errors,message}=state.alerts;
 	return{
 		currentApplicant: state.currentApplicant,
 		job : state.currentJob,
+		isLoading,
+		errors,
+		message,
 	}
 }
 
