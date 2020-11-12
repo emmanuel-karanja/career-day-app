@@ -40,7 +40,7 @@ class AdminJobsPage extends Component {
      if (this.props.isLoading) {
         return <div className="jobs-loading">Loading...</div>;
       }
-     if(this.props.error){
+     else if(this.props.error){
        return(<Error message={this.props.message}/>);
      }
      else{

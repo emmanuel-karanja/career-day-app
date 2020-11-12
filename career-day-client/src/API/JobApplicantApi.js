@@ -25,7 +25,7 @@ function fetchApplicantById(id){
 }
 
 function createApplicant(newApplicant){
-    return client.post(`/job-applicants`,newApplicant);
+    return client.post(`/job-applicants/register`,newApplicant);
 }
 
 function updateApplicant(updatedApplicant){

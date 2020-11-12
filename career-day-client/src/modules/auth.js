@@ -70,7 +70,8 @@ const requestLogin=(user)=>{
      } 
 }
 
-const loginSuccess=(user)=> {
+export const loginSuccess=(user)=> {
+	 setCurrentUser(user);
      return{
            type: AuthConstants.LOGIN_SUCCESS, 
            payload:user 
@@ -81,4 +82,10 @@ const loginFailure=(error)=> {
           type: AuthConstants.LOGIN_FAILURE, 
           payload: error 
         } 
+}
+
+const setCurrentUser=(user)=>{
+	console.log('saving current user');
+	console.log(user);
+	localStorage.setItem('user',JSON.stringify(user));
 }

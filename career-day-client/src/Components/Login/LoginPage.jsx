@@ -4,50 +4,67 @@ import PropTypes from 'prop-types';
 import LoginForm from './LoginForm';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
-import {login} from '../../modules/auth';
+import {login,loginSuccess} from '../../modules/auth';
 import {withRouter} from 'react-router-dom';
 import Error from '../Common/Error';
+import {authApi} from '../../API/AuthApi';
+import axios from 'axios';
+
+
+const LOGIN_URL='http://localhost:8080/api/v1/auth/login';
 
 class LoginPage extends Component{
-   render(){
-    if (this.props.isLoading) {
-      return <div className="jobs-loading">Loading...</div>;
-    }
-    
-    if(this.props.error){
-      return(<Error message={this.props.message}/>)
-    }
-    else{
+    constructor(){
+		super();
+		this.state={errorMessage:"",
+		            hasErrors:false,
+		            user:{}
+				   };
+	}
+	
+	onLogin=(credentials)=>{	
+		 axios.post(LOGIN_URL, credentials)
+        .then(response => {
+			this.setState({ user: response.data});
+			const {history}=this.props;
+			//refresh the store//
+		    this.props.loginSuccess(response.data);
+		
+			//navigate to home//
+			history.push('/main');
+		}).catch(error => {
+			console.log(error);
+            this.setState({ errorMessage: error.message, hasErrors:true});         
+        });	
+	}
+	render(){
+		
+	
        return(
            <div>
-               <LoginForm login={this.props.login}/>
+		   {this.state.hasErrors? <Error message={this.state.errorMessage}/> : null}
+               <LoginForm login={this.onLogin}/>
            </div>
-       );
-    }
-   }
+       ); 
+	}
 }
 
 LoginPage.propType={
     login: PropTypes.func.isRequired,
 }
 
-const mapStateToProps=state=>{
-  const{isLoading,error,message}=state.alerts;
-  return{
-    isLoading, error,message
-  }
-}
+
 const mapDispatchToProps=(dispatch)=> {
     return bindActionCreators(
       {
-        login,
+        login,loginSuccess
       },
       dispatch
     );
   }
 
   export default connect(
-    mapStateToProps,
+    null,
     mapDispatchToProps
   )(withRouter(LoginPage));
   

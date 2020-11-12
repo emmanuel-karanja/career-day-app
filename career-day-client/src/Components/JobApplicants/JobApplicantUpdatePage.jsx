@@ -5,7 +5,7 @@ import { connect} from "react-redux";
 import {createApplicant} from "../../modules/jobApplicants";
 import JobApplicantUpdateForm from './JobApplicantUpdateForm';
 import {bindActionCreators} from 'redux';
-import jobApplicantApi from '../../API/JobApplicantApi';
+import {jobApplicantApi} from '../../API/JobApplicantApi';
 import Error from '../Common/Error';
 
 class JobApplicantUpdatePage extends Component {

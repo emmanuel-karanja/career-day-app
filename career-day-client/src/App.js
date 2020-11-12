@@ -22,21 +22,25 @@ import LoginPage from './Components/Login/LoginPage';
 import JobApplicantDetailsPage from './Components/JobApplicants/JobApplicantDetailsPage';
 import ViewJobApplicationsPage from './Components/JobApplications/ViewJobApplicationsPage';
 import authApi from './API/AuthApi';
+import ViewJobApplicantsPage from './Components/JobApplicants/ViewJobApplicantsPage';
 import LogoutPage from './Components/Logout/LogoutPage';
+import Main  from './Components/Dashboards/main';
 
 let App=(props)=> {
   return (
    <Provider store={store}>
     <BrowserRouter>
         <div>
-          <Header admin={props.admin} appName={props.appName} currentUser={props.currentUser}/>
+          <Header appName={props.appName} currentUser={props.currentUser}/>
           
           <div className="container">
             <Switch>
               <Route exact path="/" component={Home} />
+              <Route exact path="/main" component={Main}/>
               <Route path="/login" component={LoginPage}/>
               <Route path="/logout" component={LogoutPage}/>
               <Route path="/registerapplicant" component={JobApplicantRegistrationPage}/>
+              <Route path="/applicants" component={ViewJobApplicantsPage}/>
               <Route path="/adminjobpage" component={AdminJobPage}/>
               <Route path="/viewjoblist" component={ViewJobList}/>
               <Route path="/jobdetails/:jobId" component={JobDetailsPage}/>
@@ -57,10 +61,10 @@ let App=(props)=> {
 
 const mapStateToProps=(state)=>{
   
+   const currentUser=state.authentication.user;
    return{
-      admin : true,
       appName: 'CAREERDAY',
-      currentUser: authApi.getCurrentUser()
+      currentUser
    }
 }
 

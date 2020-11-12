@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_BASE_URL='http://localhost:8080/api/v1/users';
+const API_BASE_URL='http://localhost:8080/api/v1/auth';
 
 const client =axios.create({
     baseURL: API_BASE_URL,
@@ -15,12 +15,15 @@ const authApi={
 }
 
 function login(credentials){
+
     
-    const authResponse=client.get(`/login`,credentials);
+    const response=client.post(`/login`,credentials);
+    if (response.ok){
+       localStorage.setItem('user',JSON.stringify(response.data));
+	   console.log(`current logged in user: ${response.data.email} with token ${response.data.jwtToken}`);
+    }
 
-    localStorage.setItem('user',JSON.stringify(authResponse));
-
-    return Response;
+    return response;
 }
 
 function getAuthBearerToken() {

@@ -55,11 +55,11 @@ const mapDispatchToProps=(dispatch)=> {
       );
     }
 function mapStateToProps(state) {
-    const{isLoading,errors,message}=state.alerts;
+    const{isLoading,error,message}=state.alerts;
     return {
-      jobs : getJobs(state),
+      jobs : getFilteredJobs(state),
       isLoading,
-      errors,
+      error,
       message,
     };
   }

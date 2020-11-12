@@ -3,8 +3,8 @@
 import React,{Component} from 'react';
 import {connect} from 'react-redux';
 import {filterApplications, deleteApplication} from '../../modules/jobApplications';
-import ViewJobApplicationsTable from './ViewJobApplicationsTable';
-import jobApplicantApi from '../../API/JobApplicantApi';
+import JobApplicationsTable from './JobApplicationsTable';
+import {jobApplicantApi} from '../../API/JobApplicantApi';
 import {bindActionCreators} from 'redux';
 import Error from '../Common/Error';
 import {withRouter} from 'react-router-dom';
@@ -53,7 +53,7 @@ class ViewJobApplicationsPage extends Component{
               </div>
             </div>
             <h4>Job Applications</h4>
-            <ViewJobApplicationsTable applications={this.props.applications} 
+            <JobApplicationsTable applications={this.props.applications} 
                deleteApplication={this.onDeleteApplication}/>
         </div>
         );

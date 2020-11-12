@@ -4,6 +4,7 @@ import * as Yup from 'yup';
 import PropTypes from 'prop-types';
 import {Form} from 'react-bootstrap';
 
+
 import {MyTextInput,
         MyStyledButton,
         MyStyledContainer,
@@ -27,14 +28,15 @@ const LoginForm=(props)=>{
             <Formik 
                initialValues={{
 							   email:"",
-							   phone:"",   
+							   password:"",   
                                }}
                validationSchema={loginSchema}
                onSubmit={(values, {setSubmitting, resetForm})=>{
                      setSubmitting(true);
-                       //alert(JSON.stringify(values,null,2));
+                       alert(JSON.stringify(values,null,2));
                        //send the axios request here
                        props.login(values);
+					   
                        resetForm();
                        setSubmitting(false);
                }}
