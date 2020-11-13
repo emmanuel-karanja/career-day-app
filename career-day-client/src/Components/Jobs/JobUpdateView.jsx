@@ -6,18 +6,21 @@ import JobUpdateForm from './JobUpdateForm';
 import {bindActionCreators} from 'redux';
 import {updateJob} from '../../modules/jobs';
 import {withRouter} from 'react-router-dom';
-import {jobApi} from '../../API/JobApi';
+import {jobApi} from '../../api/jobApi';
 import Error from '../Common/Error';
+import authApi from '../../api/authApi';
 
-
-
- class JobUpdatePage extends Component{
+ class JobUpdateView extends Component{
    	 constructor(){
         super();
         this.state={job:{}, error:"",hasErrors:false};
       }
    async componentDidMount(){
-	   const {jobId}=this.props.match.params;
+     const {jobId}=this.props.match.params;
+     if(!authApi.getCurrentUser.admin){
+       const message="You must be admin to perform this action";
+       this.setState({hasErrors:true,error:message});
+     }
 	   try{
        const response=await jobApi.fetchJobById(jobId);
        if (!response.ok) {
@@ -45,9 +48,8 @@ import Error from '../Common/Error';
    }
 }
 
-JobUpdatePage.propTypes={
+JobUpdateView.propTypes={
 	updateJob: PropTypes.func.isRequired,
-	fetchJob: PropTypes.func.isRequired,
 }
   
   
@@ -65,4 +67,4 @@ JobUpdatePage.propTypes={
   export default connect(
     null,
     mapDispatchToProps
-  )(withRouter(JobUpdatePage));
+  )(withRouter(JobUpdateView));

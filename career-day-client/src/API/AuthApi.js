@@ -11,18 +11,14 @@ const client =axios.create({
 });
 
 const authApi={
-    login,logout,getAuthBearerToken,getCurrentUser
+    login,logout,getAuthBearerToken,getCurrentUser,resetUser
 }
 
-function login(credentials){
-
-    
+function login(credentials){ 
     const response=client.post(`/login`,credentials);
     if (response.ok){
        localStorage.setItem('user',JSON.stringify(response.data));
-	   console.log(`current logged in user: ${response.data.email} with token ${response.data.jwtToken}`);
     }
-
     return response;
 }
 
@@ -40,14 +36,19 @@ function getAuthBearerToken() {
 function getCurrentUser(){
     let user=JSON.parse(localStorage.getItem('user'));
     if(user){
-        return {user}
+        return user;
     }else{
-        return{};
+        return null;
     }
+}
+
+function resetUser(){
+    localStorage.removeItem('user');
 }
 
 function logout(){
     localStorage.removeItem('user');
 }
+
 
 export default authApi;

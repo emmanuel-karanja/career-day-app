@@ -4,13 +4,12 @@
 import React,{Component} from 'react';
 import ViewJobList from './ViewJobList';
 import {connect} from 'react-redux';
-import {filterJobs, getFilteredJobs,getJobs,fetchJobs} from '../../modules/jobs';
-import PropType from 'prop-types';
+import {filterJobs, getFilteredJobs,fetchJobs} from '../../modules/jobs';
+import PropTypes from 'prop-types';
 import {bindActionCreators} from 'redux';
 import Error from '../Common/Error';
 
-class ViewJobsPage extends Component{
-	
+class JobsView extends Component{
 	componentDidMount(){
 		this.props.fetchJobs();
 	}
@@ -40,10 +39,10 @@ class ViewJobsPage extends Component{
     }
 }
 
-ViewJobsPage.propTypes={
-  jobs: PropType.array.isRequired,
-  filterJobs: PropType.func.isRequired,
-  fetchJobs: PropType.func.isRequired
+JobsView.propTypes={
+  jobs: PropTypes.array.isRequired,
+  filterJobs: PropTypes.func.isRequired,
+  fetchJobs: PropTypes.func.isRequired
 }
 
 const mapDispatchToProps=(dispatch)=> {
@@ -66,4 +65,4 @@ function mapStateToProps(state) {
   
   
   
-  export default connect(mapStateToProps,mapDispatchToProps)(ViewJobsPage);
+  export default connect(mapStateToProps,mapDispatchToProps)(JobsView);

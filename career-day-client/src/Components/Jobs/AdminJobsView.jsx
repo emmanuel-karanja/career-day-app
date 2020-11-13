@@ -6,7 +6,7 @@ import AdminJobList from './AdminJobList';
 import {bindActionCreators} from 'redux';
 import Error from '../Common/Error';
 
-class AdminJobsPage extends Component {
+class AdminJobsView extends Component {
     constructor(props) {
       super(props);
       this.state = {
@@ -80,4 +80,4 @@ class AdminJobsPage extends Component {
     );
   }
   
-  export default connect(mapStateToProps, mapDispatchToProps)(AdminJobsPage);
+  export default connect(mapStateToProps, mapDispatchToProps)(AdminJobsView);

@@ -7,7 +7,6 @@ import {bindActionCreators} from 'redux';
 import {login,loginSuccess} from '../../modules/auth';
 import {withRouter} from 'react-router-dom';
 import Error from '../Common/Error';
-import {authApi} from '../../API/AuthApi';
 import axios from 'axios';
 
 
@@ -21,25 +20,27 @@ class LoginPage extends Component{
 		            user:{}
 				   };
 	}
-	
+	componentDidMount(){
+    
+  }
 	onLogin=(credentials)=>{	
 		 axios.post(LOGIN_URL, credentials)
         .then(response => {
 			this.setState({ user: response.data});
 			const {history}=this.props;
 			//refresh the store//
-		    this.props.loginSuccess(response.data);
+		  this.props.login(credentials);
 		
-			//navigate to home//
-			history.push('/main');
+      //navigate to home//
+      
+			history.push('/');
 		}).catch(error => {
 			console.log(error);
             this.setState({ errorMessage: error.message, hasErrors:true});         
         });	
 	}
 	render(){
-		
-	
+       console.log('inside login');
        return(
            <div>
 		   {this.state.hasErrors? <Error message={this.state.errorMessage}/> : null}

@@ -5,10 +5,10 @@ import { connect} from "react-redux";
 import {createApplicant} from "../../modules/jobApplicants";
 import JobApplicantUpdateForm from './JobApplicantUpdateForm';
 import {bindActionCreators} from 'redux';
-import {jobApplicantApi} from '../../API/JobApplicantApi';
+import {jobApplicantApi} from '../../api/jobApplicantApi';
 import Error from '../Common/Error';
 
-class JobApplicantUpdatePage extends Component {
+class JobApplicantUpdateView extends Component {
   constructor(){
     super();
     this.state={
@@ -50,7 +50,7 @@ class JobApplicantUpdatePage extends Component {
   }
 }
 
-JobApplicantUpdatePage.propTypes = {
+JobApplicantUpdateView.propTypes = {
   updateApplicant: PropTypes.func.isRequired,
 };
 
@@ -69,4 +69,4 @@ const mapDispatchToProps=(dispatch)=> {
 export default connect(
   null,
   mapDispatchToProps
-)(withRouter(JobApplicantUpdatePage));
+)(withRouter(JobApplicantUpdateView));

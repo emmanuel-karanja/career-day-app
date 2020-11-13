@@ -1,26 +1,27 @@
 import React, { Component } from "react";
-import { Link, withRouter } from "react-router-dom";
+import {withRouter,Link} from "react-router-dom";
 import PropTypes from "prop-types";
 import { connect} from "react-redux";
 import {createApplicant} from "../../modules/jobApplicants";
 import JobApplicantCreateForm from './JobApplicantCreateForm';
 import {bindActionCreators} from 'redux';
-import {login} from "../../modules/auth";
+import Error from '../Common/Error';
 
-
-
-class JobApplicantRegisterPage extends Component {
-  
-  componentDidMount() {
-    // If logged in and user navigates to Register page, should redirect them to dashboard
-    if (this.props.authentication.isLoggedIn) {
-      this.props.history.push("/viewjoblist");
+class RegisterPage extends Component {
+  onRegister=(newApplicant)=>{
+    this.props.createApplicant(newApplicant);
+    const{history}=this.props;
+    if(this.props.error !==""){
+        history.push('/register-success');
     }
+  
   }
 
-
   render() {
-
+    if(this.props.error ===""){
+      return(<Error message={this.props.message}/>);
+    }
+    else{
     return (
       <div className="container">
         <div className="row">
@@ -34,31 +35,35 @@ class JobApplicantRegisterPage extends Component {
                 Already have an account? <Link to="/login">Log in</Link>
               </p>
             </div>
-            <JobApplicantCreateForm createApplicant={this.props.createApplicant}/>
+            <JobApplicantCreateForm createApplicant={this.onRegister}/>
           </div>
         </div>
       </div>
     );
+    }
   }
 }
-
-JobApplicantRegisterPage.propTypes = {
+RegisterPage.propTypes = {
   login: PropTypes.func.isRequired,
   createApplicant: PropTypes.func.isRequired,
   authentication: PropTypes.object.isRequired,
 };
 
 const mapStateToProps = state => {
-	
+  const {appLoaded}=state.appLoaded;
+  const {error,message, isLoading}=state.alerts;
 	return {
-		authentication: state.authentication
+    appLoaded,
+    error,
+    message,
+    isLoading
 	}
 }
 
 const mapDispatchToProps=(dispatch)=> {
     return bindActionCreators(
       {
-        createApplicant,login
+        createApplicant
       },
       dispatch
     );
@@ -67,4 +72,4 @@ const mapDispatchToProps=(dispatch)=> {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(withRouter(JobApplicantRegisterPage));
+)(withRouter(RegisterPage));

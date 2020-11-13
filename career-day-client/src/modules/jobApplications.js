@@ -1,6 +1,6 @@
 //import {projectActions} from './projects';
 import {alertActions}  from './alerts';
-import { jobApplicantApi } from '../API/JobApplicantApi';
+import { jobApplicantApi } from '../api/jobApplicantApi';
 import { createSelector } from 'reselect';
 
 export const ApplicationConstants={

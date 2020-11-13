@@ -6,7 +6,7 @@ import {createApplication} from '../../modules/jobApplications';
 import {Button} from 'react-bootstrap';
 import Error from '../Common/Error';
 
-const JobDetailsPage=(props)=>{
+const JobDetails=(props)=>{
 	if (props.isLoading) {
         return <div className="jobs-loading">Loading...</div>;
       }
@@ -73,4 +73,4 @@ const mapDispatchToProps=(dispatch)=> {
 export default connect(
     mapStateToProps,
     mapDispatchToProps
-  )(withRouter(JobDetailsPage));
+  )(withRouter(JobDetails));

@@ -1,6 +1,6 @@
 
 import {alertActions} from './alerts';
-import {jobApi} from '../API/JobApi';
+import {jobApi} from '../api/jobApi';
 import {createSelector} from 'reselect';
 
 export const JobConstants={

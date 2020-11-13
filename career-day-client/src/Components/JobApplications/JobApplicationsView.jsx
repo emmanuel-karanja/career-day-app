@@ -4,11 +4,11 @@ import React,{Component} from 'react';
 import {connect} from 'react-redux';
 import {filterApplications, deleteApplication} from '../../modules/jobApplications';
 import JobApplicationsTable from './JobApplicationsTable';
-import {jobApplicantApi} from '../../API/JobApplicantApi';
+import {jobApplicantApi} from '../../api/jobApplicantApi';
 import {bindActionCreators} from 'redux';
 import Error from '../Common/Error';
 import {withRouter} from 'react-router-dom';
-class ViewJobApplicationsPage extends Component{
+class JobApplicationsView extends Component{
     constructor(){
       super();
         this.state={applications:[],
@@ -75,4 +75,4 @@ const mapDispatchToProps=(dispatch)=> {
   export default connect(
     null,
     mapDispatchToProps)
-    (withRouter(ViewJobApplicationsPage));
+    (withRouter(JobApplicationsView));

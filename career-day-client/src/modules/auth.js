@@ -1,8 +1,9 @@
 
 import history from '../Utils/history';
-import authApi from '../API/AuthApi';
+import authApi from '../api/authApi';
 import {setCurrentApplicant} from './jobApplicants';
 import {alertActions} from './alerts';
+
 
 export const AuthConstants = {
     LOGIN_REQUEST: 'USERS_LOGIN_REQUEST',
@@ -13,25 +14,23 @@ export const AuthConstants = {
 };
 
 
-export default function authReducer(authentication = {}, action) {
+export default function authReducer(currentUser = {}, action) {
     switch (action.type) {
         case AuthConstants.LOGIN_REQUEST:
           return {
-            loggingIn: true,
-            user: action.payload
+            currentUser: action.payload
           };
 
         case AuthConstants.LOGIN_SUCCESS:
           return {
-            loggedIn: true,
-            user: action.payload
+            currentUser:action.payload
           };
         case AuthConstants.LOGIN_FAILURE:
           return {};
         case AuthConstants.LOGOUT:
           return {};
         default:
-          return authentication
+          return currentUser;
       }
 }
 
@@ -71,10 +70,10 @@ const requestLogin=(user)=>{
 }
 
 export const loginSuccess=(user)=> {
-	 setCurrentUser(user);
+	   console.log(user);
      return{
            type: AuthConstants.LOGIN_SUCCESS, 
-           payload:user 
+           payload: user
       } 
 }
 const loginFailure=(error)=> {
@@ -84,8 +83,3 @@ const loginFailure=(error)=> {
         } 
 }
 
-const setCurrentUser=(user)=>{
-	console.log('saving current user');
-	console.log(user);
-	localStorage.setItem('user',JSON.stringify(user));
-}

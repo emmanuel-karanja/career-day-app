@@ -1,18 +1,20 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import LiNavLink from '../LiNavLink/LiNavLink';
+import LiNavLink from './LiNavLink';
 
-import './style.css';
 
 const LoggedOutView = props => {
+  console.log('loggedoutview');
   if (!props.currentUser) {
     return (      
       <div role="navigation" className="navbar navbar-expand-lg">
         <div className="container">
             <ul className="navbar-nav mr-auto">
-              <LiNavLink activeClassName='active' exact={true} to="/">Home</LiNavLink>
-              <LiNavLink activeClassName='active' exact={true} to="/login">Sign-in</LiNavLink>
-              <LiNavLink activeClassName='active' exact={true} to="/registerapplicant">Sign-Up</LiNavLink>         
+               <li className="nav-item">
+                  <Link to="/" className="nav-link">Home</Link>
+              </li>
+              <LiNavLink activeClassName='active'  to="/login">Sign-in</LiNavLink>
+              <LiNavLink activeClassName='active'  to="/register">Sign-Up</LiNavLink>         
             </ul>
           </div>
         </div>
@@ -27,9 +29,12 @@ const LoggedInView = props => {
       <div role="navigation" className="navbar navbar-expand-lg">
         <div className="container">
             <ul className="navbar-nav mr-auto">
-              <LiNavLink activeClassName='active' exact={true} to="/">Home</LiNavLink>
-              <LiNavLink activeClassName='active' exact={true} to={`/applicationspage/${props.currentUser.userId}`}>Jobs</LiNavLink>
-              <LiNavLink activeClassName='active' exact={true} to="/updateapplicant">My Profile</LiNavLink> 
+               <li className="nav-item">
+                  <Link to="/" className="nav-link">Home</Link>
+              </li>
+
+              <LiNavLink activeClassName='active' exact={true} to={`/view-applications/${props.currentUser.userId}`}>My Applications</LiNavLink>
+              <LiNavLink activeClassName='active' exact={true} to="/update-my-profile">My Profile</LiNavLink> 
               <LiNavLink activeClassName='active' exact={true} to="/logout">Sign-out</LiNavLink> 
               <LiNavLink activeClassName='active' to={`/@${props.currentUser.username}`}
                          className="nav-link"> {props.currentUser.username}
@@ -44,14 +49,15 @@ const LoggedInView = props => {
 };
 
 const AdminLoggedInView = props => {
-  if (props.currentUser && props.currentUser.isAdmin===true) {
+  if (props.currentUser && props.currentUser.admin===true) {
     return (
       <div role="navigation" className="navbar navbar-expand-lg">
         <div className="container">
             <ul className="navbar-nav mr-auto">
               <LiNavLink activeClassName='active' exact={true} to="/">Home</LiNavLink>
-              <LiNavLink activeClassName='active' exact={true} to="/adminjobpage">Jobs</LiNavLink>
-              <LiNavLink activeClassName='active' exact={true} to="/applicants">Applicants</LiNavLink> 
+              <LiNavLink activeClassName='active' exact={true} to="/view-jobs">Jobs</LiNavLink>
+              <LiNavLink activeClassName='active' exact={true} to="/view-applicants">Applicants</LiNavLink>
+              <LiNavLink activeClassName='active' to='#'>{props.currentUser.email}</LiNavLink>
               <LiNavLink activeClassName='active' exact={true} to="/logout">Sign-out</LiNavLink>             
              </ul>
           </div>

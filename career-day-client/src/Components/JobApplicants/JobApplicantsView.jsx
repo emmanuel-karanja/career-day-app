@@ -6,7 +6,7 @@ import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import Error from '../Common/Error';
 
-class ViewJobApplicantsPage extends Component{
+class JobApplicantsView extends Component{
     componentDidMount(){
         this.props.fetchApplicants();
     }
@@ -57,4 +57,4 @@ const mapDispatchToProps=(dispatch)=> {
       dispatch
     );
   }
-export default connect(mapStateToProps,mapDispatchToProps)(withRouter(ViewJobApplicantsPage));
+export default connect(mapStateToProps,mapDispatchToProps)(withRouter(JobApplicantsView));
