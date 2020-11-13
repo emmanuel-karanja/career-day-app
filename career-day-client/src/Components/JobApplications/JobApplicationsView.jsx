@@ -2,7 +2,7 @@
 //and acts as the container component for the applications
 import React,{Component} from 'react';
 import {connect} from 'react-redux';
-import {filterApplications, deleteApplication} from '../../modules/jobApplications';
+import {filterApplications, deleteApplication,fetchApplications} from '../../modules/jobApplications';
 import JobApplicationsTable from './JobApplicationsTable';
 import {jobApplicantApi} from '../../api/jobApplicantApi';
 import {bindActionCreators} from 'redux';
@@ -18,23 +18,15 @@ class JobApplicationsView extends Component{
     }
 
     async componentDidMount(){
-      const {applicantId}=this.props.match.params;
-      try{
-        const response=await jobApplicantApi.fetchAllApplications(applicantId);
-        if(!response.ok){
-          throw new Error(response.statusText);
-        }
-        this.setState({applications:response.data});
-      }catch(error){
-        this.setState({hasErrors:true,errors: error.data});
-      }
+      const {applicantId}=this.props.currentApplicant;
+      this.props.fetchApplications(applicantId);
     }
-    onSearch=(searchTerm)=>{
-      this.props.filterApplications(searchTerm);
+    onSearch=(e)=>{
+      this.props.filterApplications(e.target.value);
     }
 
     onDeleteApplication=(applicationId)=>{
-       const {applicantId}=this.props.match.params;
+       const {applicantId}=this.props.currentApplicant;
        this.props.deleteApplication(applicantId,applicationId);
     }
     render(){
@@ -44,7 +36,10 @@ class JobApplicationsView extends Component{
         
         if(this.state.hasErrors){
          return <Error message={this.state.errors}/>
-        }else{
+        }else if(this.props.applications ===null || this.props.applications ===[] || this.props.applications==='undefined'){	
+          return (<div>There are no applications to display</div>)			
+		}
+		else{
         return(
         <div>
             <div className="jobs">
@@ -65,14 +60,23 @@ class JobApplicationsView extends Component{
 const mapDispatchToProps=(dispatch)=> {
   return bindActionCreators(
     {
-      deleteApplication,filterApplications
+      deleteApplication,filterApplications,fetchApplications
     },
     dispatch
   );
 }
+
+const mapStateToProps=(state)=>{
+	const{currentApplicant}=state.currentApplicant;
+	const {applications}=state.applications;
+	return{
+		currentApplicant,
+		applications,
+	}
+}
   
   
   export default connect(
-    null,
+    mapStateToProps,
     mapDispatchToProps)
     (withRouter(JobApplicationsView));

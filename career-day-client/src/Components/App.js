@@ -15,6 +15,7 @@ import { PrivateRoute } from './Common/PrivateRoute';
 import JobApplicationsView from './JobApplications/JobApplicationsView';
 import authApi from '../api/authApi';
 import JobApplicantUpdateView from './JobApplicants/JobApplicantUpdateView';
+import RegistrationSuccess from './JobApplicants/RegistrationSuccess';
 import JobUpdateView from './Jobs/JobUpdateView';
 import NotFound from './NotFound';
 
@@ -40,11 +41,12 @@ class App extends Component{
               <Route path="/login" component={LoginPage} />
               <Route path="/view-jobs" component={JobsView}/>
               <Route path="/register" component={RegisterPage}/>
+			  <Route path="/register-success" component={RegistrationSuccess}/>
               <PrivateRoute path="/update-my-profile" component={JobApplicantUpdateView}/>
               <Route path="/admin-jobs" component={AdminJobsView}/>
               <Route path="/job-details/:jobId" component={JobDetails}/>
               <Route path="/view-applicants" component={JobApplicantsView}/>
-              <Route path="/view-applications/:applicantId" component={JobApplicationsView}/>
+              <Route path="/view-applications" component={JobApplicationsView}/>
               <Route path="/job-update/:jobId" component={JobUpdateView}/>
               <Route path="/logout" component={LogoutPage}/>
               <Route component={NotFound}/>    

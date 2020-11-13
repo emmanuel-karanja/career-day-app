@@ -18,39 +18,12 @@ class  JobDetails extends Component{
 			error:""
 		};
 	}
-	componentDidMount(){
-		const {jobId}=this.props;
-        axios.post(`http://localhost:8080/api/v1/jobs/${jobId}`)
-        .then(response => {
-			this.setState({ job: response.data});
-			const {history}=this.props;
-			this.props.onLoad(response.data);     
-			history.push('/');
-		}).catch(error => {
-            this.setState({ errorMessage: error.message, hasErrors:true});         
-        });
-	}
+	
 
 	onApply=()=>{
-		const{jobId}=this.state;
-		const {email}=this.props.currentUser;
-		let applicant;
-
-		const emailRequest={
-			email:email,
-		}
-		axios.post('http://localhost:8080/api/v1/job-applicants/byemail',emailRequest)
-        .then(response => {
-			if(response.ok){
-				applicant=response.data;
-			}else{
-				throw new Error(response.statusText);
-			}
-		}).catch(error => {
-            console.log(error);        
-		});
-		
-		this.props.createApplication(applicant.applicantId,jobId);
+		const{jobId}=this.props;
+		const {applicantId}=this.props.currentApplicant;		
+		this.props.createApplication(applicantId,jobId);
 	}
 
 	render(){
@@ -94,9 +67,9 @@ class  JobDetails extends Component{
 
 const mapStateToProps=(state)=>{
 	const {isLoading,errors,message}=state.alerts;
-	const{currentUser}=state.currentUser;
+	const {currentApplicant}=state.currentApplicant;
 	return{
-		currentUser,
+		currentApplicant,
 		isLoading,
 		errors,
 		message,
