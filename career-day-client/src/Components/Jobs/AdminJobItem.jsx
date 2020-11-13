@@ -21,9 +21,9 @@ const AdminJobItem = props => {
         <p>
           {props.job.description} <br/>	 	 
         </p>
-		<strong>Interview On : {props.job.InterviewOn}</strong> <br/>
-		 Interview StartTime : {props.job.StartTime} <br/>
-		 Interview EndTime   : {props.job.EndTime}
+		    <strong>Interview On : {props.job.InterviewOn}</strong> <br/>
+	          Interview StartTime : {props.job.StartTime} <br/>
+		       Interview EndTime   : {props.job.EndTime}
       </div>
      <div>
         <Link to={`/job-update/${props.job.jobId}`}>Edit</Link>  |  

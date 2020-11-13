@@ -21,6 +21,7 @@ function fetchAllApplicants(){
 }
 
 function getApplicantByEmail(email){
+	console.log('getApplicantByEmail api call..');
     return client.post('/job-applicants/byemail',email);
 }
 

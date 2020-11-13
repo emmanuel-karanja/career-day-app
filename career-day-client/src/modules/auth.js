@@ -1,8 +1,8 @@
 
-import history from '../Utils/history';
 import authApi from '../api/authApi';
-import {setCurrentApplicant} from './jobApplicants';
+import {fetchCurrentApplicant,setCurrentApplicant} from './jobApplicants';
 import {alertActions} from './alerts';
+
 
 
 export const AuthConstants = {
@@ -43,10 +43,11 @@ export const login=(credentials)=>{
     try{
       //to get data from from axios you response.data
       const {data}=await authApi.login(credentials);
-      dispatch(setCurrentApplicant(data));
+	  dispatch(fetchCurrentApplicant(data.email));
       dispatch(loginSuccess(data));
+	  
       dispatch(alertActions.success(`User ${data.firstName} fetched successfuly`));
-      history.push('/');
+      
     }catch(error){
      dispatch(alertActions.failure('Failed to fetch Applicant',error.message));
      dispatch(loginFailure('Failed to fetch user',error.message));

@@ -3,7 +3,7 @@
 import {fetchJobs} from './jobs';
 import {loginSuccess} from './auth'
 import {fetchApplications} from './jobApplications';
-import {fetchApplicants} from './jobApplicants';
+import {fetchApplicants,fetchApplicant} from './jobApplicants';
 
 const AppConstants={
     APP_LOADED_EVENT : 'APP_LOADED_EVENT',
@@ -33,6 +33,7 @@ export const onLoad=(user)=>{
 
     if(user.id){
         dispatch(fetchApplications(user.id));
+		dispatch(fetchApplicant(user.email));
         console.log('applications loaded into state..');
     }
     if(user.admin===true){

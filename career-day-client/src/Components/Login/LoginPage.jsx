@@ -5,6 +5,7 @@ import LoginForm from './LoginForm';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import {login,loginSuccess} from '../../modules/auth';
+import {fetchApplicant} from '../../modules/jobApplicants';
 import {withRouter} from 'react-router-dom';
 import Error from '../Common/Error';
 import axios from 'axios';
@@ -26,12 +27,16 @@ class LoginPage extends Component{
 		axios.post(LOGIN_URL, credentials)
         .then(response => {
 			this.setState({ user: response.data});
+			this.props.fetchApplicant({email:response.data.email});
 			const {history}=this.props;
-			this.props.onLoad(response.data);     
+			this.props.onLoad(response.data);			
 			history.push('/');
+			
 		}).catch(error => {
             this.setState({ errorMessage: error.message, hasErrors:true});         
         });
+		
+		
 	}
 	render(){
        console.log('inside login');
@@ -52,7 +57,7 @@ LoginPage.propType={
 const mapDispatchToProps=(dispatch)=> {
     return bindActionCreators(
       {
-        login,loginSuccess,onLoad
+        login,loginSuccess,onLoad,fetchApplicant,
       },
       dispatch
     );

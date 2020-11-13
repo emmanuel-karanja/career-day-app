@@ -53,7 +53,7 @@ public class JobApplicantController{
 		return new ResponseEntity<>(response,HttpStatus.OK);
 	}
 	
-	@GetMapping("/byemail")
+	@PostMapping("/byemail")
 	public ResponseEntity<JobApplicantResponse> getByEmail(@Valid @RequestBody EmailRequest request){
 		JobApplicantResponse response=jobApplicantService.getByEmail(request);
 		return new ResponseEntity<>(response,HttpStatus.OK);

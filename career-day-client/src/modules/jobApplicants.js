@@ -15,7 +15,7 @@ export const ApplicantConstants={
 };
 
 export const ApplicationStatusConstants={
-  ACTIE: 'Active',
+  ACTIVE: 'Active',
   SUSPENDED:'Suspended',
   CANCELLED: 'Cancelled',
   EXPIRED: 'Expired'
@@ -65,7 +65,7 @@ export const fetchApplicants=()=>{
       const {data}=await jobApplicantApi.fetchAllApplicants();
     dispatch(fetchApplicantsSucceeded(data));
         const defaultApplicantId=data[0].applicantId;
-        dispatch(fetchApplicant(defaultApplicantId));
+       // dispatch(setCurrentApplicant(data[0]));
       dispatch(alertActions.success('Applicants fetched successfully'))
     }catch(error){
       dispatch(alertActions.failure('Failed to fetch Applicants',error.message));
@@ -89,7 +89,7 @@ export const fetchApplicants=()=>{
        const {data}=await jobApplicantApi.createApplicant(newApplicant);
        dispatch(createApplicantSucceeded(data));
        dispatch(alertActions.success('Applicant Created Succesfully'));
-       dispatch(fetchApplicant(data.applicantId));
+       
      }catch(error){
       dispatch(alertActions.failure('Failed to createApplicant',error.message));
      }
@@ -110,7 +110,7 @@ export const fetchApplicants=()=>{
         const {data}=await jobApplicantApi.editApplicant(applicant);
         dispatch(editApplicantSucceeded(data));
         dispatch(alertActions.success('Applicant Updated'));
-        dispatch(fetchApplicant(data.applicantId));
+        //dispatch(fetchApplicant(data.applicantId));
      }catch(error){
        dispatch(alertActions.failure('Failed to update Applicant',error.message));
      }
@@ -145,10 +145,10 @@ export const fetchApplicants=()=>{
  }
 
 
-export const fetchApplicant=(id)=>{
+export const fetchApplicant=(email)=>{
   return async dispatch=>{
     try{
-      const {data}=await jobApplicantApi.getApplicantById(id);
+      const {data}=await jobApplicantApi.getApplicantByEmail(email);
       dispatch(setCurrentApplicant(data));
       dispatch(alertActions.success(`Applicant ${data.firstName} fetched successfuly`))
     }catch(error){
@@ -158,9 +158,24 @@ export const fetchApplicant=(id)=>{
 }
 
 export const setCurrentApplicant=(applicant)=>{
+	console.log('setcurrentapplicant called');
+	console.log(applicant)
   return {
     type: ApplicantConstants.SET_CURRENT_APPLICANT,
     payload: applicant
+  }
+}
+
+export const fetchCurrentApplicant=(email)=>{
+	console.log('called fetchCurrentApplicant');
+	return async dispatch=>{
+    try{
+      const {data}=await jobApplicantApi.getApplicantByEmail(email);
+      dispatch(setCurrentApplicant(data));
+      dispatch(alertActions.success(`Applicant ${data.firstName} fetched successfuly`))
+    }catch(error){
+     dispatch(alertActions.failure('Failed to fetch Applicant',error.message));
+    }
   }
 }
 

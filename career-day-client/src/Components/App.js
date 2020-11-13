@@ -45,7 +45,7 @@ class App extends Component{
               <Route path="/job-details/:jobId" component={JobDetails}/>
               <Route path="/view-applicants" component={JobApplicantsView}/>
               <Route path="/view-applications/:applicantId" component={JobApplicationsView}/>
-              <Route path="job-update/:jobId" component={JobUpdateView}/>
+              <Route path="/job-update/:jobId" component={JobUpdateView}/>
               <Route path="/logout" component={LogoutPage}/>
               <Route component={NotFound}/>    
             </Switch>

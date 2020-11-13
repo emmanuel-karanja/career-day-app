@@ -64,7 +64,7 @@ export const fetchJobs=()=>{
     try{
       const {data}=await jobApi.fetchAllJobs();
       dispatch(fetchJobsSucceeded(data));
-     // dispatch(setCurrentJob(data[0]));
+      dispatch(setCurrentJob(data[0]));
       dispatch(alertActions.success('Jobs fetched successfully'))
     }catch(error){
       dispatch(alertActions.failure('Failed to fetch jobs',error.message));
@@ -88,6 +88,7 @@ export const fetchJobs=()=>{
      try{
        const {data}=await jobApi.createJob(newJob);
        dispatch(createJobSucceeded(data));
+	   dispatch(setCurrentJob(data));
        dispatch(alertActions.success('Job Created Succesfully'));
      }catch(error){
       dispatch(alertActions.failure('Failed to create job',error.message));
@@ -108,6 +109,7 @@ export const fetchJobs=()=>{
      try{
         const {data}=await jobApi.updateJob(job);
         dispatch(editJobSucceeded(data));
+		dispatch(setCurrentJob(data));
         dispatch(alertActions.success('Job Updated'));
      }catch(error){
        dispatch(alertActions.failure('Failed to update Job',error.message));
@@ -128,6 +130,7 @@ export const fetchJobs=()=>{
      try{
        await jobApi.deleteJob(id)
        dispatch(deleteJobSucceeded(id));
+	   dispatch(fetchJobs());
        dispatch(alertActions.success('Job Deleted'));
      }catch(error){
        dispatch(alertActions.failure('Failed to delete job',error.message));
