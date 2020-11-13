@@ -4,6 +4,7 @@ package com.careerday.careerdayapp.Services;
 import com.careerday.careerdayapp.DTOs.ApiResponse;
 import com.careerday.careerdayapp.DTOs.AvailabilityResponse;
 import com.careerday.careerdayapp.DTOs.CountResponse;
+import com.careerday.careerdayapp.DTOs.EmailRequest;
 import com.careerday.careerdayapp.DTOs.JobApplicantRegisterRequest;
 import com.careerday.careerdayapp.DTOs.JobApplicantResponse;
 import com.careerday.careerdayapp.DTOs.JobApplicantUpdateRequest;
@@ -211,8 +212,7 @@ public class JobApplicantService implements IJobApplicantService{
     public JobApplicationResponse updateApplication(UserPrincipal currentUser,Long id, Long applicationId,
     		JobApplicationUpdateRequest request){
 
-        JobApplicant applicant=jobApplicantRepository.findById(id)
-		                                .orElseThrow(()->new ResourceNotFoundException(APPLICANT,ID,applicationId));
+       
        // if(currentUser.getEmail() != applicant.getEmail()) {
 		//	throw new UnauthorizedException("You are not authorized to perform this action");
 		//}
@@ -344,6 +344,15 @@ public class JobApplicantService implements IJobApplicantService{
 		if (size > AppConstants.MAX_PAGE_SIZE) {
 			throw new BadRequestException("Page size must not be greater than " +AppConstants.MAX_PAGE_SIZE);
 		}
+	}
+
+
+
+	@Override
+	public JobApplicantResponse getByEmail(EmailRequest request) {
+		 JobApplicant applicant=jobApplicantRepository.findByEmail(request.getEmail())
+                 .orElseThrow(()->new ResourceNotFoundException(APPLICANT,ID,request.getEmail()));
+		 return convertFromEntity(applicant);
 	}
 	
 }

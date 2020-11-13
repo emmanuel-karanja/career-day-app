@@ -13,11 +13,15 @@ const client =axios.create({
 
 export const jobApplicantApi={
     fetchAllApplicants,updateApplicant,createApplicant,deleteApplicant,fetchApplicantById,
-    fetchAllApplications,fetchApplicationById, createApplication,deleteApplication
+    fetchAllApplications,fetchApplicationById, createApplication,deleteApplication,getApplicantByEmail
 }
 
 function fetchAllApplicants(){
     return client.get('/job-applicants');
+}
+
+function getApplicantByEmail(email){
+    return client.post('/job-applicants/byemail',email);
 }
 
 function fetchApplicantById(id){

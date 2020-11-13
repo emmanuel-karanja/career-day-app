@@ -8,35 +8,25 @@ import {updateJob} from '../../modules/jobs';
 import {withRouter} from 'react-router-dom';
 import {jobApi} from '../../api/jobApi';
 import Error from '../Common/Error';
-import authApi from '../../api/authApi';
-
+import axios from 'axios';
  class JobUpdateView extends Component{
    	 constructor(){
         super();
         this.state={job:{}, error:"",hasErrors:false};
       }
    async componentDidMount(){
-     const {jobId}=this.props.match.params;
-     if(!authApi.getCurrentUser.admin){
-       const message="You must be admin to perform this action";
-       this.setState({hasErrors:true,error:message});
-     }
-	   try{
-       const response=await jobApi.fetchJobById(jobId);
-       if (!response.ok) {
-        throw Error(response.statusText);
-      }
-      this.setState({job:response.data});
-     }catch(error){
-       this.setState({error:error.data,hasErrors:true});
-     }
+     const {jobId}=this.props;;
+     axios.get(`http://localhost:8080/api/v1/jobs/${jobId}`)
+        .then(response => {
+			this.setState({ job: response.data});    
+	   	}).catch(error => {
+            this.setState({ errorMessage: error.message, hasErrors:true});         
+        });
 	   
    }
    
-   render(){ 
-        
-			if(this.state.hasErrors){
-          //display error
+   render(){        
+		 if(this.state.hasErrors){
          return( <Error message={this.state.error}/>)
       }
        else{ return(

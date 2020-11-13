@@ -5,6 +5,7 @@ import java.util.List;
 import com.careerday.careerdayapp.DTOs.ApiResponse;
 import com.careerday.careerdayapp.DTOs.AvailabilityResponse;
 import com.careerday.careerdayapp.DTOs.CountResponse;
+import com.careerday.careerdayapp.DTOs.EmailRequest;
 import com.careerday.careerdayapp.DTOs.JobApplicantRegisterRequest;
 import com.careerday.careerdayapp.DTOs.JobApplicantResponse;
 import com.careerday.careerdayapp.DTOs.JobApplicantUpdateRequest;
@@ -20,7 +21,7 @@ public interface IJobApplicantService {
 	
 	JobApplicantResponse create(JobApplicantRegisterRequest newApplicant);
 	JobApplicantResponse update(UserPrincipal currentUser,Long id,JobApplicantUpdateRequest updatedApplicant);
-	//JobApplicantResponse getByEmail(String email);
+	JobApplicantResponse getByEmail(EmailRequest request);
 	JobApplicantResponse getById(Long id);
 	PagedResponse<JobApplicantResponse> getAllApplicants(int size, int page);
 	List<JobApplicantResponse> getAllApplicants();

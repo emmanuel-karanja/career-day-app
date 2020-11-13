@@ -82,8 +82,7 @@ const JobUpdateForm=(props)=>{
                validationSchema={JobUpdateSchema}
                onSubmit={(values, {setSubmitting, resetForm})=>{
                    setSubmitting(true);
-                       //alert(JSON.stringify(values,null,2));
-                       //send the axios request here
+                       
                        const updatedJob={id: props.job.jobId,...values};
 					   
                        props.updateJob(updatedJob);

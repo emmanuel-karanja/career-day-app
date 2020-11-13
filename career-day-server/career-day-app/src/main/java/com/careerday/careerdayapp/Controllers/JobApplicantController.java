@@ -52,6 +52,12 @@ public class JobApplicantController{
 		List<JobApplicantResponse> response=jobApplicantService.getAllApplicants();
 		return new ResponseEntity<>(response,HttpStatus.OK);
 	}
+	
+	@GetMapping("/byemail")
+	public ResponseEntity<JobApplicantResponse> getByEmail(@Valid @RequestBody EmailRequest request){
+		JobApplicantResponse response=jobApplicantService.getByEmail(request);
+		return new ResponseEntity<>(response,HttpStatus.OK);
+	}
 		
    @GetMapping("/paged")
 	public ResponseEntity<PagedResponse<JobApplicantResponse>> getAll(
