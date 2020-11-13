@@ -10,9 +10,7 @@ const LoggedOutView = props => {
       <div role="navigation" className="navbar navbar-expand-lg">
         <div className="container">
             <ul className="navbar-nav mr-auto">
-               <li className="nav-item">
-                  <Link to="/" className="nav-link">Home</Link>
-              </li>
+              <LiNavLink activeClassName='active' exact={true} to="/">Home</LiNavLink>
               <LiNavLink activeClassName='active'  to="/login">Sign-in</LiNavLink>
               <LiNavLink activeClassName='active'  to="/register">Sign-Up</LiNavLink>         
             </ul>
@@ -24,15 +22,14 @@ const LoggedOutView = props => {
 };
 
 const LoggedInView = props => {
-  if (props.currentUser  && props.currentUser.isAdmin===false) {
+	console.log(props);
+	//console.log(props.currentUser.admin);
+  if (props.currentUser  && props.currentUser.admin===false) {
     return (
       <div role="navigation" className="navbar navbar-expand-lg">
         <div className="container">
             <ul className="navbar-nav mr-auto">
-               <li className="nav-item">
-                  <Link to="/" className="nav-link">Home</Link>
-              </li>
-
+              <LiNavLink activeClassName='active' exact={true} to="/">Home</LiNavLink>
               <LiNavLink activeClassName='active' exact={true} to={`/view-applications/${props.currentUser.userId}`}>My Applications</LiNavLink>
               <LiNavLink activeClassName='active' exact={true} to="/update-my-profile">My Profile</LiNavLink> 
               <LiNavLink activeClassName='active' exact={true} to="/logout">Sign-out</LiNavLink> 
@@ -55,8 +52,8 @@ const AdminLoggedInView = props => {
         <div className="container">
             <ul className="navbar-nav mr-auto">
               <LiNavLink activeClassName='active' exact={true} to="/">Home</LiNavLink>
-              <LiNavLink activeClassName='active' exact={true} to="/view-jobs">Jobs</LiNavLink>
-              <LiNavLink activeClassName='active' exact={true} to="/view-applicants">Applicants</LiNavLink>
+              <LiNavLink activeClassName='active' exact={true} to="/admin-jobs">Jobs</LiNavLink>
+              <LiNavLink activeClassName='active' exact={true} to="#">Applicants</LiNavLink>
               <LiNavLink activeClassName='active' to='#'>{props.currentUser.email}</LiNavLink>
               <LiNavLink activeClassName='active' exact={true} to="/logout">Sign-out</LiNavLink>             
              </ul>
@@ -79,7 +76,7 @@ const Header =(props)=> {
           </Link>
            <LoggedOutView currentUser={props.currentUser} />
            <LoggedInView currentUser={props.currentUser}/>
-           <AdminLoggedInView current={props.currentUser}/>
+           <AdminLoggedInView currentUser={props.currentUser}/>
         </div>
       </nav>
     );

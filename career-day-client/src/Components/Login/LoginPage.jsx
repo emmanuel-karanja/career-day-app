@@ -8,6 +8,7 @@ import {login,loginSuccess} from '../../modules/auth';
 import {withRouter} from 'react-router-dom';
 import Error from '../Common/Error';
 import axios from 'axios';
+import {onLoad} from '../../modules/appCommon';
 
 
 const LOGIN_URL='http://localhost:8080/api/v1/auth/login';
@@ -20,24 +21,17 @@ class LoginPage extends Component{
 		            user:{}
 				   };
 	}
-	componentDidMount(){
-    
-  }
+	
 	onLogin=(credentials)=>{	
-		 axios.post(LOGIN_URL, credentials)
+		axios.post(LOGIN_URL, credentials)
         .then(response => {
 			this.setState({ user: response.data});
 			const {history}=this.props;
-			//refresh the store//
-		  this.props.login(credentials);
-		
-      //navigate to home//
-      
+			this.props.onLoad(response.data);     
 			history.push('/');
 		}).catch(error => {
-			console.log(error);
             this.setState({ errorMessage: error.message, hasErrors:true});         
-        });	
+        });
 	}
 	render(){
        console.log('inside login');
@@ -58,7 +52,7 @@ LoginPage.propType={
 const mapDispatchToProps=(dispatch)=> {
     return bindActionCreators(
       {
-        login,loginSuccess
+        login,loginSuccess,onLoad
       },
       dispatch
     );

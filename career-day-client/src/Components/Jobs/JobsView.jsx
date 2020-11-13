@@ -14,8 +14,8 @@ class JobsView extends Component{
 		this.props.fetchJobs();
 	}
 
-  onSearch=(searchTerm)=>{
-      this.props.filterJobs(searchTerm);
+  onSearch=(e)=>{
+      this.props.filterJobs(e.target.value);
   }
   render(){
      if (this.props.isLoading) {

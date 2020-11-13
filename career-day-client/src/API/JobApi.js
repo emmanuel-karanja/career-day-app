@@ -1,13 +1,12 @@
 import axios from 'axios';
 import authApi from './authApi';
-
 const API_BASE_URL='http://localhost:8080/api/v1';
 
 const client =axios.create({
     baseURL: API_BASE_URL,
     headers:{
         'Content-Type' : 'application/json',
-        //'Authorization' : authApi.getAuthBearerToken(),
+        'Authorization' : `${authApi.getAuthBearerToken()}`,
 	   'Access-Control-Allow-Origin' : 'http://localhost:3000'
     },
 });

@@ -5,6 +5,7 @@ import {onLoadHome} from '../modules/appCommon';
 import {connect} from 'react-redux';
 import JobsView from './Jobs/JobsView';
 import Error from '../Components/Common/Error';
+import Header from './Header';
 
 class Home extends Component {
   componentDidMount(){
@@ -15,8 +16,7 @@ class Home extends Component {
       
       <div className="Container">
          <h2>List of Jobs</h2>
-        <hr/>
-        {(this.props.error !=="") ? <Error message={this.props.message}/> : null}
+         <hr/>
         <JobsView/>
       </div>
     );

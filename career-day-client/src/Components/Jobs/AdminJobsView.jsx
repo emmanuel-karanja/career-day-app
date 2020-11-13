@@ -20,8 +20,9 @@ class AdminJobsView extends Component {
     toggleForm = () => {
       this.setState({ showNewJobCardForm: !this.state.showNewJobCardForm });
     }
-    onSearch=(searchTerm)=>{
-      this.props.filterJobs(searchTerm);
+    onSearch=(e)=>{
+	
+      this.props.filterJobs(e.target.value);
     }
     
     renderJobLists() { 

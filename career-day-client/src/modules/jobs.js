@@ -64,7 +64,7 @@ export const fetchJobs=()=>{
     try{
       const {data}=await jobApi.fetchAllJobs();
       dispatch(fetchJobsSucceeded(data));
-      dispatch(setCurrentJob(data[0]));
+     // dispatch(setCurrentJob(data[0]));
       dispatch(alertActions.success('Jobs fetched successfully'))
     }catch(error){
       dispatch(alertActions.failure('Failed to fetch jobs',error.message));
@@ -145,10 +145,9 @@ export const fetchJobs=()=>{
 
 export const fetchJob=(id)=>{
   return async(dispatch)=>{
-    try{
-		
+    try{		
 		const {data} = await jobApi.fetchJobById(id);
-      dispatch(setCurrentJob(data));
+      //dispatch(setCurrentJob(data));
       dispatch(alertActions.success(`Job ${data.name} fetched successfuly`))
     }catch(error){
      dispatch(alertActions.failure('Failed to fetch Job',error.message));
@@ -173,7 +172,7 @@ export const filterJobs=(searchTerm)=>{
 
 
 ///SELECTORS
-export const getJobs=(state)=>{
+const getJobs=(state)=>{
 	if(!state.jobs){
 		return [];
 	}

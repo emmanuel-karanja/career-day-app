@@ -78,9 +78,7 @@ const JobCreateForm=(props)=>{
                onSubmit={(values, {setSubmitting, resetForm})=>{
                    setSubmitting(true);
 				       console.log('job create form onsubmit');
-                       alert(JSON.stringify(values,null,2));
-                       //send the axios request here
-                      // props.createJob(values);
+                       props.createJob(values);
                        resetForm();
                        setSubmitting(false);
                }}

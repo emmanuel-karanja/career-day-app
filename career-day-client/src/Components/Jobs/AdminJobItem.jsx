@@ -26,8 +26,8 @@ const AdminJobItem = props => {
 		 Interview EndTime   : {props.job.EndTime}
       </div>
      <div>
-        <Link to={`/updatejob/${props.job.jobId}`}>Edit</Link>  |  
-        <Link to={`/jobdetails/${props.job.jobId}`}> Details</Link>
+        <Link to={`/job-update/${props.job.jobId}`}>Edit</Link>  |  
+        <Link to={`/job-details/${props.job.jobId}`}> Details</Link>
         <br/>
 		<br/>
         <Button variant="danger" type="button" onClick={onDeleteJob}>Delete</Button>

@@ -15,7 +15,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 @NoArgsConstructor
 public class JobApplicationResponse {
 	
-	@JsonProperty("ApplicationId")
     private Long applicationId;
 	
     private Instant applicationDate;

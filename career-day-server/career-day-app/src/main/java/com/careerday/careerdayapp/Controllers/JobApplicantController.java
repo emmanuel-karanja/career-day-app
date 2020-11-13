@@ -79,7 +79,7 @@ public class JobApplicantController{
    }
    
    @GetMapping("/{id}/applications/count")
-   @PreAuthorize("hasRole('APPLICANT')")
+   //@PreAuthorize("hasRole('APPLICANT')")
    public ResponseEntity<CountResponse> getApplicationCountByApplicant(@CurrentUser UserPrincipal currentUser,@PathVariable(value="id") Long id){
 	   CountResponse response=jobApplicantService.getApplicationCountByApplicant(currentUser,id);
 	   return new ResponseEntity<>(response,HttpStatus.OK);
@@ -93,7 +93,7 @@ public class JobApplicantController{
 	}
 	
 	@GetMapping("/{id}")
-	@PreAuthorize("hasRole('APPLICANT')")
+	//@PreAuthorize("hasRole('APPLICANT')")
 	public ResponseEntity<JobApplicantResponse> getApplicant(@PathVariable(value="id") Long id,
 			@CurrentUser UserPrincipal currentUser){
 	   JobApplicantResponse response=jobApplicantService.getById(id);
@@ -101,7 +101,7 @@ public class JobApplicantController{
 	}
 	
 	@PutMapping("/{id}")
-	@PreAuthorize("hasRole('APPLICANT')")
+	//@PreAuthorize("hasRole('APPLICANT')")
 	public ResponseEntity<JobApplicantResponse> updateApplicant(@CurrentUser UserPrincipal currentUser,@PathVariable(value="id") Long id, 
 	        @Valid @RequestBody JobApplicantUpdateRequest request){
 				JobApplicantResponse response=jobApplicantService.update(currentUser,id,request);
@@ -109,7 +109,7 @@ public class JobApplicantController{
 	}
 	
 	@DeleteMapping("/{id}")
-	@PreAuthorize("hasRole('APPLICANT')")
+	//@PreAuthorize("hasRole('APPLICANT')")
 	public ResponseEntity<ApiResponse> deleteApplicant(@PathVariable(value="id") Long id,
 			@CurrentUser UserPrincipal currentUser){
 		ApiResponse response=jobApplicantService.delete(currentUser,id);
@@ -117,7 +117,7 @@ public class JobApplicantController{
 	}
 	
 	@GetMapping("/{id}/applications")
-	@PreAuthorize("hasRole('APPLICANT')")
+	//@PreAuthorize("hasRole('APPLICANT')")
 	public ResponseEntity<List<JobApplicationResponse>> getApplications(@CurrentUser UserPrincipal currentUser,@PathVariable(value="id") Long id){
 		List<JobApplicationResponse> response=jobApplicantService.getAllApplications(currentUser,id);
 		return new ResponseEntity<>(response, HttpStatus.OK);
@@ -126,7 +126,7 @@ public class JobApplicantController{
 	
 	
 	@GetMapping("/{id}/applications/{applicationId}")
-	@PreAuthorize("hasRole('APPLICANT')")
+	//@PreAuthorize("hasRole('APPLICANT')")
 	public ResponseEntity<JobApplicationResponse> getApplication(@CurrentUser UserPrincipal currentUser,@PathVariable(value="id") Long id, 
 	@PathVariable(value="applicationId") Long applicationId){
 		JobApplicationResponse response=jobApplicantService.getApplication(currentUser,id,applicationId);
@@ -134,7 +134,7 @@ public class JobApplicantController{
 	}
 	
 	@PostMapping("/{id}/applications")
-	@PreAuthorize("hasRole('APPLICANT')")
+	//@PreAuthorize("hasRole('APPLICANT')")
 	public ResponseEntity<JobApplicationResponse> addApplication(@CurrentUser UserPrincipal currentUser,@PathVariable(value="id") Long id,
 	@Valid @RequestBody JobApplicationCreateRequest request){
 		JobApplicationResponse response=jobApplicantService.createApplication(currentUser,id,request);
@@ -142,7 +142,7 @@ public class JobApplicantController{
 	}
 	
 	@DeleteMapping("/{id}/applications/{applicationId}")
-	@PreAuthorize("hasRole('APPLICANT')")
+	//@PreAuthorize("hasRole('APPLICANT')")
 	public ResponseEntity<ApiResponse> deleteApplication(@CurrentUser UserPrincipal currentUser,@PathVariable(value="id") Long id,
 	@PathVariable(value="applicationId") Long applicationId){
 		ApiResponse response=jobApplicantService.deleteApplication(currentUser,id,applicationId);

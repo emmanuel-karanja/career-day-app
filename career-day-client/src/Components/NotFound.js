@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-
+import {Link} from 'react-router-dom';
 
 class NotFound extends Component {
   render() {
@@ -8,6 +8,7 @@ class NotFound extends Component {
         <h1>
           404 <small>Not Found :(</small>
         </h1>
+		<Link to="/">Back Home</Link>
       </div>
     )
   }

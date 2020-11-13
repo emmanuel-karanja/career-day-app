@@ -23,10 +23,11 @@ class App extends Component{
   componentDidMount(){
     const user=authApi.getCurrentUser();
     console.log('in app..')
+	console.log(user);
     if(user){
         this.props.onLoad(user);
     }
-    this.props.onLoadHome();
+   // this.props.onLoadHome();
   } 
   render() {
       return (
@@ -40,12 +41,12 @@ class App extends Component{
               <Route path="/view-jobs" component={JobsView}/>
               <Route path="/register" component={RegisterPage}/>
               <PrivateRoute path="/update-my-profile" component={JobApplicantUpdateView}/>
-              <PrivateRoute path="/admin-view-jobs" component={AdminJobsView}/>
-              <PrivateRoute path="/job-details/:jobId" component={JobDetails}/>
-              <PrivateRoute path="/view-applicants" component={JobApplicantsView}/>
-              <PrivateRoute path="/view-applications/:applicantId" component={JobApplicationsView}/>
-              <PrivateRoute path="job-update/:jobId" component={JobUpdateView}/>
-              <PrivateRoute path="/logout" component={LogoutPage}/>
+              <Route path="/admin-jobs" component={AdminJobsView}/>
+              <Route path="/job-details/:jobId" component={JobDetails}/>
+              <Route path="/view-applicants" component={JobApplicantsView}/>
+              <Route path="/view-applications/:applicantId" component={JobApplicationsView}/>
+              <Route path="job-update/:jobId" component={JobUpdateView}/>
+              <Route path="/logout" component={LogoutPage}/>
               <Route component={NotFound}/>    
             </Switch>
         </div>
