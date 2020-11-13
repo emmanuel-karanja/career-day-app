@@ -9,9 +9,9 @@ const AppConstants={
     APP_LOADED_EVENT : 'APP_LOADED_EVENT',
 }
 
-export default function appCommonReducer(appLoaded= false,action){
-    switch(action){
-        case AppConstants.ADD_LOADED_EVENT:{
+export default function appCommonReducer(appLoaded=false,action){
+    switch(action.type){
+        case AppConstants.APP_LOADED_EVENT:{
             return true;
         }
 
@@ -47,13 +47,17 @@ export const onLoad=(user)=>{
 }
 
 export const onLoadHome=()=>{
+    console.log('onload home..')
   return async dispatch=>{ 
     dispatch(fetchJobs());
+    dispatch(isLoaded());
 }
 
 }
 const isLoaded=()=>{
+    console.log('on loaded called')
     return{
         type: AppConstants.APP_LOADED_EVENT,
+        payload:true
     }
 }

@@ -26,9 +26,9 @@ class App extends Component{
     if(user){
         this.props.onLoad(user);
     }
+    this.props.onLoadHome();
   } 
   render() {
-    if (this.props.appLoaded) {
       return (
         <div>
           <Header
@@ -50,29 +50,8 @@ class App extends Component{
             </Switch>
         </div>
       );
-    }
-    return (
-      <div>
-        <Header
-          appName="careerday"
-          currentUser={this.props.currentUser} />
-        
-        <Switch>
-              <Route exact path="/" component={Home}/>
-              <Route path="/login" component={LoginPage} />
-              <Route path="/view-jobs" component={JobsView}/>
-              <Route path="/register" component={RegisterPage}/>
-              <PrivateRoute path="/update-my-profile" component={JobApplicantUpdateView}/>
-              <PrivateRoute path="/admin-view-jobs" component={AdminJobsView}/>
-              <PrivateRoute path="/job-details/:jobId" component={JobDetails}/>
-              <PrivateRoute path="/view-applicants" component={JobApplicantsView}/>
-              <PrivateRoute path="/view-applications/:applicantId" component={JobApplicationsView}/>
-              <PrivateRoute path="job-update/:jobId" component={JobUpdateView}/>
-              <PrivateRoute path="/logout" component={LogoutPage}/>
-              <Route component={NotFound}/>    
-            </Switch>
-      </div>
-    );
+    
+    
   }
 }
 
